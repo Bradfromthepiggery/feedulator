@@ -1,0 +1,19 @@
+'use strict';
+
+angular.module('app.feed-calculator', [
+        'ui.router'
+    ])
+    .config(function config($stateProvider) {
+        $stateProvider.state('feed-calculator', {
+            url: '/feeds/calculator',
+            views: {
+                "main": {
+                    controller: 'MixtureNewCtrl',
+                    templateUrl: 'app/mixture/mixture-new.tpl.html'
+                }
+            },
+            data: {
+                pageTitle: 'Feed Calculator'
+            }
+        });
+    });

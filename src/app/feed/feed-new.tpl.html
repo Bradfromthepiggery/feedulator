@@ -1,0 +1,178 @@
+<div class="row">
+    <aside class="col-lg-3">
+        <p class="lead">Preview</p>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title" style="font-size: 16px">
+                    {{formResult.name || "New Feed" | truncate: 20: '...' | ucfirst}}
+                </h2>
+            </div>
+            <div class="panel-body" ng-if="formResult.batchId || formResult.description">
+                <p ng-if="formResult.batchId">
+                    <small>Batch ID: {{formResult.batchId}}</small>
+                </p>
+                <p ng-if="formResult.description">{{formResult.description}}</p>
+            </div>
+            <table class="table table-condensed table-hover table-responsive table-striped" ng-if="formResult.compData.length > 0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Ingredient</th>
+                        <th>Qty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="comp in formResult.compData">
+                        <td>{{$index+1}}</td>
+                        <td>{{comp.name}}</td>
+                        <td>{{comp.value | percent: 100}}%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="panel panel-default" ng-if="formResult.nutritionData">
+            <div class="panel-heading">
+                <h2 class="panel-title" style="font-size: 16px">
+                    Nutrition Breakdown
+                </h2>
+            </div>
+            <table class="table table-condensed table-hover table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nutrition</th>
+                        <th>Qty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="(key, data) in formResult.nutritionData">
+                        <td>{{$index+1}}</td>
+                        <td>{{data.name | ucfirst}}</td>
+                        <td>{{data.value + data.unit}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </aside>
+    <section class="col-lg-9">
+        <form role="form" ng-submit="submit()">
+            <p class="lead">Feed Components</p>
+            <p>Choose the items that will be mixed into the feed. Click "Add Component" to add an additional item. If desired, you can specify minimum and maximum quantities for each item. Otherwise, leave them blank.</p>
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Quantity (%)</th>
+                        <th>Cost</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="comp in formResult.compData">
+                        <td>
+                            <select multiple id="{{'select' + $index}}" ng-model="comp._id" ng-options="data.name for data in ingredientData track by data._id" class="form-control multiselect multiselect-primary" style="width: 100%" ui-select="{{$index}}">
+                                <option ng-if="false" value="">Choose Component</option>
+                            </select>
+                        </td>
+                        <td style="width: 32.5%">
+                            <div class="input-group">
+                                <input class="form-control" ng-model="comp.min" type="number" min="0" max="100" placeholder="Min" ng-change="calculate()" />
+                                <span class="input-group-addon">≤</span>
+                                <input class="form-control" ng-model="comp.value" type="number" min="0" max="100" ng-change="calculate()" />
+                                <span class="input-group-addon">≤</span>
+                                <input class="form-control" ng-model="comp.max" type="number" min="0" max="100" placeholder="Max" ng-change="calculate()" />
+                            </div>
+                        </td>
+                        <td style="width: 20%">
+                            <div class="input-group">
+                                <span class="input-group-addon">$</span>
+                                <input class="form-control" ng-model="comp.cost" type="number" min="0" step="0.01" />
+                                <span class="input-group-addon">/
+                                    <abbr>lb</abbr>
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger" ng-disabled="formResult.compData.length < 2" ng-click="removeIng($index)">
+                                <span aria-hidden="true">&times;</span>
+                                <span class="sr-only">Close</span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="button" class="btn btn-info" ng-disabled="ingredientCount == formResult.compData.length" ng-click="addNewIng()">Add Component</button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary" ng-disabled="formResult.compData.length < 1 || isOptimize || formResult.nutritionData == null" ng-click="isOptimize = true">Optimize</button>
+                            <button type="button" class="btn btn-danger pull-right" ng-disabled="formResult.compData.length < 1" ng-click="resetComponents()">Reset</button>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div ng-if="isOptimize">
+                <p class="lead">Optimization Constraints</p>
+                <p>The feed components you've added above provide the following nutritional contents. To optimize feed component proportions, you can specify minimum and maximum quantities for each item below. Otherwise, leave them blank.</p>
+                <table class="table table-condensed table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Nutrition</th>
+                            <th>Unit</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="(key, data) in formResult.nutritionData">
+                            <td>{{data.name | ucfirst}}</td>
+                            <td>{{data.unit}}</td>
+                            <td style="width: 60%">
+                                <div class="input-group">
+                                    <input class="form-control" ng-model="data.min" type="number" min="0" step="0.01" placeholder="Min" />
+                                    <span class="input-group-addon">≤</span>
+                                    <input class="form-control" disabled ng-model="data.value" type="number" min="0" step="0.01" />
+                                    <span class="input-group-addon">≤</span>
+                                    <input class="form-control" ng-model="data.max" type="number" min="0" placeholder="Max" step="0.01" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <button type="button" class="btn btn-primary" ng-click="optFeed()">Calculate Feed Proportions</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div ng-if="isCalculateOnly == false">
+                <p class="lead">Feed Metadata</p>
+                <p>Provide some information that can be used to identify this feed. To see what everything will look like, check out the preview on the left!</p>
+                <div class="form-group">
+                    <label for="feedName" class="control-label">Feed Name</label>
+                    <input id="feedName" ng-disabled="isEdit" class="form-control" type="text" ng-model="formResult.name" required />
+                    <span class="help-block">This shows up in the list of feeds, so keep it short but descriptive. You <b>have</b> to fill this in.</span>
+                </div>
+                <div class="form-group">
+                    <label for="animalBatchId" class="control-label">Animal Batch ID</label>
+                    <input id="animalBatchId" class="form-control" type="text" ng-model="formResult.batchId" />
+                    <span class="help-block">You can leave this blank, but if you're creating this feed for a certain batch of animals, use this field to keep track of their identification codes.</span>
+                </div>
+                <div class="form-group">
+                    <label for="feedDescription" class="control-label">Description</label>
+                    <textarea id="feedDescription" class="form-control" ng-model="formResult.description" rows="5"></textarea>
+                    <span class="help-block">You can leave this blank. Put any comments or additional information about this feed here.</span>
+                </div>
+                <!-- TODO: Add Public/Private Option -->
+                <button type="submit" class="btn btn-primary btn-large">
+                    <span class="fui-check"></span> Save Feed Mixture
+                </button>
+                <button type="reset" class="btn btn-danger btn-large pull-right" ui-sref="feed-list">
+                    <span class="fui-cross"></span> Cancel
+                </button>
+            </div>
+        </form>
+    </section>
+</div>

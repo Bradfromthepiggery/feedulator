@@ -1,0 +1,26 @@
+<form>
+    <input type="text" ng-model="search" placeholder="Search by Anything" />
+    <br/>
+    <input type="checkbox" ng-model="supplierChecked" ng-init="supplierChecked=true" />Supplier
+    <br/>
+    <input type="checkbox" ng-model="gmoChecked" ng-init="gmoChecked=true" />GMO Status
+    <br/>
+    <input type="checkbox" ng-model="nutrientsChecked" ng-init="nutrientsChecked=true" />Nutrients
+    <br/>
+    <input type="checkbox" ng-model="descriptionChecked" ng-init="descriptionChecked=true" />Description
+    <br/>
+    <input type="checkbox" ng-model="chartChecked" ng-init="chartChecked=true" />Chart
+</form>
+<article ng-repeat="animal in animalData | toArray | filter: { $: search }">
+    <h1>{{animal.type | ucfirst}}</h1>
+    <ul>
+        <li ng-repeat="diet in animal.targetDiets.data">
+            {{diet.name | ucfirst}}
+            <ul>
+                <li ng-repeat="(nutrientName, nutrientData) in diet.nutrients">
+                    {{nutrientName | ucfirst}}, {{nutrientData.value}}{{nutrientData.unit}}
+                </li>
+            </ul>
+        </li>
+    </ul>
+</article>

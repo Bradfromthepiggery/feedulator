@@ -1,0 +1,74 @@
+<div class="row">
+    <aside class="col-lg-3">
+        <p class="lead">Preview</p>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title" style="font-size: 16px">
+                    {{formResult.name || "New Feed Component" | truncate: 30: '...' | ucfirst}}
+                </h2>
+            </div>
+            <div class="panel-body" ng-if="formResult.description">
+                <p ng-if="formResult.description">{{formResult.description}}</p>
+            </div>
+            <table class="table table-condensed table-hover table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nutrition</th>
+                        <th>Qty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="(key, data) in formResult.nutrients">
+                        <td>{{$index+1}}</td>
+                        <td>{{data.name | ucfirst}}</td>
+                        <td>{{data.value + data.unit}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </aside>
+    <section class="col-lg-9">
+        <form role="form" ng-submit="submit()">
+            <p class="lead">Component Metadata</p>
+            <p>Provide some information about this feed component. To see what everything will look like, check out the preview on the left!</p>
+            <div class="form-group">
+                <label for="mixtureName" class="control-label">Feed Component Name</label>
+                <input id="mixtureName" ng-disabled="isEdit" class="form-control" type="text" ng-model="formResult.name" required />
+                <span class="help-block">This shows up in the list of feed components, so keep it short but descriptive. You <b>have</b> to fill this in.</span>
+            </div>
+            <div class="form-group">
+                <label for="mixtureDescription" class="control-label">Description</label>
+                <textarea id="mixtureDescription" class="form-control" ng-model="formResult.description" rows="5"></textarea>
+                <span class="help-block">You can leave this blank. Put any comments or additional information about this component here.</span>
+            </div>
+            <p class="lead">Nutrition Data</p>
+            <p>Fill in the table below with information about the nutrition that this feed component provides. Make sure that you're using the correct units. If you're not sure about a certain entry, or if it's not applicable, leave it at 0.</p>
+            <table class="table table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <th>Nutrition</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="(key, data) in formResult.nutrients">
+                        <td style="width: 30%;">{{data.name | ucfirst}}</td>
+                        <td style="width: 30%;">
+                            <div class="input-group">
+                                <input class="form-control" ng-model="data.value" type="number" min="0" step="0.01" />
+                                <span class="input-group-addon">{{data.unit}}</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary btn-large">
+                <span class="fui-check"></span> Save Feed Component
+            </button>
+            <button type="reset" class="btn btn-danger btn-large pull-right" ui-sref="component-list">
+                <span class="fui-cross"></span> Cancel
+            </button>
+        </form>
+    </section>
+</div>
