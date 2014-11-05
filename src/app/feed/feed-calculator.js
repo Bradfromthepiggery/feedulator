@@ -9,7 +9,7 @@ angular.module('app.feed-calculator', [
             views: {
                 "main": {
                     controller: 'MixtureNewCtrl',
-                    templateUrl: 'app/mixture/mixture-new.tpl.html'
+                    templateUrl: 'app/feed/feed-new.tpl.html'
                 }
             },
             data: {
