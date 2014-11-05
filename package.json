@@ -14,6 +14,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "scripts": {
+      "postinstall": "./node_modules/bower/bin/bower install"
+  },
   "author": "Lim Mingjie, Kenneth",
   "license": "GNU GPL v2.0"
 }
