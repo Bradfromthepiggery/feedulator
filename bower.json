@@ -8,7 +8,7 @@
   "moduleType": [
     "node"
   ],
-  "license": "MIT",
+  "license": "GNU GPL v2.0",
   "private": true,
   "ignore": [
     "**/.*",
