@@ -30,7 +30,7 @@
     "bootstrap": "~3.3.0",
     "flat-ui": "~2.2.1",
     "ng-lodash": "~0.0.2",
-    "numericjs": "~1.2.6"
+    "jsLPSolver": "*"
   },
   "resolutions": {
     "angular": "~1.3.2"
