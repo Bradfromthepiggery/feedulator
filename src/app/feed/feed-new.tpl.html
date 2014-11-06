@@ -17,7 +17,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Ingredient</th>
+                        <th>Component</th>
                         <th>Qty</th>
                     </tr>
                 </thead>
@@ -25,7 +25,7 @@
                     <tr ng-repeat="comp in formResult.compData">
                         <td>{{$index+1}}</td>
                         <td>{{comp.name}}</td>
-                        <td>{{comp.value | percent: 100}}%</td>
+                        <td>{{comp.value}}%</td>
                     </tr>
                 </tbody>
             </table>
@@ -70,7 +70,7 @@
                 <tbody>
                     <tr ng-repeat="comp in formResult.compData">
                         <td>
-                            <select multiple id="{{'select' + $index}}" ng-model="comp._id" ng-options="data.name for data in ingredientData track by data._id" class="form-control multiselect multiselect-primary" style="width: 100%" ui-select="{{$index}}">
+                            <select multiple id="{{'select' + $index}}" ng-model="comp._id" ng-options="data.name for data in compData track by data._id" class="form-control multiselect multiselect-primary" style="width: 100%" ui-select="{{$index}}">
                                 <option ng-if="false" value="">Choose Component</option>
                             </select>
                         </td>
@@ -93,7 +93,7 @@
                             </div>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-danger" ng-disabled="formResult.compData.length < 2" ng-click="removeIng($index)">
+                            <button type="button" class="btn btn-danger" ng-disabled="formResult.compData.length < 2" ng-click="removeComp($index)">
                                 <span aria-hidden="true">&times;</span>
                                 <span class="sr-only">Close</span>
                             </button>
@@ -101,7 +101,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <button type="button" class="btn btn-info" ng-disabled="ingredientCount == formResult.compData.length" ng-click="addNewIng()">Add Component</button>
+                            <button type="button" class="btn btn-info" ng-disabled="compCount == formResult.compData.length" ng-click="addNewComp()">Add Component</button>
                         </td>
                         <td>
                             <button type="button" class="btn btn-primary" ng-disabled="formResult.compData.length < 1 || isOptimize || formResult.nutritionData == null" ng-click="isOptimize = true">Optimize</button>
