@@ -37,8 +37,8 @@
             <section class="col-lg-4" dir-paginate="feed in feedData | toArray | filter: { $: search } | itemsPerPage: 12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h2 class="panel-title" style="font-size: 16px">
-                            {{feed.name | ucfirst}}
+                        <h2 class="panel-title" style="font-size: 16px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+                            {{feed.name | truncate: 20: '...' |ucfirst}}
                             <span class="pull-right" am-time-ago="feed.creationDate"></span>
                         </h2>
                     </div>

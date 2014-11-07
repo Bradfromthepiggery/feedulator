@@ -27,6 +27,8 @@ angular.module('app.component-list', [
 
         $scope.deleteComp = function(feedId) {
             compStore.delete(feedId).then(function() {
+                Messenger().post("Successfully deleted component");
+
                 $scope.compData = lodash.reject($scope.compData, { _id: feedId });
             });
         }

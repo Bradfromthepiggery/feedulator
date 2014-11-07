@@ -96,6 +96,8 @@ angular.module('app.component-new', [
             $indexedDB.objectStore('components')
                 .upsert($scope.formResult)
                 .then(function(e) {
+                    Messenger().post("Saved component " + $scope.formResult.name);
+
                     $state.go('component-list');
                 });
         }

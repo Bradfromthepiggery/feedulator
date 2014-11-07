@@ -28,6 +28,8 @@ angular.module('app.feed-list', [
 
         $scope.deleteFeed = function(feedId) {
             feedStore.delete(feedId).then(function() {
+                Messenger().post("Successfully deleted feed");
+
                 $scope.feedData = lodash.reject($scope.feedData, { _id: feedId });
             });
         }

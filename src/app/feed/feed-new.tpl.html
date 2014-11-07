@@ -76,11 +76,11 @@
                         </td>
                         <td style="width: 32.5%">
                             <div class="input-group">
-                                <input class="form-control" ng-model="comp.min" type="number" min="0" max="100" placeholder="Min" ng-change="calculate()" />
+                                <input class="form-control" ng-model="comp.min" type="number" min="0" max="100" placeholder="Min" ng-change="calculate()" step="0.01"/>
                                 <span class="input-group-addon">≤</span>
-                                <input class="form-control" ng-model="comp.value" type="number" min="0" max="100" ng-change="calculate()" />
+                                <input class="form-control" ng-model="comp.value" type="number" min="0" max="100" ng-change="calculate()" step="0.01"/>
                                 <span class="input-group-addon">≤</span>
-                                <input class="form-control" ng-model="comp.max" type="number" min="0" max="100" placeholder="Max" ng-change="calculate()" />
+                                <input class="form-control" ng-model="comp.max" type="number" min="0" max="100" placeholder="Max" ng-change="calculate()" step="0.01"/>
                             </div>
                         </td>
                         <td style="width: 20%">

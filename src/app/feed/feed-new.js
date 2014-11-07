@@ -26,7 +26,10 @@ angular.module('app.feed-new', [
                 // Initialize the Select2 combobox, then bind an event handler
                 // so the scope is updated whenever the value changes
                 $('#select' + attrs.uiSelect)
-                    .select2()
+                    .select2({
+                        minimumInputLength: 3,
+                        maximumSelectionSize: 1
+                    })
                     .on('change', function(e) {
                         scope.$apply('updateComp(' + attrs.uiSelect + ', \'' + e.val + '\')');
                     });
@@ -241,7 +244,10 @@ angular.module('app.feed-new', [
                 $scope.calculate();
             } else {
                 // TODO: Replace this with something more elegant
-                alert("Optimization is unfeasible. Please check your nutrition bounds.");
+                Messenger().post({
+                    message: 'Optimization bounds are unfeasible. Please check them and try again.',
+                    type: 'error'
+                });
             }
         }
 
@@ -254,6 +260,8 @@ angular.module('app.feed-new', [
             $indexedDB.objectStore('feeds')
                 .upsert($scope.formResult)
                 .then(function(e) {
+                    Messenger().post("Saved feed " + $scope.formResult.name);
+
                     $state.go('feed-list');
                 });
         }

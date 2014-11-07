@@ -25,6 +25,12 @@ angular.module('app.feed-edit', [
 
         $indexedDB.objectStore('feeds').find($stateParams.feedId).then(function(result) {
             $scope.formResult = result;
+
+            setTimeout(function() {
+                $scope.formResult.compData.forEach(function(item, index) {
+                   $('#select' + index).select2('val', item._id);
+                });
+            }, 500);
         });
 
         // Update an entry in the component selector. This is called when
@@ -232,7 +238,12 @@ angular.module('app.feed-edit', [
             $indexedDB.objectStore('feeds')
                 .upsert($scope.formResult)
                 .then(function(e) {
-                    $state.go('feed-list');
+                    Messenger().post({
+                        message: 'Saved feed \'' + $scope.formResult.name + '\'',
+                        showCloseButton: true
+                    });
+
+                    $state.go('feed-list', {}, { reload: true });
                 });
         }
 

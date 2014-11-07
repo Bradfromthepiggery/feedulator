@@ -50,6 +50,12 @@ angular.module('app', [
                     keyPath: '_id'
                 });
             });
+
+        // Configure the notification UI
+        Messenger.options = {
+            extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-right',
+            theme: 'flat'
+        }
     })
     .controller('AppCtrl', function AppCtrl($scope, $location, $indexedDB) {
         $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
@@ -61,12 +67,12 @@ angular.module('app', [
         initComponents($indexedDB);
     });
 
-    // An instance reads entries from data/components.json and bootstraps
-    // the components table in the local database
-    var initComponents = function(dbService) {
-        var componentStore = dbService.objectStore(COMPONENT_TABLE_NAME);
+// An instance reads entries from data/components.json and bootstraps
+// the components table in the local database
+var initComponents = function(dbService) {
+    var componentStore = dbService.objectStore(COMPONENT_TABLE_NAME);
 
-        for (var compId in components) {
-            componentStore.insert(components[compId]);
-        }
+    for (var compId in components) {
+        componentStore.insert(components[compId]);
     }
+}
