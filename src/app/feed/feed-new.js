@@ -228,7 +228,7 @@ angular.module('app.feed-new', [
 
                 $scope.calculate();
             } else {
-                // TODO: Handle error state
+                alert("Optimization is unfeasible");
             }
         }
 

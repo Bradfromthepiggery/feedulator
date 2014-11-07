@@ -52,6 +52,16 @@ angular.module('app.component-new', [
                     "value": 0,
                     "unit": "% protein"
                 },
+                "threonone": {
+                    "name": "Threonone",
+                    "value": 0,
+                    "unit": "% protein"
+                },
+                "tryptophan": {
+                    "name": "Tryptophan",
+                    "value": 0,
+                    "unit": "% protein"
+                },
                 "valine": {
                     "name": "Valine",
                     "value": 0,
@@ -62,10 +72,20 @@ angular.module('app.component-new', [
                     "value": 0,
                     "unit": "g/kg DM"
                 },
+                "selenium": {
+                    "name": "Selenium",
+                    "value": 0,
+                    "unit": "g/kg DM"
+                },
                 "zinc": {
                     "name": "Zinc",
                     "value": 0,
                     "unit": "mg/kg DM"
+                },
+                "linoleic_acid": {
+                    "name": "Linoleic Acid",
+                    "value": 0,
+                    "unit": "% fat"
                 }
             }
         }

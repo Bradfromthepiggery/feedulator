@@ -38,6 +38,11 @@
                 <span class="help-block">This shows up in the list of feed components, so keep it short but descriptive. You <b>have</b> to fill this in.</span>
             </div>
             <div class="form-group">
+                <label for="mixtureName" class="control-label">Supplier</label>
+                <input id="mixtureName" class="form-control" type="text" ng-model="formResult.supplier" required />
+                <span class="help-block">You can leave this blank. "Corn" can come from many different farms&mdash;specify a supplier so you don't get confused.</span>
+            </div>
+            <div class="form-group">
                 <label for="mixtureDescription" class="control-label">Description</label>
                 <textarea id="mixtureDescription" class="form-control" ng-model="formResult.description" rows="5"></textarea>
                 <span class="help-block">You can leave this blank. Put any comments or additional information about this component here.</span>
@@ -64,10 +69,10 @@
                 </tbody>
             </table>
             <button type="submit" class="btn btn-primary btn-large">
-                <span class="fui-check"></span> Save Feed Component
+                <span class="fui-check"></span>&nbsp;Save Feed Component
             </button>
             <button type="reset" class="btn btn-danger btn-large pull-right" ui-sref="component-list">
-                <span class="fui-cross"></span> Cancel
+                <span class="fui-cross"></span>&nbsp;Cancel
             </button>
         </form>
     </section>
