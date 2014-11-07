@@ -117,7 +117,7 @@ angular.module('app.feed-edit', [
             $indexedDB.objectStore('feeds')
                 .upsert($scope.formResult)
                 .then(function(e) {
-                    $state.go('mixture-view', {
+                    $state.go('feed-view', {
                         mixtureId: $scope.formResult._id
                     }, {
                         reload: true

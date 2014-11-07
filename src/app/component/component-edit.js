@@ -18,7 +18,7 @@ angular.module('app.component-edit', [
             }
         });
     })
-    .controller('ComponentEditCtrl', function ComponentEditController($scope, $indexedDB, $stateParams, $state) {
+    .controller('ComponentEditCtrl', function ComponentEditController($scope, $indexedDB, $stateParams, $state, Slug) {
         $indexedDB.objectStore('components').find($stateParams.compId).then(function(result) {
             $scope.formResult = result;
         });
