@@ -148,6 +148,7 @@ angular.module('app.feed-new', [
             });
         }
 
+        // Optimize the feed based on constraints provided by the user
         $scope.optFeed = function() {
             $scope.solver = new Solver();
             $scope.model = {
@@ -164,6 +165,7 @@ angular.module('app.feed-new', [
 
             // Populate variables based on selected components
             $scope.formResult.compData.forEach(function(comp) {
+                // Initialize static variables
                 $scope.model.variables[comp._id] = {
                     "cost": comp.cost,
                     "totalWeight": 1
@@ -201,6 +203,8 @@ angular.module('app.feed-new', [
                         }).nutrients[nutrKey];
 
                         if (searchResult) {
+                            // Note we divide the values by 0.01 because the variables
+                            // are expressed in terms of percentage
                             $scope.model.variables[entry][nutrKey] = searchResult.value * 0.01;
                         }
                     }
@@ -217,18 +221,27 @@ angular.module('app.feed-new', [
                 }
             }
 
+            // Run a Simplex solver on the model and inject the results into the scope
             $scope.results = $scope.solver.Solve($scope.model);
-
+            debugger;
             if ($scope.results.feasible) {
+                // Inject the optimization results, and clamp them all
+                // to 2 decimal places
                 $scope.formResult.compData.map(function(item) {
                     item.value = +$scope.results[item._id].toFixed(2);
                 });
 
+                // Clamp the feed cost to 2 decimal places
                 $scope.formResult.feedCost = +$scope.results.result.toFixed(2);
 
+                // TODO: Draw attention back to the UI to visually inform the
+                // user that the values have been updated
+
+                // Trigger a recalculate of the nutrition elements
                 $scope.calculate();
             } else {
-                alert("Optimization is unfeasible");
+                // TODO: Replace this with something more elegant
+                alert("Optimization is unfeasible. Please check your nutrition bounds.");
             }
         }
 
