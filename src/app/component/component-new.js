@@ -35,57 +35,57 @@ angular.module('app.component-new', [
                 "calcium": {
                     "name": "Calcium",
                     "value": 0,
-                    "unit": "g/kg DM"
+                    "unit": "% DM"
                 },
                 "phosphorus": {
                     "name": "Phosphorus",
                     "value": 0,
-                    "unit": "g/kg DM"
+                    "unit": "% DM"
                 },
                 "lysine": {
                     "name": "Lysine",
                     "value": 0,
-                    "unit": "% protein"
+                    "unit": "% DM"
                 },
                 "methionine": {
                     "name": "Methionine",
                     "value": 0,
-                    "unit": "% protein"
+                    "unit": "% DM"
                 },
-                "threonone": {
-                    "name": "Threonone",
+                "threonine": {
+                    "name": "Threonine",
                     "value": 0,
-                    "unit": "% protein"
+                    "unit": "% DM"
                 },
                 "tryptophan": {
                     "name": "Tryptophan",
                     "value": 0,
-                    "unit": "% protein"
+                    "unit": "% DM"
                 },
                 "valine": {
                     "name": "Valine",
                     "value": 0,
-                    "unit": "% protein"
+                    "unit": "% DM"
                 },
                 "sodium": {
                     "name": "Sodium",
                     "value": 0,
-                    "unit": "g/kg DM"
+                    "unit": "% DM"
                 },
                 "selenium": {
                     "name": "Selenium",
                     "value": 0,
-                    "unit": "g/kg DM"
+                    "unit": "% DM"
                 },
                 "zinc": {
                     "name": "Zinc",
                     "value": 0,
-                    "unit": "mg/kg DM"
+                    "unit": "% DM"
                 },
                 "linoleic_acid": {
                     "name": "Linoleic Acid",
                     "value": 0,
-                    "unit": "% fat"
+                    "unit": "% DM"
                 }
             }
         }

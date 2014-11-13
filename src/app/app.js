@@ -34,7 +34,19 @@ angular.module('app', [
         // Initialize the local database
         $indexedDBProvider
             .connection(DB_NAME)
-            .upgradeDatabase(1, function(_, db) {
+            .upgradeDatabase(2, function(_, db) {
+                if (db.objectStoreNames.contains(COMPONENT_TABLE_NAME)) {
+                    db.deleteObjectStore(COMPONENT_TABLE_NAME);
+                }
+
+                if (db.objectStoreNames.contains(FEED_TABLE_NAME)) {
+                    db.deleteObjectStore(FEED_TABLE_NAME);
+                }
+
+                if (db.objectStoreNames.contains(ANIMAL_TABLE_NAME)) {
+                    db.deleteObjectStore(ANIMAL_TABLE_NAME);
+                }
+
                 // Initialize a table to store feed components
                 db.createObjectStore(COMPONENT_TABLE_NAME, {
                     keyPath: '_id'
