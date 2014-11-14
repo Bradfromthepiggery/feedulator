@@ -39,7 +39,7 @@ angular.module('app.feed-new', [
             });
         }
     })
-    .controller('FeedNewCtrl', function MixtureCreationController($scope, $http, $indexedDB, lodash, Slug, $state) {
+    .controller('FeedNewCtrl', function MixtureCreationController($scope, $http, $indexedDB, lodash, Slug, $state, $timeout) {
         // Extract all components from the database and bind them to the scope
         $indexedDB.objectStore('components').getAll().then(function(results) {
             $scope.compData = results;
@@ -260,11 +260,11 @@ angular.module('app.feed-new', [
                 // Inject the optimization results, and clamp them all
                 // to 2 decimal places
                 $scope.formResult.compData.map(function(item) {
-                    item.value = +$scope.results[item._id].toFixed(2);
+                    item.value = $scope.results[item._id];
                 });
 
                 // Clamp the feed cost to 2 decimal places
-                $scope.formResult.feedCost = +$scope.results.result.toFixed(2);
+                $scope.formResult.feedCost = $scope.results.result;
 
                 // TODO: Draw attention back to the UI to visually inform the
                 // user that the values have been updated
@@ -273,10 +273,7 @@ angular.module('app.feed-new', [
                 $scope.calculate();
             } else {
                 // TODO: Replace this with something more elegant
-                Messenger().post({
-                    message: 'Optimization bounds are unfeasible. Please check them and try again.',
-                    type: 'error'
-                });
+                Messenger().post('Optimization bounds are unfeasible. Please check them and try again.');
             }
         }
 
@@ -301,4 +298,8 @@ angular.module('app.feed-new', [
 
         // A flag to display the optimization interface
         $scope.isOptimize = false;
+
+        $timeout(function() {
+            $('input[type="radio"]').radiocheck()
+        });
     });

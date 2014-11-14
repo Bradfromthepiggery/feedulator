@@ -184,7 +184,15 @@
                     <textarea id="feedDescription" class="form-control" ng-model="formResult.description" rows="5"></textarea>
                     <span class="help-block">You can leave this blank. Put any comments or additional information about this feed here.</span>
                 </div>
-                <!-- TODO: Add Public/Private Option -->
+                <div class="form-group">
+                    <label class="control-label">Can anyone else see this feed?</label>
+                    <label class="radio" ng-init="formResult.private = 'false'">
+                        <input type="radio" ng-model="formResult.private" data-toggle="radio" name="privacySelector" id="publicRatio" value="false" checked><b>Public: </b> Everyone can see this, but only you can make changes.
+                    </label>
+                    <label class="radio">
+                        <input type="radio" ng-model="formResult.private" data-toggle="radio" name="privacySelector" id="privateRadio" value="true"><b>Private: </b> Only you can see this, and only you can make changes.
+                    </label>
+                </div>
                 <button type="submit" class="btn btn-primary btn-large">
                     <span class="fui-check"></span>&nbsp;Save Feed Mixture
                 </button>
