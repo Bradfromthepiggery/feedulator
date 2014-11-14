@@ -10,7 +10,7 @@ angular.module('app.feed-new', [
             url: '/feeds/new',
             views: {
                 "main": {
-                    controller: 'MixtureNewCtrl',
+                    controller: 'FeedNewCtrl',
                     templateUrl: 'app/feed/feed-new.tpl.html'
                 }
             },
@@ -39,7 +39,7 @@ angular.module('app.feed-new', [
             });
         }
     })
-    .controller('MixtureNewCtrl', function MixtureCreationController($scope, $http, $indexedDB, lodash, Slug, $state) {
+    .controller('FeedNewCtrl', function MixtureCreationController($scope, $http, $indexedDB, lodash, Slug, $state) {
         // Extract all components from the database and bind them to the scope
         $indexedDB.objectStore('components').getAll().then(function(results) {
             $scope.compData = results;
@@ -113,6 +113,12 @@ angular.module('app.feed-new', [
                 $scope.formResult.compData[0].value = difference
             } else {
                 Messenger().post("Warning: Sum of component quantities exceeds 100%");
+            }
+
+            if ($scope.formResult.weight) {
+                $scope.feedCost = $scope.formResult.compData.reduce(function(acc, curr) {
+                    return acc + curr.value * 0.01 * $scope.formResult.weight * curr.cost
+                }, 0);
             }
 
             // Extract the nutrients associated with the current component
@@ -244,7 +250,7 @@ angular.module('app.feed-new', [
 
             // Run a Simplex solver on the model and inject the results into the scope
             $scope.results = $scope.solver.Solve($scope.model);
-            debugger;
+
             if ($scope.results.feasible) {
                 // Inject the optimization results, and clamp them all
                 // to 2 decimal places

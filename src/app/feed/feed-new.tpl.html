@@ -30,6 +30,9 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="panel-footer" ng-if="formResult.weight" style="font-size: 14px">
+                Total Feed Cost: ${{feedCost | number: 2}}
+            </div>
         </div>
         <div class="panel panel-default" ng-if="formResult.nutritionData">
             <div class="panel-heading">
@@ -54,6 +57,9 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="panel-footer" style="font-size: 14px">
+
+            </div>
         </div>
     </aside>
     <section class="col-lg-9">
@@ -117,7 +123,7 @@
             <div class="form-group" ng-if="formResult.compData.length > 0">
             <label for="feedWeight" class="control-label">Feed Weight</label>
                 <div class="input-group">
-                <input id="feedWeight" class="form-control" type="number" ng-model="formResult.weight" required />
+                <input id="feedWeight" class="form-control" type="number" ng-model="formResult.weight" ng-change="calculate()"/>
                 <span class="input-group-addon">lb</span>
                 </div>
                 <span class="help-block">Provide a desired feed weight to view component quantities in pounds</span>

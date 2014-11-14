@@ -4976,13 +4976,6 @@ var components = {
             }
         }
     },
-    "": {
-        "_id": "",
-        "creationDate": "2014-11-10T05:01:51.974Z",
-        "gmoFree": false,
-        "name": "",
-        "nutrients": {}
-    },
     "coloured_guinea_grass_aerial_part_fresh": {
         "_id": "coloured_guinea_grass_aerial_part_fresh",
         "creationDate": "2014-11-10T05:01:51.993Z",

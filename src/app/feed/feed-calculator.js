@@ -8,7 +8,7 @@ angular.module('app.feed-calculator', [
             url: '/feeds/calculator',
             views: {
                 "main": {
-                    controller: 'MixtureNewCtrl',
+                    controller: 'FeedNewCtrl',
                     templateUrl: 'app/feed/feed-new.tpl.html'
                 }
             },
