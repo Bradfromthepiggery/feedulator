@@ -25,7 +25,8 @@
                     <tr ng-repeat="comp in formResult.compData">
                         <td>{{$index+1}}</td>
                         <td>{{comp.name}}</td>
-                        <td>{{comp.value}}%</td>
+                        <td ng-if="formResult.weight == null">{{comp.value}}%</td>
+                        <td ng-if="formResult.weight">{{comp.value * 0.01 * formResult.weight}} lb</td>
                     </tr>
                 </tbody>
             </table>
@@ -112,6 +113,14 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="form-group" ng-if="formResult.compData.length > 0">
+            <label for="feedWeight" class="control-label">Feed Weight</label>
+                <div class="input-group">
+                <input id="feedWeight" class="form-control" type="number" ng-model="formResult.weight" required />
+                <span class="input-group-addon">lb</span>
+                </div>
+                <span class="help-block">Provide a desired feed weight to view component quantities in pounds</span>
+            </div>
             <div ng-if="isOptimize">
                 <p class="lead">Optimization Constraints</p>
                 <p>The feed components you've added above provide the following nutritional contents. To optimize feed component proportions, you can specify minimum and maximum quantities for each item below. Otherwise, leave them blank.</p>
