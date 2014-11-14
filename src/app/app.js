@@ -66,7 +66,7 @@ angular.module('app', [
         // Configure the notification UI
         Messenger.options = {
             extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-right',
-            theme: 'flat'
+            theme: 'block'
         }
     })
     .controller('AppCtrl', function AppCtrl($scope, $location, $indexedDB) {

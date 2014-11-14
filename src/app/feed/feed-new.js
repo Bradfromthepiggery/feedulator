@@ -74,6 +74,8 @@ angular.module('app.feed-new', [
                 value: 0,
                 cost: 0
             });
+
+            $scope.calculate()
         }
 
         // Remove an entry from the component selector
@@ -87,12 +89,32 @@ angular.module('app.feed-new', [
                 item.value = 0;
             });
 
+            $scope.formResult.compData[0].value = 100
+
             // Reset the calculations and numbers in the scope
             $scope.formResult.nutritionData = null;
         }
 
         // Evaluate the total nutrition provided by the components
         $scope.calculate = function() {
+            var complementWeight = 0
+
+            if ($scope.formResult.compData.length > 2) {
+                var complementWeight = lodash.rest($scope.formResult.compData).reduce(function(acc, curr) {
+                    return acc + curr.value;
+                }, 0);
+            } else if ($scope.formResult.compData.length === 2) {
+                var complementWeight = $scope.formResult.compData[1].value
+            }
+
+            var difference = 100 - complementWeight
+
+            if (difference > 0) {
+                $scope.formResult.compData[0].value = difference
+            } else {
+                Messenger().post("Warning: Sum of component quantities exceeds 100%");
+            }
+
             // Extract the nutrients associated with the current component
             var nutrientList = $scope.formResult.compData.map(function(item) {
                 var nutrients = lodash.find($scope.compData, {
@@ -100,11 +122,9 @@ angular.module('app.feed-new', [
                 }).nutrients;
 
                 return lodash.mapValues(nutrients, function(nutrient) {
-                    var sumVal = nutrient.value * item.value * 0.01;
-
                     return {
                         name: nutrient.name,
-                        value: +sumVal.toFixed(2),
+                        value: nutrient.value * item.value * 0.01,
                         unit: nutrient.unit
                     };
                 });
@@ -140,11 +160,9 @@ angular.module('app.feed-new', [
 
                 // Merge both entries in the pair and sum their values
                 return lodash.merge(lodash.clone(acc), curr, function(a, b) {
-                    var sumVal = a.value + b.value;
-
                     return {
                         name: a.name,
-                        value: +sumVal.toFixed(2),
+                        value: a.value + b.value,
                         unit: a.unit
                     };
                 });
