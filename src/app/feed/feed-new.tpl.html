@@ -46,7 +46,7 @@
                         <th>#</th>
                         <th>Nutrition</th>
                         <th>Qty<br/>(% DM)</th>
-                        <th>Ref.<br/>(% DM)</th>
+                        <th ng-if="formResult.refAnimal">Ref.<br/>(% DM)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -54,11 +54,14 @@
                         <td>{{$index+1}}</td>
                         <td>{{data.name | ucfirst}}</td>
                         <td>{{data.value | number: 3}}</td>
+                        <td ng-if="formResult.refAnimal">{{formResult.refAnimal.nutrients[key].value || 0}}</td>
                     </tr>
                 </tbody>
             </table>
             <div class="panel-footer" style="font-size: 14px">
-
+                <select id="animalSelect" ng-model="formResult.refAnimal" ng-options="animal.name for animal in animalData track by animal._id" class="form-control">
+                    <option value="">Compare to Animal</option>
+                </select>
             </div>
         </div>
     </aside>

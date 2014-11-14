@@ -77,6 +77,7 @@ angular.module('app', [
         });
 
         initComponents($indexedDB);
+        initAnimals($indexedDB);
     });
 
 // An instance reads entries from data/components.json and bootstraps
@@ -86,5 +87,15 @@ var initComponents = function(dbService) {
 
     for (var compId in components) {
         componentStore.insert(components[compId]);
+    }
+}
+
+// An instance reads entries from data/animals.json and bootstraps
+// the animals table in the local database
+var initAnimals = function(dbService) {
+    var animalStore = dbService.objectStore(ANIMAL_TABLE_NAME);
+
+    for (var animalId in animals) {
+        animalStore.insert(animals[animalId]);
     }
 }

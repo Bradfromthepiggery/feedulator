@@ -46,6 +46,11 @@ angular.module('app.feed-new', [
             $scope.compCount = Object.keys($scope.compData).length;
         });
 
+        // Extract all animals from the database and bind them to the scope
+        $indexedDB.objectStore('animals').getAll().then(function(results) {
+            $scope.animalData = results;
+        });
+
         // Initialize an object to collect all the input data
         $scope.formResult = {
             compData: [],
@@ -284,7 +289,7 @@ angular.module('app.feed-new', [
             $indexedDB.objectStore('feeds')
                 .upsert($scope.formResult)
                 .then(function(e) {
-                    Messenger().post("Saved feed " + $scope.formResult.name);
+                    Messenger().post('Saved feed ' + $scope.formResult.name);
 
                     $state.go('feed-list');
                 });

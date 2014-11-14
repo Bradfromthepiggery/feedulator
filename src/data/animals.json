@@ -1,52 +1,112 @@
 var animals = {
-    "growing_pig_3_5": {
-        "crude_protein": {
-            "value": 26.0,
-            "unit": "% DM"
-        },
-        "lysine": {
-            "value": 26.0,
-            "unit": "% DM"
-        },
-        "methionine": {
-            "value": 26.0,
-            "unit": "% DM"
-        },
-        "threonine": {
-            "value": 26.0,
-            "unit": "% DM"
-        },
-        "tryptophan": {
-            "value": 26.0,
-            "unit": "% DM"
-        },
-        "valine": {
-            "value": 26.0,
-            "unit": "% DM"
-        },
-        "calcium": {
-            "value": 26.0,
-            "unit": "% DM"
-        },
-        "phosphorus": {
-            "value": 26.0,
-            "unit": "% DM"
-        },
-        "sodium": {
-            "value": 26.0,
-            "unit": "% DM"
-        },
-        "selenium": {
-            "value": 26.0,
-            "unit": "% DM"
-        },
-        "zinc": {
-            "value": 26.0,
-            "unit": "% DM"
-        },
-        "linoleic_acid": {
-            "value": 26.0,
-            "unit": "% DM"
+    "growing_pig_7_11": {
+        "_id": "growing_pig_7_11",
+        "name": "Growing Pig, 7--11 lb",
+        "creationDate": "2014-11-10T05:01:52.216Z",
+        "nutrients": {
+            "crude_protein": {
+                "value": 26.0,
+                "unit": "% DM"
+            },
+            "lysine": {
+                "value": 1.50,
+                "unit": "% DM"
+            },
+            "methionine": {
+                "value": 0.40,
+                "unit": "% DM"
+            },
+            "threonine": {
+                "value": 0.98,
+                "unit": "% DM"
+            },
+            "tryptophan": {
+                "value": 0.27,
+                "unit": "% DM"
+            },
+            "valine": {
+                "value": 1.04,
+                "unit": "% DM"
+            },
+            "calcium": {
+                "value": 0.90,
+                "unit": "% DM"
+            },
+            "phosphorus": {
+                "value": 0.70,
+                "unit": "% DM"
+            },
+            "sodium": {
+                "value": 0.25,
+                "unit": "% DM"
+            },
+            "selenium": {
+                "value": 0.30,
+                "unit": "% DM"
+            },
+            "zinc": {
+                "value": 0.01,
+                "unit": "% DM"
+            },
+            "linoleic_acid_c18_2": {
+                "value": 0.10,
+                "unit": "% DM"
+            }
+        }
+    },
+    "growing_pig_12_22": {
+        "_id": "growing_pig_12_22",
+        "name": "Growing Pig, 12--22 lb",
+        "creationDate": "2014-11-10T05:01:52.216Z",
+        "nutrients": {
+            "crude_protein": {
+                "value": 23.7,
+                "unit": "% DM"
+            },
+            "lysine": {
+                "value": 1.35,
+                "unit": "% DM"
+            },
+            "methionine": {
+                "value": 0.35,
+                "unit": "% DM"
+            },
+            "threonine": {
+                "value": 0.86,
+                "unit": "% DM"
+            },
+            "tryptophan": {
+                "value": 0.24,
+                "unit": "% DM"
+            },
+            "valine": {
+                "value": 0.92,
+                "unit": "% DM"
+            },
+            "calcium": {
+                "value": 0.80,
+                "unit": "% DM"
+            },
+            "phosphorus": {
+                "value": 0.65,
+                "unit": "% DM"
+            },
+            "sodium": {
+                "value": 0.20,
+                "unit": "% DM"
+            },
+            "selenium": {
+                "value": 0.30,
+                "unit": "% DM"
+            },
+            "zinc": {
+                "value": 0.01,
+                "unit": "% DM"
+            },
+            "linoleic_acid_c18_2": {
+                "value": 0.10,
+                "unit": "% DM"
+            }
         }
     }
 }
