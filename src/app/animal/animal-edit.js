@@ -1,24 +1,22 @@
 'use strict';
 
 angular.module('app.animal-edit', [
-        'ui.router'
+        'ui.router',
+        'xc.indexedDB'
     ])
     .config(function config($stateProvider) {
         $stateProvider.state('animal-edit', {
-            url: '/animals/:animalId',
+            url: '/animals/edit/:animalId',
             views: {
                 "main": {
                     controller: 'AnimalEditCtrl',
-                    templateUrl: 'app/animal/animal-edit.tpl.html'
+                    templateUrl: 'app/animal/animal-new.tpl.html'
                 }
             },
             data: {
-                pageTitle: 'Animal Information'
+                pageTitle: 'Edit Animal'
             }
         });
     })
     .controller('AnimalEditCtrl', function AnimalEditController($stateParams, $scope, $http) {
-        $http.get('data/' + $stateParams.animalId + '.json').success(function(data) {
-            $scope.animalData = data;
-        });
     });

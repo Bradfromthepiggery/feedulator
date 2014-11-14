@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('app.animal-list', [
-        'ui.router'
+        'ui.router',
+        'xc.indexedDB'
     ])
     .config(function config($stateProvider) {
         $stateProvider.state('animal-list', {
@@ -13,12 +14,24 @@ angular.module('app.animal-list', [
                 }
             },
             data: {
-                pageTitle: 'All Animals'
+                pageTitle: 'Animals'
             }
         });
     })
-    .controller('AnimalListCtrl', function AnimalListController($scope, $http) {
-        $http.get('data/animals.json').success(function(data) {
-            $scope.animalData = data;
+    .controller('AnimalListCtrl', function AnimalListController($scope, $state, $indexedDB, lodash) {
+        var animalStore = $indexedDB.objectStore('animals')
+
+        animalStore.getAll().then(function(results) {
+            $scope.animalData = results;
         });
+
+        $scope.deleteAnimal = function(animalId) {
+            animalStore.delete(animalId).then(function() {
+                Messenger().post("Successfully deleted animal");
+
+                $scope.animalData = lodash.reject($scope.animalData, { _id: animalId });
+            });
+        }
+
+        $(':checkbox').radiocheck();
     });

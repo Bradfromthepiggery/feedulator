@@ -1,0 +1,52 @@
+var animals = {
+    "growing_pig_3_5": {
+        "crude_protein": {
+            "value": 26.0,
+            "unit": "% DM"
+        },
+        "lysine": {
+            "value": 26.0,
+            "unit": "% DM"
+        },
+        "methionine": {
+            "value": 26.0,
+            "unit": "% DM"
+        },
+        "threonine": {
+            "value": 26.0,
+            "unit": "% DM"
+        },
+        "tryptophan": {
+            "value": 26.0,
+            "unit": "% DM"
+        },
+        "valine": {
+            "value": 26.0,
+            "unit": "% DM"
+        },
+        "calcium": {
+            "value": 26.0,
+            "unit": "% DM"
+        },
+        "phosphorus": {
+            "value": 26.0,
+            "unit": "% DM"
+        },
+        "sodium": {
+            "value": 26.0,
+            "unit": "% DM"
+        },
+        "selenium": {
+            "value": 26.0,
+            "unit": "% DM"
+        },
+        "zinc": {
+            "value": 26.0,
+            "unit": "% DM"
+        },
+        "linoleic_acid": {
+            "value": 26.0,
+            "unit": "% DM"
+        }
+    }
+}
