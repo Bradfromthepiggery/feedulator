@@ -18,7 +18,7 @@ angular.module('app.component-list', [
             }
         });
     })
-    .controller('CompListCtrl', function CompListController($scope, $state, $indexedDB, lodash) {
+    .controller('CompListCtrl', function CompListController($scope, $state, $indexedDB, lodash, $timeout) {
         var compStore = $indexedDB.objectStore('components')
 
         compStore.getAll().then(function(results) {
@@ -29,9 +29,13 @@ angular.module('app.component-list', [
             compStore.delete(feedId).then(function() {
                 Messenger().post("Successfully deleted component");
 
-                $scope.compData = lodash.reject($scope.compData, { _id: feedId });
+                $scope.compData = lodash.reject($scope.compData, {
+                    _id: feedId
+                });
             });
         }
 
-        $(':checkbox').radiocheck();
+        $timeout(function() {
+            $(':checkbox').radiocheck();
+        });
     });

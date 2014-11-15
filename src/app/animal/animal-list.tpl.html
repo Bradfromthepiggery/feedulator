@@ -1,26 +1,72 @@
-<form>
-    <input type="text" ng-model="search" placeholder="Search by Anything" />
-    <br/>
-    <input type="checkbox" ng-model="supplierChecked" ng-init="supplierChecked=true" />Supplier
-    <br/>
-    <input type="checkbox" ng-model="gmoChecked" ng-init="gmoChecked=true" />GMO Status
-    <br/>
-    <input type="checkbox" ng-model="nutrientsChecked" ng-init="nutrientsChecked=true" />Nutrients
-    <br/>
-    <input type="checkbox" ng-model="descriptionChecked" ng-init="descriptionChecked=true" />Description
-    <br/>
-    <input type="checkbox" ng-model="chartChecked" ng-init="chartChecked=true" />Chart
-</form>
-<article ng-repeat="animal in animalData | toArray | filter: { $: search }">
-    <h1>{{animal.type | ucfirst}}</h1>
-    <ul>
-        <li ng-repeat="diet in animal.targetDiets.data">
-            {{diet.name | ucfirst}}
-            <ul>
-                <li ng-repeat="(nutrientName, nutrientData) in diet.nutrients">
-                    {{nutrientName | ucfirst}}, {{nutrientData.value}}{{nutrientData.unit}}
-                </li>
-            </ul>
-        </li>
-    </ul>
-</article>
+<div class="row">
+    <aside class="col-lg-3">
+        <form role="form">
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="search" class="form-control" ng-model="search" placeholder="Search Animals" />
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn">
+                            <span class="fui-search"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <hr>
+            <p class="lead">Hide/Show Details</p>
+            <label class="checkbox" for="descCheckbox">
+                <input type="checkbox" id="descCheckbox" data-toggle="checkbox" ng-model="descriptionChecked" ng-init="descriptionChecked=false" checked>Description
+            </label>
+            <label class="checkbox" for="nutrientsCheckbox">
+                <input type="checkbox" id="nutrientsCheckbox" data-toggle="checkbox" ng-model="nutrientsChecked" ng-init="nutrientsChecked=true">Nutrients
+            </label>
+            <hr>
+            <button class="btn btn-primary btn-block" ui-sref="component-new">
+                <span class="fui-plus"></span>&nbsp;Create New Animal</button>
+        </form>
+    </aside>
+    <div class="col-lg-9">
+        <div class="row">
+            <section class="col-lg-4" dir-paginate="animal in animalData | toArray | filter: { $: search } | itemsPerPage: 12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title" style="font-size: 16px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+                            {{animal.name | ucfirst}}
+                        </h2>
+                    </div>
+                    <div class="panel-body" ng-if="comp.supplier || comp.description">
+                        <p ng-if="descriptionChecked">{{animal.description}}</p>
+                    </div>
+                    <table class="table table-condensed table-striped table-hover table-responsive" ng-if="nutrientsChecked" style="max-height: 150px; overflow-y: scroll;">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nutrient</th>
+                                <th>Qty (% DM)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="(nutrientName, data) in animal.nutrients">
+                                <td>{{$index+1}}</td>
+                                <td>{{data.name | ucfirst}}</td>
+                                <td>{{data.value}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="panel-footer">
+                        <button class="btn btn-warning btn-sm" ui-sref="animal-edit({ animalId: animal._id})">
+                            <span class="fui-new"></span>&nbsp;Edit
+                        </button>
+                        <span class="pull-right">
+                            <button class="btn btn-danger btn-sm" ng-click="deleteAnimal(animal._id)">
+                                <span class="fui-trash"></span>&nbsp;Delete
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="text-center">
+            <dir-pagination-controls boundary-links="false" template-url="./app/common/pagination.tpl.html"></dir-pagination-controls>
+        </div>
+    </div>
+</div>
