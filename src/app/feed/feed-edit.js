@@ -17,20 +17,27 @@ angular.module('app.feed-edit', [
             }
         });
     })
-    .controller('FeedEditCtrl', function FeedEditController($state, $scope, $stateParams, lodash, Slug, $indexedDB) {
+    .controller('FeedEditCtrl', function FeedEditController($state, $scope, $stateParams, lodash, Slug, $indexedDB, $timeout) {
         $indexedDB.objectStore('components').getAll().then(function(results) {
             $scope.compData = results;
             $scope.compCount = Object.keys($scope.compData).length;
+
+            // Populate the component selection fields once the component data
+            // has loaded. This is wrapped in a timeout to enqueue it onto the
+            // digest stack so the select2 field is guaranteed to initialize first
+            $timeout(function() {
+                $scope.formResult.compData.forEach(function(item, index) {
+                   $('#select' + index).select2('val', item._id);
+                });
+            });
         });
 
         $indexedDB.objectStore('feeds').find($stateParams.feedId).then(function(result) {
             $scope.formResult = result;
 
-            setTimeout(function() {
-                $scope.formResult.compData.forEach(function(item, index) {
-                   $('#select' + index).select2('val', item._id);
-                });
-            }, 500);
+            // setTimeout(function() {
+
+            // }, 500);
         });
 
         // Update an entry in the component selector. This is called when
