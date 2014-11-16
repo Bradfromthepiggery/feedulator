@@ -180,13 +180,6 @@ angular.module('app.feed-new', [
             });
         }
 
-        $scope.makeSticky = function() {
-            $('#nutritionPanel').sticky({
-                topSpacing: 20,
-                getWidthFrom: 'aside'
-            });
-        }
-
         // Optimize the feed based on constraints provided by the user
         $scope.optFeed = function() {
             $scope.solver = new Solver();
@@ -297,6 +290,13 @@ angular.module('app.feed-new', [
 
                     $state.go('feed-list');
                 });
+        }
+
+        $scope.makeSticky = function() {
+            $('#nutritionPanel').sticky({
+                topSpacing: 20,
+                getWidthFrom: 'aside'
+            });
         }
 
         // A flag to hide the feed metadata interface when the view is called

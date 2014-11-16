@@ -57,7 +57,7 @@
                         <td>{{$index+1}}</td>
                         <td>{{data.name | ucfirst}}</td>
                         <td>{{data.value | number: 3}}</td>
-                        <td ng-if="formResult.refAnimal">{{formResult.refAnimal.nutrients[key].value || 0}}</td>
+                        <td ng-if="formResult.refAnimal" ng-class="{ 'highlight--red': formResult.refAnimal.nutrients[key].value < data.value }">{{formResult.refAnimal.nutrients[key].value || 0}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -96,6 +96,7 @@
                                 <span class="input-group-addon">≤</span>
                                 <input class="form-control" ng-model="comp.max" type="number" min="0" max="100" placeholder="Max" ng-change="calculate()" step="0.01" />
                             </div>
+                            <span ng-if="$first" class="help-block">This is your main component. It's value will change automatically, ensuring that your feed components always sum to 100%</span>
                         </td>
                         <td style="width: 20%">
                             <div class="input-group">
