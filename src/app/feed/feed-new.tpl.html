@@ -17,8 +17,9 @@
                     <tr>
                         <th>#</th>
                         <th>Component</th>
-                        <th>Qty (
-                            <span ng-if="formResult.weight == null">%</span>
+                        <th>Qty
+                        <br/>(
+                            <span ng-if="formResult.weight == null || formResult.weight == 0">%</span>
                             <span ng-if="formResult.weight">lb</span>)</th>
                     </tr>
                 </thead>
@@ -26,8 +27,8 @@
                     <tr ng-repeat="comp in formResult.compData">
                         <td>{{$index+1}}</td>
                         <td style="width: 60%">{{comp.name}}</td>
-                        <td ng-if="formResult.weight == null">{{comp.value | number: 2}}</td>
-                        <td ng-if="formResult.weight">{{comp.value * 0.01 * formResult.weight | number: 2}}</td>
+                        <td ng-if="formResult.weight == null || formResult.weight == 0">{{comp.value | number: 2}}</td>
+                        <td ng-if="formResult.weight !== 0">{{comp.value * 0.01 * formResult.weight | number: 2}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -53,11 +54,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="(key, data) in formResult.nutritionData">
+                    <tr ng-repeat="(key, data) in formResult.nutritionData" ng-class="{ danger: formResult.refAnimal.nutrients[key].value > data.value, success: formResult.refAnimal.nutrients[key].value <= data.value }">
                         <td>{{$index+1}}</td>
                         <td>{{data.name | ucfirst}}</td>
                         <td>{{data.value | number: 3}}</td>
-                        <td ng-if="formResult.refAnimal" ng-class="{ 'highlight--red': formResult.refAnimal.nutrients[key].value < data.value }">{{formResult.refAnimal.nutrients[key].value || 0}}</td>
+                        <td ng-if="formResult.refAnimal">{{formResult.refAnimal.nutrients[key].value || 0}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -71,7 +72,7 @@
     <section class="col-lg-9">
         <form role="form" ng-submit="submit()">
             <p class="lead">Feed Components</p>
-            <p>Choose the items that will be mixed into the feed. Click "Add Component" to add an additional item. If desired, you can specify minimum and maximum quantities for each item. Otherwise, leave them blank.</p>
+            <p>Choose the items that will be mixed into the feed. Click "Add Component" to add an additional item. If desired, you can specify minimum and maximum quantities for each item. Otherwise, leave them blank. Once you're done making your choices, click "Optimize" to calculate the best ratio of components and keep costs low.</p>
             <table class="table table-condensed">
                 <thead>
                     <tr>
@@ -101,7 +102,7 @@
                         <td style="width: 20%">
                             <div class="input-group">
                                 <span class="input-group-addon">$</span>
-                                <input class="form-control" ng-model="comp.cost" type="number" min="0" step="0.01" />
+                                <input class="form-control" ng-model="comp.cost" type="number" min="0" step="0.01" ng-change="calculate()" />
                                 <span class="input-group-addon">/
                                     <abbr>lb</abbr>
                                 </span>
@@ -119,7 +120,7 @@
                             <button type="button" class="btn btn-info" ng-disabled="compCount == formResult.compData.length" ng-click="addNewComp()">Add Component</button>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-primary" ng-disabled="formResult.compData.length < 1 || isOptimize || formResult.nutritionData == null" ng-click="isOptimize = true">Optimize</button>
+                            <button type="button" class="btn btn-primary" ng-disabled="formResult.compData.length < 2 || isOptimize || formResult.nutritionData == null" ng-click="isOptimize = true">Optimize</button>
                             <button type="button" class="btn btn-danger pull-right" ng-disabled="formResult.compData.length < 1" ng-click="resetComponents()">Reset</button>
                         </td>
                         <td></td>
@@ -133,7 +134,7 @@
                     <input id="feedWeight" class="form-control" type="number" min="0" step="0.1" ng-model="formResult.weight" ng-change="calculate()" />
                     <span class="input-group-addon">lb</span>
                 </div>
-                <span class="help-block">Provide a desired feed weight to view component quantities in pounds</span>
+                <span class="help-block">Provide a desired feed weight to view all component quantities in pounds. Leaving this empty will show component quantities as a percentage of total feed weight.</span>
             </div>
             <div ng-if="isOptimize">
                 <p class="lead">Optimization Constraints</p>
@@ -176,22 +177,22 @@
                 <div class="form-group">
                     <label for="feedName" class="control-label">Feed Name</label>
                     <input id="feedName" ng-disabled="isEdit" class="form-control" type="text" ng-model="formResult.name" required />
-                    <span class="help-block">This shows up in the list of feeds, so keep it short but descriptive. You <b>have</b> to fill this in.</span>
+                    <span class="help-block">You <b>have</b> to fill this in. This shows up in the list of feeds, so keep it short but descriptive.</span>
                 </div>
                 <div class="form-group">
                     <label for="animalBatchId" class="control-label">Animal Batch ID</label>
                     <input id="animalBatchId" class="form-control" type="text" ng-model="formResult.batchId" />
-                    <span class="help-block">You can leave this blank, but if you're creating this feed for a certain batch of animals, use this field to keep track of their identification codes.</span>
+                    <span class="help-block">You can leave this blank. If you're creating this feed for a certain batch of animals, use this field to keep track of their identification codes.</span>
                 </div>
                 <div class="form-group">
                     <label for="feedDescription" class="control-label">Description</label>
                     <textarea id="feedDescription" class="form-control" ng-model="formResult.description" rows="5"></textarea>
-                    <span class="help-block">You can leave this blank. Put any comments or additional information about this feed here.</span>
+                    <span class="help-block">You can leave this blank. Use this space to store any additional information or comments about this feed.</span>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Can anyone else see this feed?</label>
                     <label class="radio" ng-init="formResult.private = 'false'">
-                        <input type="radio" ng-model="formResult.private" data-toggle="radio" name="privacySelector" id="publicRatio" value="false" checked><b>Public: </b> Everyone can see this, but only you can make changes.
+                        <input type="radio" ng-model="formResult.private" data-toggle="radio" name="privacySelector" id="publicRatio" value="false" checked=""><b>Public: </b> Everyone can see this, but only you can make changes.
                     </label>
                     <label class="radio">
                         <input type="radio" ng-model="formResult.private" data-toggle="radio" name="privacySelector" id="privateRadio" value="true"><b>Private: </b> Only you can see this, and only you can make changes.

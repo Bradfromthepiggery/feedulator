@@ -15,14 +15,14 @@
                     <tr>
                         <th>#</th>
                         <th>Nutrition</th>
-                        <th>Qty</th>
+                        <th>Qty (% DM)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="(key, data) in formResult.nutrients">
                         <td>{{$index+1}}</td>
                         <td>{{data.name | ucfirst}}</td>
-                        <td>{{data.value + data.unit}}</td>
+                        <td>{{data.value}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -30,7 +30,7 @@
     </aside>
     <section class="col-lg-9">
         <form role="form" ng-submit="submit()">
-            <p class="lead">Component Metadata</p>
+            <p class="lead">About This Component</p>
             <p>Provide some information about this feed component. To see what everything will look like, check out the preview on the left!</p>
             <div class="form-group">
                 <label for="mixtureName" class="control-label">Feed Component Name</label>

@@ -32,12 +32,13 @@ angular.module('app.feed-edit', [
             });
         });
 
+        // Extract all animals from the database and bind them to the scope
+        $indexedDB.objectStore('animals').getAll().then(function(results) {
+            $scope.animalData = results;
+        });
+
         $indexedDB.objectStore('feeds').find($stateParams.feedId).then(function(result) {
             $scope.formResult = result;
-
-            // setTimeout(function() {
-
-            // }, 500);
         });
 
         // Update an entry in the component selector. This is called when
@@ -62,6 +63,8 @@ angular.module('app.feed-edit', [
                 value: 0,
                 cost: 0
             });
+
+            $scope.calculate()
         }
 
         // Remove an entry from the component selector
@@ -75,12 +78,38 @@ angular.module('app.feed-edit', [
                 item.value = 0;
             });
 
+            $scope.formResult.compData[0].value = 100
+
             // Reset the calculations and numbers in the scope
             $scope.formResult.nutritionData = null;
         }
 
         // Evaluate the total nutrition provided by the components
         $scope.calculate = function() {
+            var complementWeight = 0
+
+            if ($scope.formResult.compData.length > 2) {
+                var complementWeight = lodash.rest($scope.formResult.compData).reduce(function(acc, curr) {
+                    return acc + curr.value;
+                }, 0);
+            } else if ($scope.formResult.compData.length === 2) {
+                var complementWeight = $scope.formResult.compData[1].value
+            }
+
+            var difference = 100 - complementWeight
+
+            if (difference > 0) {
+                $scope.formResult.compData[0].value = difference
+            } else {
+                Messenger().post("Warning: Sum of component quantities exceeds 100%");
+            }
+
+            if ($scope.formResult.weight) {
+                $scope.feedCost = $scope.formResult.compData.reduce(function(acc, curr) {
+                    return acc + curr.value * 0.01 * $scope.formResult.weight * curr.cost
+                }, 0);
+            }
+
             // Extract the nutrients associated with the current component
             var nutrientList = $scope.formResult.compData.map(function(item) {
                 var nutrients = lodash.find($scope.compData, {
@@ -88,11 +117,9 @@ angular.module('app.feed-edit', [
                 }).nutrients;
 
                 return lodash.mapValues(nutrients, function(nutrient) {
-                    var sumVal = nutrient.value * item.value * 0.01;
-
                     return {
                         name: nutrient.name,
-                        value: +sumVal.toFixed(2),
+                        value: nutrient.value * item.value * 0.01,
                         unit: nutrient.unit
                     };
                 });
@@ -128,11 +155,9 @@ angular.module('app.feed-edit', [
 
                 // Merge both entries in the pair and sum their values
                 return lodash.merge(lodash.clone(acc), curr, function(a, b) {
-                    var sumVal = a.value + b.value;
-
                     return {
                         name: a.name,
-                        value: +sumVal.toFixed(2),
+                        value: a.value + b.value,
                         unit: a.unit
                     };
                 });
@@ -214,16 +239,16 @@ angular.module('app.feed-edit', [
 
             // Run a Simplex solver on the model and inject the results into the scope
             $scope.results = $scope.solver.Solve($scope.model);
-            debugger;
+
             if ($scope.results.feasible) {
                 // Inject the optimization results, and clamp them all
                 // to 2 decimal places
                 $scope.formResult.compData.map(function(item) {
-                    item.value = +$scope.results[item._id].toFixed(2);
+                    item.value = $scope.results[item._id];
                 });
 
                 // Clamp the feed cost to 2 decimal places
-                $scope.formResult.feedCost = +$scope.results.result.toFixed(2);
+                $scope.formResult.feedCost = $scope.results.result;
 
                 // TODO: Draw attention back to the UI to visually inform the
                 // user that the values have been updated
@@ -232,7 +257,7 @@ angular.module('app.feed-edit', [
                 $scope.calculate();
             } else {
                 // TODO: Replace this with something more elegant
-                alert("Optimization is unfeasible. Please check your nutrition bounds.");
+                Messenger().post('Optimization bounds are unfeasible. Please check them and try again.');
             }
         }
 
@@ -245,13 +270,18 @@ angular.module('app.feed-edit', [
             $indexedDB.objectStore('feeds')
                 .upsert($scope.formResult)
                 .then(function(e) {
-                    Messenger().post({
-                        message: 'Saved feed \'' + $scope.formResult.name + '\'',
-                        showCloseButton: true
-                    });
+                    Messenger().post('Saved feed ' + $scope.formResult.name);
 
-                    $state.go('feed-list', {}, { reload: true });
+                    $state.go('feed-list');
                 });
+        }
+
+        $scope.makeSticky = function() {
+            $('#nutritionPanel').sticky({
+                topSpacing: 20,
+                getWidthFrom: 'aside',
+
+            });
         }
 
         // A flag to hide the feed metadata interface when the view is called
@@ -260,4 +290,8 @@ angular.module('app.feed-edit', [
 
         // A flag to display the optimization interface
         $scope.isOptimize = false;
+
+        $timeout(function() {
+            $('input[type="radio"]').radiocheck();
+        });
     });

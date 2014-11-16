@@ -62,13 +62,18 @@ angular.module('app.feed-new', [
         $scope.updateComp = function(index, value) {
             $scope.formResult.compData[index]._id = value;
 
-            // Lookup the name of the component using the component master list
-            $scope.formResult.compData[index].name = lodash.find($scope.compData, {
+            var searchResult = lodash.find($scope.compData, {
                 _id: value
-            }).name;
+            });
 
-            // Update the nutrition calculations
-            $scope.calculate();
+            if (searchResult) {
+                // Lookup the name of the component using the component master list
+                $scope.formResult.compData[index].name = searchResult.name
+
+
+                // Update the nutrition calculations
+                $scope.calculate();
+            }
         }
 
         // Add an entry to the component selector
@@ -295,7 +300,8 @@ angular.module('app.feed-new', [
         $scope.makeSticky = function() {
             $('#nutritionPanel').sticky({
                 topSpacing: 20,
-                getWidthFrom: 'aside'
+                getWidthFrom: 'aside',
+                responsiveWidth: true
             });
         }
 
