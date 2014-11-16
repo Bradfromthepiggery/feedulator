@@ -1,6 +1,5 @@
 <div class="row">
     <aside class="col-lg-3">
-        <p class="lead">Preview</p>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h2 class="panel-title" style="font-size: 16px">
@@ -18,7 +17,9 @@
                     <tr>
                         <th>#</th>
                         <th>Component</th>
-                        <th>Qty (<span ng-if="formResult.weight == null">%</span><span ng-if="formResult.weight">lb</span>)</th>
+                        <th>Qty (
+                            <span ng-if="formResult.weight == null">%</span>
+                            <span ng-if="formResult.weight">lb</span>)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,7 +35,7 @@
                 Total Feed Cost: ${{feedCost | number: 2}}
             </div>
         </div>
-        <div class="panel panel-default" ng-if="formResult.nutritionData">
+        <div class="panel panel-default" id="nutritionPanel" ng-if="formResult.nutritionData" ng-init="makeSticky()">
             <div class="panel-heading">
                 <h2 class="panel-title" style="font-size: 16px">
                     Nutrition Breakdown
@@ -45,8 +46,10 @@
                     <tr>
                         <th>#</th>
                         <th>Nutrition</th>
-                        <th>Qty<br/>(% DM)</th>
-                        <th ng-if="formResult.refAnimal">Ref.<br/>(% DM)</th>
+                        <th>Qty
+                            <br/>(% DM)</th>
+                        <th ng-if="formResult.refAnimal">Ref.
+                            <br/>(% DM)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -87,11 +90,11 @@
                         </td>
                         <td style="width: 32.5%">
                             <div class="input-group">
-                                <input class="form-control" ng-model="comp.min" type="number" min="0" max="100" placeholder="Min" ng-change="calculate()" step="0.01"/>
+                                <input class="form-control" ng-model="comp.min" type="number" min="0" max="100" placeholder="Min" ng-change="calculate()" step="0.01" />
                                 <span class="input-group-addon">≤</span>
-                                <input class="form-control" ng-disabled="$first" ng-model="comp.value" type="number" min="0" max="100" ng-change="calculate()" step="0.01"/>
+                                <input class="form-control" ng-disabled="$first" ng-model="comp.value" type="number" min="0" max="100" ng-change="calculate()" step="0.01" />
                                 <span class="input-group-addon">≤</span>
-                                <input class="form-control" ng-model="comp.max" type="number" min="0" max="100" placeholder="Max" ng-change="calculate()" step="0.01"/>
+                                <input class="form-control" ng-model="comp.max" type="number" min="0" max="100" placeholder="Max" ng-change="calculate()" step="0.01" />
                             </div>
                         </td>
                         <td style="width: 20%">
@@ -124,10 +127,10 @@
                 </tbody>
             </table>
             <div class="form-group" ng-if="formResult.compData.length > 0">
-            <label for="feedWeight" class="control-label">Feed Weight</label>
+                <label for="feedWeight" class="control-label">Feed Weight</label>
                 <div class="input-group">
-                <input id="feedWeight" class="form-control" type="number" ng-model="formResult.weight" ng-change="calculate()"/>
-                <span class="input-group-addon">lb</span>
+                    <input id="feedWeight" class="form-control" type="number" min="0" step="0.1" ng-model="formResult.weight" ng-change="calculate()" />
+                    <span class="input-group-addon">lb</span>
                 </div>
                 <span class="help-block">Provide a desired feed weight to view component quantities in pounds</span>
             </div>
