@@ -27,7 +27,6 @@ angular.module('app.feed-new', [
                 // so the scope is updated whenever the value changes
                 $('#select' + attrs.uiSelect)
                     .select2({
-                        minimumInputLength: 3,
                         maximumSelectionSize: 1
                     })
                     .on('change', function(e) {
@@ -35,7 +34,7 @@ angular.module('app.feed-new', [
                     });
 
                 // Set the initial value of the combobox
-                $('#select' + attrs.uiSelect).select2('val', scope.comp._id);
+                // $('#select' + attrs.uiSelect).select2('val', scope.comp._id);
             });
         }
     })
@@ -53,7 +52,12 @@ angular.module('app.feed-new', [
 
         // Initialize an object to collect all the input data
         $scope.formResult = {
-            compData: [],
+            compData: [{
+                _id: null,
+                name: null,
+                value: 100,
+                cost: 0
+            }],
             creationDate: new Date()
         };
 
@@ -79,8 +83,8 @@ angular.module('app.feed-new', [
         // Add an entry to the component selector
         $scope.addNewComp = function() {
             $scope.formResult.compData.push({
-                _id: $scope.compData[0]._id,
-                name: $scope.compData[0].name,
+                _id: null,
+                name: null,
                 value: 0,
                 cost: 0
             });
@@ -91,6 +95,8 @@ angular.module('app.feed-new', [
         // Remove an entry from the component selector
         $scope.removeComp = function(index) {
             $scope.formResult.compData.splice(index, 1);
+
+            $scope.calculate();
         }
 
         // Reset all fields in the component selector to 0
