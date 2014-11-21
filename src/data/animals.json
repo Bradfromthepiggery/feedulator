@@ -1,7 +1,7 @@
 var animals = {
     "growing_pig_7_11": {
         "_id": "growing_pig_7_11",
-        "name": "Growing Pig, 7--11 lb",
+        "name": "Growing Pig, 7-11 lb",
         "creationDate": "2014-11-10T05:01:52.216Z",
         "nutrients": {
             "crude_protein": {
@@ -68,7 +68,7 @@ var animals = {
     },
     "growing_pig_12_22": {
         "_id": "growing_pig_12_22",
-        "name": "Growing Pig, 12--22 lb",
+        "name": "Growing Pig, 12-22 lb",
         "creationDate": "2014-11-10T05:01:52.216Z",
         "nutrients": {
             "crude_protein": {

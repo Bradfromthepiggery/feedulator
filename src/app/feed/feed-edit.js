@@ -27,7 +27,7 @@ angular.module('app.feed-edit', [
             // digest stack so the select2 field is guaranteed to initialize first
             $timeout(function() {
                 $scope.formResult.compData.forEach(function(item, index) {
-                   $('#select' + index).select2('val', item._id);
+                    $('#select' + index).select2('val', item._id);
                 });
             });
         });
@@ -46,20 +46,25 @@ angular.module('app.feed-edit', [
         $scope.updateComp = function(index, value) {
             $scope.formResult.compData[index]._id = value;
 
-            // Lookup the name of the component using the component master list
-            $scope.formResult.compData[index].name = lodash.find($scope.compData, {
+            var searchResult = lodash.find($scope.compData, {
                 _id: value
-            }).name;
+            });
 
-            // Update the nutrition calculations
-            $scope.calculate();
+            if (searchResult) {
+                // Lookup the name of the component using the component master list
+                $scope.formResult.compData[index].name = searchResult.name
+
+
+                // Update the nutrition calculations
+                $scope.calculate();
+            }
         }
 
         // Add an entry to the component selector
         $scope.addNewComp = function() {
             $scope.formResult.compData.push({
-                _id: $scope.compData[0]._id,
-                name: $scope.compData[0].name,
+                _id: null,
+                name: null,
                 value: 0,
                 cost: 0
             });
@@ -70,6 +75,8 @@ angular.module('app.feed-edit', [
         // Remove an entry from the component selector
         $scope.removeComp = function(index) {
             $scope.formResult.compData.splice(index, 1);
+
+            $scope.calculate();
         }
 
         // Reset all fields in the component selector to 0
@@ -280,7 +287,7 @@ angular.module('app.feed-edit', [
             $('#nutritionPanel').sticky({
                 topSpacing: 20,
                 getWidthFrom: 'aside',
-
+                responsiveWidth: true
             });
         }
 
@@ -290,6 +297,7 @@ angular.module('app.feed-edit', [
 
         // A flag to display the optimization interface
         $scope.isOptimize = false;
+        $scope.isEdit = true;
 
         $timeout(function() {
             $('input[type="radio"]').radiocheck();

@@ -45,7 +45,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="(nutrientName, data) in animal.nutrients">
+                            <tr ng-class="{ success: data.name.toLowerCase().contains(search.toLowerCase()) && search !== '' }" ng-repeat="data in animal.nutrients | toArray | orderBy: '-value' ">
                                 <td>{{$index+1}}</td>
                                 <td>{{data.name | ucfirst}}</td>
                                 <td>{{data.value}}</td>

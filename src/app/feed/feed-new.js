@@ -30,7 +30,12 @@ angular.module('app.feed-new', [
                         maximumSelectionSize: 1
                     })
                     .on('change', function(e) {
-                        scope.$apply('updateComp(' + attrs.uiSelect + ', \'' + e.val + '\')');
+                        if (e.added) {
+                            scope.$apply('updateComp(' + attrs.uiSelect + ', \'' + e.val + '\')');
+                        } else if (e.removed) {
+                            scope.$apply('nullifyComp(' + attrs.uiSelect + ')');
+                        }
+
                     });
 
                 // Set the initial value of the combobox
@@ -78,6 +83,13 @@ angular.module('app.feed-new', [
                 // Update the nutrition calculations
                 $scope.calculate();
             }
+        }
+
+        $scope.nullifyComp = function(index) {
+            $scope.formResult.compData[index]._id = null;
+            $scope.formResult.compData[index].name = null;
+
+            $scope.calculate();
         }
 
         // Add an entry to the component selector
@@ -128,7 +140,7 @@ angular.module('app.feed-new', [
             if (difference > 0) {
                 $scope.formResult.compData[0].value = difference
             } else {
-                Messenger().post("Warning: Sum of component quantities exceeds 100%");
+                Messenger().post("Warning: Sum of component quantities exceeds 100%. Please delete a component or change its quantity.");
             }
 
             if ($scope.formResult.weight) {
@@ -138,57 +150,64 @@ angular.module('app.feed-new', [
             }
 
             // Extract the nutrients associated with the current component
-            var nutrientList = $scope.formResult.compData.map(function(item) {
-                var nutrients = lodash.find($scope.compData, {
-                    _id: item._id
-                }).nutrients;
+            if ($scope.formResult.compData.length === 1 && $scope.formResult.compData[0]._id === null) {
+                $scope.formResult.nutritionData = null;
+            } else {
+                $scope.nutrientList = lodash.compact($scope.formResult.compData.map(function(item) {
+                    if (item._id) {
+                        var nutrients = lodash.find($scope.compData, {
+                            _id: item._id
+                        }).nutrients;
 
-                return lodash.mapValues(nutrients, function(nutrient) {
-                    return {
-                        name: nutrient.name,
-                        value: nutrient.value * item.value * 0.01,
-                        unit: nutrient.unit
-                    };
-                });
-            });
-
-            $scope.formResult.nutritionData = lodash.reduce(nutrientList, function(acc, curr) {
-                // Extract keys from the current comparison pair
-                var accKeys = lodash.keys(acc),
-                    currKeys = lodash.keys(curr);
-
-                // Cross-compare both entries and find the exclusion set
-                var accKeyDiff = lodash.difference(accKeys, currKeys),
-                    currKeyDiff = lodash.difference(currKeys, accKeys);
-
-                // Synchronize keys between both pairs. This is a necessary
-                // pre-processing step so the merge operation can perform one-
-                // to-one mappings
-                lodash.map(accKeyDiff, function(item) {
-                    curr[item] = {
-                        name: acc[item].name,
-                        value: 0,
-                        unit: acc[item].unit
+                        return lodash.mapValues(nutrients, function(nutrient) {
+                            return {
+                                name: nutrient.name,
+                                value: nutrient.value * item.value * 0.01,
+                                unit: nutrient.unit
+                            };
+                        });
                     }
-                });
+                }));
 
-                lodash.map(currKeyDiff, function(item) {
-                    acc[item] = {
-                        name: curr[item].name,
-                        value: 0,
-                        unit: curr[item].unit
-                    }
-                });
+                $scope.formResult.nutritionData = lodash.reduce($scope.nutrientList, function(acc, curr) {
+                    // Extract keys from the current comparison pair
+                    var accKeys = lodash.keys(acc),
+                        currKeys = lodash.keys(curr);
 
-                // Merge both entries in the pair and sum their values
-                return lodash.merge(lodash.clone(acc), curr, function(a, b) {
-                    return {
-                        name: a.name,
-                        value: a.value + b.value,
-                        unit: a.unit
-                    };
+                    // Cross-compare both entries and find the exclusion set
+                    var accKeyDiff = lodash.difference(accKeys, currKeys),
+                        currKeyDiff = lodash.difference(currKeys, accKeys);
+
+                    // Synchronize keys between both pairs. This is a necessary
+                    // pre-processing step so the merge operation can perform one-
+                    // to-one mappings
+                    lodash.map(accKeyDiff, function(item) {
+                        curr[item] = {
+                            name: acc[item].name,
+                            value: 0,
+                            unit: acc[item].unit
+                        }
+                    });
+
+                    lodash.map(currKeyDiff, function(item) {
+                        acc[item] = {
+                            name: curr[item].name,
+                            value: 0,
+                            unit: curr[item].unit
+                        }
+                    });
+
+                    // Merge both entries in the pair and sum their values
+                    return lodash.merge(lodash.clone(acc), curr, function(a, b) {
+                        var result = a.value + b.value;
+                        return {
+                            name: a.name,
+                            value: +result.toFixed(3),
+                            unit: a.unit
+                        };
+                    });
                 });
-            });
+            }
         }
 
         // Optimize the feed based on constraints provided by the user

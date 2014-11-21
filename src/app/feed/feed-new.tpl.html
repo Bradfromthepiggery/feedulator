@@ -6,29 +6,30 @@
                     {{formResult.name || "New Feed" | truncate: 20: '...' | ucfirst}}
                 </h2>
             </div>
-            <div class="panel-body" ng-if="formResult.batchId || formResult.description">
+            <div class="panel-body" ng-if="!formResult.hasOwnProperty('nutritionData') || formResult.nutritionData === null">
                 <p ng-if="formResult.batchId">
                     <small>Batch ID: {{formResult.batchId}}</small>
                 </p>
                 <p ng-if="formResult.description">{{formResult.description}}</p>
+                <span ng-if="!formResult.hasOwnProperty('nutritionData') || formResult.nutritionData === null"><small>This panel will update with information as soon as you select a component.</small></span>
             </div>
-            <table class="table table-condensed table-hover table-responsive table-striped" ng-if="formResult.compData.length > 0">
+            <table class="table table-condensed table-hover table-responsive table-striped" ng-if="formResult.compData.length > 0 && formResult.compData[0]._id !== null">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Component</th>
                         <th>Qty
                             <br/>(
-                            <span ng-if="formResult.weight == null || formResult.weight == 0">%</span>
-                            <span ng-if="formResult.weight">lb</span>)</th>
+                            <span ng-if="!formResult.hasOwnProperty('weight') || formResult.weight === 0">%</span>
+                            <span ng-if="formResult.hasOwnProperty('weight') && formResult.weight !== 0">lb</span>)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="comp in formResult.compData">
                         <td>{{$index+1}}</td>
                         <td style="width: 60%">{{comp.name}}</td>
-                        <td ng-if="formResult.weight == null || formResult.weight == 0">{{comp.value | number: 2}}</td>
-                        <td ng-if="formResult.weight !== 0">{{comp.value * 0.01 * formResult.weight | number: 2}}</td>
+                        <td ng-if="!formResult.hasOwnProperty('weight')  || formResult.weight === 0">{{comp.value | number: 2}}</td>
+                        <td ng-if="formResult.hasOwnProperty('weight') && formResult.weight !== 0">{{comp.value * 0.01 * formResult.weight | number: 2}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -74,7 +75,7 @@
             <div class="panel-group" id="formAccordion" role="tablist" aria-multiselectable="true">
                 <div class="panel panel-default">
                     <div class="panel-heading" role="tab">
-                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#feedComponents" style="color: #fff">1. Feed Components</a>
+                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#feedComponents" style="color: #fff">1. Feed Components <span class="label label-danger pull-right">Required</span></a>
                     </div>
                     <div id="feedComponents" class="panel-collapse collapse in" role="tabpanel">
                         <table class="table table-condensed">
@@ -89,7 +90,7 @@
                             <tbody>
                                 <tr ng-repeat="comp in formResult.compData">
                                     <td>
-                                        <select multiple id="{{'select' + $index}}" ng-model="comp._id" ng-options="data.name for data in compData track by data._id" class="form-control multiselect multiselect-default" style="width: 100%" ui-select="{{$index}}">
+                                        <select multiple id="{{'select' + $index}}" ng-model="comp._id" ng-options="data.name for data in compData track by data._id" class="form-control multiselect multiselect-inverse" style="width: 100%" ui-select="{{$index}}">
                                             <option ng-if="false" value="">Choose Component</option>
                                         </select>
                                         <span ng-if="$first" class="help-block">Start typing to search for a component.</span>
@@ -122,7 +123,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <button type="button" class="btn btn-info" ng-disabled="compCount == formResult.compData.length" ng-click="addNewComp()">Add Component</button>
+                                        <button type="button" class="btn btn-info" ng-disabled="compCount == formResult.compData.length || formResult.compData.length >= nutrientList.length + 1 || !formResult.hasOwnProperty('nutritionData') || formResult.nutritionData === null" ng-click="addNewComp()">Add Component</button>
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-primary" ng-disabled="formResult.compData.length < 2 || isOptimize || formResult.nutritionData == null" ng-click="isOptimize = true">Optimize</button>
@@ -136,32 +137,32 @@
                     </div>
                 </div>
 
-                <div class="panel panel-default">
+                <div class="panel panel-default" ng-if="formResult.nutritionData">
                     <div class="panel-heading" role="tab">
-                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#feedWeight" style="color: #fff">2. Feed Weight Conversion</a>
+                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#feedWeight" style="color: #fff">2. Feed Weight Conversion <span class="label label-info pull-right">Optional</span></a>
                     </div>
-                    <div id="feedWeight" class="panel-collapse collapse in" role="tabpanel">
+                    <div id="feedWeight" class="panel-collapse collapse" role="tabpanel">
                         <div class="panel-body">
                             <div class="form-group" ng-if="formResult.compData.length > 0">
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <input id="feedWeight" class="form-control" type="number" min="0" step="0.1" ng-model="formResult.weight" ng-change="calculate()" />
+                                        <input id="feedWeight" class="form-control" type="number" min="0" step="0.1" ng-model="formResult.weight" ng-change="calculate()" ng-init="formResult.weight = 0"/>
                                         <span class="input-group-addon">lb</span>
                                     </div>
-                                    <span class="help-block">Provide a desired feed weight to view all component quantities in pounds. Leaving this empty will show component quantities as a percentage of total feed weight.</span>
+                                    <span class="help-block">Provide a desired feed weight to view all component quantities in pounds. Leaving this as 0 will show component quantities as a percentage of total feed weight.</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="panel panel-default">
+                <div class="panel panel-default" ng-if="formResult.nutritionData">
                     <div class="panel-heading" role="tab">
-                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#optimize" style="color: #fff">3. Minimize Feed Costs</a>
+                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#optimize" style="color: #fff">3. Minimize Feed Costs <span class="label label-info pull-right">Optional</span></a>
                     </div>
-                    <div id="optimize" class="panel-collapse collapse in" role="tabpanel">
+                    <div id="optimize" class="panel-collapse collapse" role="tabpanel">
                         <div class="panel-body">
-                            The feed components you've added above provide the following nutritional contents. To optimize feed component proportions, you can specify minimum and maximum quantities for each item below. Otherwise, leave them blank.
+                            The feed components you've added above provide the following nutritional content. If you provide the minimum and maximum quantities for any items below, we'll help you calculate the component quantities you can use to meet those requirements with the lowest possible cost. Otherwise, leave them blank.
                         </div>
                         <table class="table table-condensed table-responsive">
                             <thead>
@@ -179,7 +180,7 @@
                                         <div class="input-group">
                                             <input class="form-control" ng-model="data.min" type="number" min="0" step="0.01" placeholder="Min" />
                                             <span class="input-group-addon">≤</span>
-                                            <input class="form-control" disabled ng-model="data.value" type="number" min="0" step="0.01" />
+                                            <input class="form-control" disabled type="number" min="0" step="0.01" value="{{data.value | number: 3}}"/>
                                             <span class="input-group-addon">≤</span>
                                             <input class="form-control" ng-model="data.max" type="number" min="0" placeholder="Max" step="0.01" />
                                         </div>
@@ -197,10 +198,10 @@
                     </div>
                 </div>
 
-                <div class="panel panel-default" ng-if="isCalculateOnly == false">
+                <div class="panel panel-default" ng-if="isCalculateOnly == false && formResult.nutritionData">
                     <div class="panel-heading" role="tab">
                         <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#feedMeta" style="color: #fff">4. About This Feed
-                        </a>
+                        <span class="label label-danger pull-right">Required</span></a>
                     </div>
                     <div id="feedMeta" class="panel-collapse collapse in" role="tabpanel">
                         <div class="panel-body">

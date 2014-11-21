@@ -13,21 +13,18 @@
             </div>
             <hr>
             <p class="lead">Hide/Show Details</p>
-            <label class="checkbox" for="descCheckbox">
-                <input type="checkbox" id="descCheckbox" data-toggle="checkbox" ng-model="descriptionChecked" ng-init="descriptionChecked=false" checked>Description
-            </label>
             <label class="checkbox" for="nutrientsCheckbox">
                 <input type="checkbox" id="nutrientsCheckbox" data-toggle="checkbox" ng-model="nutrientsChecked" ng-init="nutrientsChecked=true">Nutrients
-            </label>
-            <label class="checkbox" for="supplierCheckbox">
-                <input type="checkbox" id="supplierCheckbox" data-toggle="checkbox" ng-model="supplierChecked" ng-init="supplierChecked=false" checked>Supplier
             </label>
             <label class="checkbox" for="gmoCheckbox">
                 <input type="checkbox" id="gmoCheckbox" data-toggle="checkbox" ng-model="gmoChecked" ng-init="gmoChecked=true" checked>GMO Status
             </label>
-            <!--             <label class="checkbox" for="chartCheckbox">
-                <input type="checkbox" id="chartCheckbox" data-toggle="checkbox" ng-model="chartChecked" ng-init="chartChecked=true" checked>Breakdown Chart
-            </label> -->
+            <label class="checkbox" for="descCheckbox">
+                <input type="checkbox" id="descCheckbox" data-toggle="checkbox" ng-model="descriptionChecked" ng-init="descriptionChecked=false" checked>Description
+            </label>
+            <label class="checkbox" for="supplierCheckbox">
+                <input type="checkbox" id="supplierCheckbox" data-toggle="checkbox" ng-model="supplierChecked" ng-init="supplierChecked=false" checked>Supplier
+            </label>
             <hr>
             <button class="btn btn-primary btn-block" ui-sref="component-new">
                 <span class="fui-plus"></span>&nbsp;Create New Feed Component</button>
@@ -52,14 +49,14 @@
                             <tr>
                                 <th>#</th>
                                 <th>Nutrient</th>
-                                <th>Qty</th>
+                                <th>Qty (% DM)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="(nutrientName, data) in comp.nutrients">
+                            <tr ng-class="{ success: data.name.toLowerCase().contains(search.toLowerCase()) && search !== '' }" ng-repeat="data in comp.nutrients | toArray | orderBy: '-value'">
                                 <td>{{$index+1}}</td>
                                 <td>{{data.name | ucfirst}}</td>
-                                <td>{{data.value}}{{data.unit}}</td>
+                                <td>{{data.value}}</td>
                             </tr>
                         </tbody>
                     </table>
