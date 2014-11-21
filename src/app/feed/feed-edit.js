@@ -60,6 +60,13 @@ angular.module('app.feed-edit', [
             }
         }
 
+        $scope.nullifyComp = function(index) {
+            $scope.formResult.compData[index]._id = null;
+            $scope.formResult.compData[index].name = null;
+
+            $scope.calculate();
+        }
+
         // Add an entry to the component selector
         $scope.addNewComp = function() {
             $scope.formResult.compData.push({
@@ -93,87 +100,127 @@ angular.module('app.feed-edit', [
 
         // Evaluate the total nutrition provided by the components
         $scope.calculate = function() {
-            var complementWeight = 0
+            ////////////////////////////////////////////////////////////////////
+            // Back-calculate Base Component proportion
+            ////////////////////////////////////////////////////////////////////
+            var complementProportion = 0
 
             if ($scope.formResult.compData.length > 2) {
-                var complementWeight = lodash.rest($scope.formResult.compData).reduce(function(acc, curr) {
+                complementProportion = lodash.rest($scope.formResult.compData).reduce(function(acc, curr) {
                     return acc + curr.value;
                 }, 0);
             } else if ($scope.formResult.compData.length === 2) {
-                var complementWeight = $scope.formResult.compData[1].value
+                complementProportion = $scope.formResult.compData[1].value
             }
 
-            var difference = 100 - complementWeight
+            var difference = 100 - complementProportion;
 
-            if (difference > 0) {
+            if (difference >= 0) {
                 $scope.formResult.compData[0].value = difference
             } else {
-                Messenger().post("Warning: Sum of component quantities exceeds 100%");
+                Messenger().post("Warning: Sum of component quantities exceeds 100%. Please delete a component or change its quantity.");
             }
 
+            ////////////////////////////////////////////////////////////////////
+            // Convert percentages to weight in pounds if specified
+            ////////////////////////////////////////////////////////////////////
             if ($scope.formResult.weight) {
                 $scope.feedCost = $scope.formResult.compData.reduce(function(acc, curr) {
                     return acc + curr.value * 0.01 * $scope.formResult.weight * curr.cost
                 }, 0);
             }
 
+            ////////////////////////////////////////////////////////////////////
+            // Tally Nutrition Elements
+            ////////////////////////////////////////////////////////////////////
+
             // Extract the nutrients associated with the current component
-            var nutrientList = $scope.formResult.compData.map(function(item) {
-                var nutrients = lodash.find($scope.compData, {
-                    _id: item._id
-                }).nutrients;
-
-                return lodash.mapValues(nutrients, function(nutrient) {
-                    return {
-                        name: nutrient.name,
-                        value: nutrient.value * item.value * 0.01,
-                        unit: nutrient.unit
-                    };
-                });
-            });
-
-            $scope.formResult.nutritionData = lodash.reduce(nutrientList, function(acc, curr) {
-                // Extract keys from the current comparison pair
-                var accKeys = lodash.keys(acc),
-                    currKeys = lodash.keys(curr);
-
-                // Cross-compare both entries and find the exclusion set
-                var accKeyDiff = lodash.difference(accKeys, currKeys),
-                    currKeyDiff = lodash.difference(currKeys, accKeys);
-
-                // Synchronize keys between both pairs. This is a necessary
-                // pre-processing step so the merge operation can perform one-
-                // to-one mappings
-                lodash.map(accKeyDiff, function(item) {
-                    curr[item] = {
-                        name: acc[item].name,
-                        value: 0,
-                        unit: acc[item].unit
+            // Only proceed if at least one component has been specified
+            if ($scope.formResult.compData.length === 1 && $scope.formResult.compData[0]._id === null) {
+                $scope.formResult.nutritionData = null;
+            } else {
+                $scope.compNutrients = lodash.compact($scope.formResult.compData.map(function(item) {
+                    if (item._id) {
+                        return lodash.find($scope.compData, {
+                            _id: item._id
+                        }).nutrients;
                     }
+                }));
+
+                $scope.nutrientList = lodash.compact($scope.compNutrients.map(function(item, index) {
+                    return lodash.mapValues(item, function(nutrient) {
+                        return {
+                            name: nutrient.name,
+                            value: nutrient.value * $scope.formResult.compData[index].value * 0.01,
+                            unit: nutrient.unit
+                        };
+                    });
+                }));
+
+                $scope.formResult.nutritionData = lodash.reduce($scope.nutrientList, function(acc, curr) {
+                    // Extract keys from the current comparison pair
+                    var accKeys = lodash.keys(acc),
+                        currKeys = lodash.keys(curr);
+
+                    // Cross-compare both entries and find the exclusion set
+                    var accKeyDiff = lodash.difference(accKeys, currKeys),
+                        currKeyDiff = lodash.difference(currKeys, accKeys);
+
+                    // Synchronize keys between both pairs. This is a necessary
+                    // pre-processing step so the merge operation can perform one-
+                    // to-one mappings
+                    lodash.map(accKeyDiff, function(item) {
+                        curr[item] = {
+                            name: acc[item].name,
+                            value: 0,
+                            unit: acc[item].unit
+                        }
+                    });
+
+                    lodash.map(currKeyDiff, function(item) {
+                        acc[item] = {
+                            name: curr[item].name,
+                            value: 0,
+                            unit: curr[item].unit
+                        }
+                    });
+
+                    // Merge both entries in the pair and sum their values
+                    return lodash.merge(lodash.clone(acc), curr, function(a, b) {
+                        var result = a.value + b.value;
+                        return {
+                            name: a.name,
+                            value: +result.toFixed(3),
+                            unit: a.unit
+                        };
+                    });
                 });
 
-                lodash.map(currKeyDiff, function(item) {
-                    acc[item] = {
-                        name: curr[item].name,
-                        value: 0,
-                        unit: curr[item].unit
-                    }
-                });
+                if ($scope.formResult.nutritionData) {
+                    $scope.maxAchievableNutrients = {};
 
-                // Merge both entries in the pair and sum their values
-                return lodash.merge(lodash.clone(acc), curr, function(a, b) {
-                    return {
-                        name: a.name,
-                        value: a.value + b.value,
-                        unit: a.unit
-                    };
-                });
-            });
+                    Object.keys($scope.formResult.nutritionData).forEach(function(item) {
+                        var maxProvider = lodash.max($scope.compNutrients, function(comp) {
+                            if (item in comp) {
+                                return comp[item].value;
+                            } else {
+                                return 0;
+                            }
+                        });
+
+                        $scope.maxAchievableNutrients[item] = maxProvider[item].value;
+                    });
+
+                    Object.keys($scope.formResult.nutritionData).forEach(function(item) {
+                        $scope.formResult.nutritionData[item].maxAchievable = $scope.maxAchievableNutrients[item];
+                    });
+                }
+            }
         }
 
         // Optimize the feed based on constraints provided by the user
         $scope.optFeed = function() {
-            $scope.solver = new Solver();
+            var solver = new Solver();
             $scope.model = {
                 "optimize": "cost",
                 "opType": "min",
@@ -244,28 +291,34 @@ angular.module('app.feed-edit', [
                 }
             }
 
-            // Run a Simplex solver on the model and inject the results into the scope
-            $scope.results = $scope.solver.Solve($scope.model);
+            // Short circuit the optimization if the values provided are buggy
+            if (Object.keys($scope.model.constraints).length === 1) {
+                $scope.results = {
+                    feasible: false
+                };
+            } else {
+                // Run a Simplex solver on the model and inject the results into the scope
+                $scope.results = solver.Solve($scope.model);
+            }
 
             if ($scope.results.feasible) {
                 // Inject the optimization results, and clamp them all
                 // to 2 decimal places
                 $scope.formResult.compData.map(function(item) {
-                    item.value = $scope.results[item._id];
+                    if (item._id in $scope.results) {
+                        item.value = +$scope.results[item._id].toFixed(2);
+                    } else {
+                        item.value = 0;
+                    }
                 });
-
-                // Clamp the feed cost to 2 decimal places
-                $scope.formResult.feedCost = $scope.results.result;
-
-                // TODO: Draw attention back to the UI to visually inform the
-                // user that the values have been updated
 
                 // Trigger a recalculate of the nutrition elements
                 $scope.calculate();
-            } else {
-                // TODO: Replace this with something more elegant
-                Messenger().post('Optimization bounds are unfeasible. Please check them and try again.');
+
+                // TODO: Re-inject optimization constraints
             }
+
+            $('#optResultModal').modal();
         }
 
         $scope.submit = function() {
@@ -295,8 +348,6 @@ angular.module('app.feed-edit', [
         // from the calculator state (instead of the creation state)
         $scope.isCalculateOnly = $state.is('feed-calculator');
 
-        // A flag to display the optimization interface
-        $scope.isOptimize = false;
         $scope.isEdit = true;
 
         $timeout(function() {

@@ -71,7 +71,7 @@
         </div>
     </aside>
     <section class="col-lg-9">
-        <form role="form" ng-submit="submit()">
+        <form role="form" ng-submit="submit()" novalidate>
             <div class="panel-group" id="formAccordion" role="tablist" aria-multiselectable="true">
                 <div class="panel panel-default">
                     <div class="panel-heading" role="tab">
@@ -96,13 +96,13 @@
                                         <span ng-if="$first" class="help-block">Start typing to search for a component.</span>
                                     </td>
                                     <td style="width: 32.5%">
-                                        <!-- <div class="input-group"> -->
-                                        <!-- <input class="form-control" ng-model="comp.min" type="number" min="0" max="100" placeholder="Min" ng-change="calculate()" step="0.01" /> -->
-                                        <!-- <span class="input-group-addon">≤</span> -->
-                                        <input class="form-control" ng-disabled="$first" ng-model="comp.value" type="number" min="0" max="100" ng-change="calculate()" step="0.01" />
-                                        <!-- <span class="input-group-addon">≤</span> -->
-                                        <!-- <input class="form-control" ng-model="comp.max" type="number" min="0" max="100" placeholder="Max" ng-change="calculate()" step="0.01" /> -->
-                                        <!-- </div> -->
+                                        <div class="input-group">
+                                            <input class="form-control" ng-model="comp.min" type="number" min="0" max="100" placeholder="Min" ng-change="calculate()" step="0.01" />
+                                            <span class="input-group-addon">≤</span>
+                                            <input class="form-control" ng-disabled="$first" ng-model="comp.value" type="number" min="0" max="100" ng-change="calculate()" step="0.01" />
+                                            <span class="input-group-addon">≤</span>
+                                            <input class="form-control" ng-model="comp.max" type="number" min="0" max="100" placeholder="Max" ng-change="calculate()" step="0.01" />
+                                        </div>
                                         <span ng-if="$first" class="help-block">This is your main component. It's value will change automatically, ensuring that your feed components always sum to 100%</span>
                                     </td>
                                     <td style="width: 20%">
@@ -126,7 +126,6 @@
                                         <button type="button" class="btn btn-info" ng-disabled="compCount == formResult.compData.length || formResult.compData.length >= nutrientList.length + 1 || !formResult.hasOwnProperty('nutritionData') || formResult.nutritionData === null" ng-click="addNewComp()">Add Component</button>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-primary" ng-disabled="formResult.compData.length < 2 || isOptimize || formResult.nutritionData == null" ng-click="isOptimize = true">Optimize</button>
                                         <button type="button" class="btn btn-danger pull-right" ng-hide="formResult.compData.length < 2" ng-click="resetComponents()">Reset</button>
                                     </td>
                                     <td></td>
@@ -156,7 +155,7 @@
                     </div>
                 </div>
 
-                <div class="panel panel-default" ng-if="formResult.nutritionData">
+                <div class="panel panel-default" ng-if="formResult.nutritionData && formResult.compData.length > 1">
                     <div class="panel-heading" role="tab">
                         <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#optimize" style="color: #fff">3. Minimize Feed Costs <span class="label label-info pull-right">Optional</span></a>
                     </div>
@@ -174,17 +173,15 @@
                             <tbody>
                                 <tr ng-repeat="(key, data) in formResult.nutritionData">
                                     <td>{{data.name | ucfirst}}</td>
-                                    <td>
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <input class="form-control" ng-model="data.min" type="number" min="0" step="0.01" max="{{maxAchievableNutrients[key]}}" placeholder="Min" />
-                                                <span class="input-group-addon">≤</span>
-                                                <input class="form-control" disabled type="number" min="0" step="0.01" value="{{data.value | number: 3}}" />
-                                                <span class="input-group-addon">≤</span>
-                                                <input class="form-control" ng-model="data.max" type="number" min="0" placeholder="Max" step="0.01" />
-                                            </div>
-                                            <span class="help-block">The minimum quantity for this item cannot exceed {{maxAchievableNutrients[key]}}</span>
+                                    <td style="width: 80%">
+                                        <div class="input-group">
+                                            <input class="form-control" ng-model="data.min" type="number" min="0" step="0.01" max="{{maxAchievableNutrients[key]}}" placeholder="Min" />
+                                            <span class="input-group-addon">≤</span>
+                                            <input class="form-control" disabled type="number" min="0" step="0.01" value="{{data.value | number: 3}}" />
+                                            <span class="input-group-addon">≤</span>
+                                            <input class="form-control" ng-model="data.max" type="number" min="0" placeholder="Max" step="0.01" />
                                         </div>
+                                        <span class="help-block">The minimum quantity for this item cannot exceed {{maxAchievableNutrients[key]}}</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -200,7 +197,7 @@
 
                 <div class="panel panel-default" ng-if="isCalculateOnly == false && formResult.nutritionData">
                     <div class="panel-heading" role="tab">
-                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#feedMeta" style="color: #fff">4. About This Feed
+                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#feedMeta" style="color: #fff">{{formResult.compData.length > 1 ? '4' : '3'}}. About This Feed
                         <span class="label label-danger pull-right">Required</span></a>
                     </div>
                     <div id="feedMeta" class="panel-collapse collapse in" role="tabpanel">
@@ -244,3 +241,42 @@
         </form>
     </section>
 </div>
+
+<div class="modal fade" id="optResultModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="fui-cross"></span><span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">Calculation Results</h4>
+            </div>
+            <div class="modal-body">
+                <div ng-if="results.feasible === false">
+                    <p>We weren't able to find a set of quantities that meets all your requirements. This normally happens when you specify minimum and maximum values that cannot be satisfied using any combination of the components you've selected.</p>
+                    <p>To fix this, you can add or remove components in Step 1 above, or change the minimum and maximum values specified in Step 3. </p>
+                </div>
+                <div ng-if="results.feasible">
+                    <p>Success! We've found a set of quantities that meets all your requirements. Your feed mixture will be automatically updated with these values once you close this window.</p>
+                </div>
+            </div>
+            <table class="table table-condensed table-hover table-responsive table-striped" ng-if="results.feasible">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Component</th>
+                        <th>Qty (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="comp in formResult.compData">
+                        <td>{{$index+1}}</td>
+                        <td style="width: 60%">{{comp.name}}</td>
+                        <td>{{comp.value | number: 2}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="modal-footer">
+                <button type="button" class="btn" ng-class="{'btn-primary': results.feasible, 'btn-danger': !results.feasible}" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>

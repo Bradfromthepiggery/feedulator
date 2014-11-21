@@ -138,9 +138,9 @@ angular.module('app.feed-new', [
                 complementProportion = $scope.formResult.compData[1].value
             }
 
-            var difference = 100 - complementProportion
+            var difference = 100 - complementProportion;
 
-            if (difference > 0) {
+            if (difference >= 0) {
                 $scope.formResult.compData[0].value = difference
             } else {
                 Messenger().post("Warning: Sum of component quantities exceeds 100%. Please delete a component or change its quantity.");
@@ -221,29 +221,31 @@ angular.module('app.feed-new', [
                     });
                 });
 
-                $scope.maxAchievableNutrients = {};
+                if ($scope.formResult.nutritionData) {
+                    $scope.maxAchievableNutrients = {};
 
-                Object.keys($scope.formResult.nutritionData).forEach(function(item) {
-                    var maxProvider = lodash.max($scope.compNutrients, function(comp) {
-                        if (item in comp) {
-                            return comp[item].value;
-                        } else {
-                            return 0;
-                        }
+                    Object.keys($scope.formResult.nutritionData).forEach(function(item) {
+                        var maxProvider = lodash.max($scope.compNutrients, function(comp) {
+                            if (item in comp) {
+                                return comp[item].value;
+                            } else {
+                                return 0;
+                            }
+                        });
+
+                        $scope.maxAchievableNutrients[item] = maxProvider[item].value;
                     });
 
-                    $scope.maxAchievableNutrients[item] = maxProvider[item].value;
-                });
-
-                Object.keys($scope.formResult.nutritionData).forEach(function(item) {
-                    $scope.formResult.nutritionData[item].maxAchievable = $scope.maxAchievableNutrients[item];
-                });
+                    Object.keys($scope.formResult.nutritionData).forEach(function(item) {
+                        $scope.formResult.nutritionData[item].maxAchievable = $scope.maxAchievableNutrients[item];
+                    });
+                }
             }
         }
 
         // Optimize the feed based on constraints provided by the user
         $scope.optFeed = function() {
-            $scope.solver = new Solver();
+            var solver = new Solver();
             $scope.model = {
                 "optimize": "cost",
                 "opType": "min",
@@ -314,28 +316,34 @@ angular.module('app.feed-new', [
                 }
             }
 
-            // Run a Simplex solver on the model and inject the results into the scope
-            $scope.results = $scope.solver.Solve($scope.model);
+            // Short circuit the optimization if the values provided are buggy
+            if (Object.keys($scope.model.constraints).length === 1) {
+                $scope.results = {
+                    feasible: false
+                };
+            } else {
+                // Run a Simplex solver on the model and inject the results into the scope
+                $scope.results = solver.Solve($scope.model);
+            }
 
             if ($scope.results.feasible) {
                 // Inject the optimization results, and clamp them all
                 // to 2 decimal places
                 $scope.formResult.compData.map(function(item) {
-                    item.value = $scope.results[item._id];
+                    if (item._id in $scope.results) {
+                        item.value = +$scope.results[item._id].toFixed(2);
+                    } else {
+                        item.value = 0;
+                    }
                 });
-
-                // Clamp the feed cost to 2 decimal places
-                $scope.formResult.feedCost = $scope.results.result;
-
-                // TODO: Draw attention back to the UI to visually inform the
-                // user that the values have been updated
 
                 // Trigger a recalculate of the nutrition elements
                 $scope.calculate();
-            } else {
-                // TODO: Replace this with something more elegant
-                Messenger().post('Optimization bounds are unfeasible. Please check them and try again.');
+
+                // TODO: Re-inject optimization constraints
             }
+
+            $('#optResultModal').modal();
         }
 
         $scope.submit = function() {
