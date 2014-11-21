@@ -260,9 +260,9 @@ angular.module('app.feed-edit', [
             });
 
             // Populate variables based on requested optimization parameters
-            for (var nutrKey in $scope.formResult.nutritionData) {
-                var nutrientMin = $scope.formResult.nutritionData[nutrKey].min,
-                    nutrientMax = $scope.formResult.nutritionData[nutrKey].max;
+            for (var nutrKey in $scope.formResult.optData) {
+                var nutrientMin = $scope.formResult.optData[nutrKey].min,
+                    nutrientMax = $scope.formResult.optData[nutrKey].max;
 
                 // Only process items for which a min or max bound was provided
                 if (nutrientMin || nutrientMax) {
