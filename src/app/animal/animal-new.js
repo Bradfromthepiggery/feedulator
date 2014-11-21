@@ -82,8 +82,8 @@ angular.module('app.animal-new', [
                     "value": 0,
                     "unit": "% DM"
                 },
-                "linoleic_acid": {
-                    "name": "Linoleic Acid",
+                "linoleic_acid_c18_2": {
+                    "name": "Linoleic Acid C18 2",
                     "value": 0,
                     "unit": "% DM"
                 }

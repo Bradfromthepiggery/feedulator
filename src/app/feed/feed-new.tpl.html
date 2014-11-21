@@ -217,7 +217,7 @@
                                 <textarea id="feedDescription" class="form-control" ng-model="formResult.description" rows="5"></textarea>
                                 <span class="help-block">You can leave this blank. Use this space to store any additional information or comments about this feed.</span>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" ng-init="initCheckbox()">
                                 <label class="control-label">Can anyone else see this feed?</label>
                                 <label class="radio" ng-init="formResult.private = 'false'">
                                     <input type="radio" ng-model="formResult.private" data-toggle="radio" name="privacySelector" id="publicRatio" value="false" checked=""><b>Public: </b> Everyone can see this, but only you can make changes.
@@ -231,7 +231,7 @@
                 </div>
             </div>
             <div ng-if="isCalculateOnly == false && formResult.nutritionData">
-                <button type="submit" class="btn btn-primary btn-large">
+                <button type="submit" class="btn btn-primary btn-large" ng-disabled="!formResult.name">
                     <span class="fui-check"></span>&nbsp;Save Feed Mixture
                 </button>
                 <button type="reset" class="btn btn-danger btn-large pull-right" ui-sref="feed-list">

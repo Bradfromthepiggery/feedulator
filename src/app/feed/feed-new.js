@@ -369,6 +369,10 @@ angular.module('app.feed-new', [
             });
         }
 
+        $scope.initCheckbox = function() {
+            $('input[type="radio"]').radiocheck();
+        }
+
         // A flag to hide the feed metadata interface when the view is called
         // from the calculator state (instead of the creation state)
         $scope.isCalculateOnly = $state.is('feed-calculator');
@@ -376,7 +380,5 @@ angular.module('app.feed-new', [
         // A flag to display the optimization interface
         $scope.isOptimize = false;
 
-        $timeout(function() {
-            $('input[type="radio"]').radiocheck();
-        });
+
     });

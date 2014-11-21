@@ -54,7 +54,6 @@ angular.module('app.feed-edit', [
                 // Lookup the name of the component using the component master list
                 $scope.formResult.compData[index].name = searchResult.name
 
-
                 // Update the nutrition calculations
                 $scope.calculate();
             }

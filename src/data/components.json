@@ -2788,39 +2788,6 @@ var components = {
             }
         }
     },
-    "blood_meal_chicken": {
-        "_id": "blood_meal_chicken",
-        "creationDate": "2014-11-14T18:34:55.816Z",
-        "gmoFree": false,
-        "name": "Blood Meal Chicken",
-        "nutrients": {
-            "lysine": {
-                "name": "Lysine",
-                "value": 0,
-                "unit": "% DM"
-            },
-            "methionine": {
-                "name": "Methionine",
-                "value": 0,
-                "unit": "% DM"
-            },
-            "threonine": {
-                "name": "Threonine",
-                "value": 0,
-                "unit": "% DM"
-            },
-            "tryptophan": {
-                "name": "Tryptophan",
-                "value": 0,
-                "unit": "% DM"
-            },
-            "valine": {
-                "name": "Valine",
-                "value": 0,
-                "unit": "% DM"
-            }
-        }
-    },
     "blood_meal_preserved_with_acid": {
         "_id": "blood_meal_preserved_with_acid",
         "creationDate": "2014-11-14T18:34:55.836Z",

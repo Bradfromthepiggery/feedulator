@@ -1,7 +1,6 @@
 <div class="row">
     <aside class="col-lg-3">
-        <p class="lead">Preview</p>
-        <div class="panel panel-default" id="nutritionPanel" ng-init="makeSticky()">
+        <div class="panel panel-primary" id="nutritionPanel" ng-init="makeSticky()">
             <div class="panel-heading">
                 <h2 class="panel-title" style="font-size: 16px">
                     {{formResult.name || "New Feed Component" | truncate: 30: '...' | ucfirst}}
@@ -19,7 +18,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="(key, data) in formResult.nutrients">
+                    <tr ng-repeat="data in formResult.nutrients">
                         <td>{{$index+1}}</td>
                         <td>{{data.name | ucfirst}}</td>
                         <td>{{data.value}}</td>
@@ -30,45 +29,61 @@
     </aside>
     <section class="col-lg-9">
         <form role="form" ng-submit="submit()">
-            <p class="lead">About This Animal</p>
-            <p>Provide some information about this animal. To see what everything will look like, check out the preview on the left!</p>
-            <div class="form-group">
-                <label for="mixtureName" class="control-label">Animal Name</label>
-                <input id="mixtureName" ng-disabled="isEdit" class="form-control" type="text" ng-model="formResult.name" required />
-                <span class="help-block">This shows up in the list of animals, so keep it short but descriptive. You <b>have</b> to fill this in.</span>
-            </div>
-            <div class="form-group">
-                <label for="mixtureDescription" class="control-label">Description</label>
-                <textarea id="mixtureDescription" class="form-control" ng-model="formResult.description" rows="5"></textarea>
-                <span class="help-block">You can leave this blank. Put any comments or additional information about this animal here.</span>
-            </div>
-            <p class="lead">Nutrition Data</p>
-            <p>Fill in the table below with information about the nutrition that this animal requires. Make sure that you're using the correct units. If you're not sure about a certain entry, or if it's not applicable, leave it at 0.</p>
-            <table class="table table-condensed table-responsive">
-                <thead>
-                    <tr>
-                        <th>Nutrition</th>
-                        <th>Quantity</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="(key, data) in formResult.nutrients">
-                        <td style="width: 30%;">{{data.name | ucfirst}}</td>
-                        <td style="width: 30%;">
-                            <div class="input-group">
-                                <input class="form-control" ng-model="data.value" type="number" min="0" step="0.01" />
-                                <span class="input-group-addon">{{data.unit}}</span>
+            <div class="panel-group" id="formAccordion" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab">
+                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#animalMeta" style="color: #fff">1. About This Animal<span class="label label-danger pull-right">Required</span></a>
+                    </div>
+                    <div id="animalMeta" class="panel-collapse collapse in" role="tabpanel">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label for="mixtureName" class="control-label">Animal Name</label>
+                                <input id="mixtureName" ng-disabled="isEdit" class="form-control" type="text" ng-model="formResult.name" required />
+                                <span class="help-block">You <b>have</b> to fill this in. This shows up in the list of animals, so keep it short but descriptive.</span>
                             </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <button type="submit" class="btn btn-primary btn-large">
-                <span class="fui-check"></span>&nbsp;Save Animal
-            </button>
-            <button type="reset" class="btn btn-danger btn-large pull-right" ui-sref="animal-list">
-                <span class="fui-cross"></span>&nbsp;Cancel
-            </button>
+                            <div class="form-group">
+                                <label for="mixtureDescription" class="control-label">Description</label>
+                                <textarea id="mixtureDescription" class="form-control" ng-model="formResult.description" rows="5"></textarea>
+                                <span class="help-block">You can leave this blank. Put any comments or additional information about this animal here.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab">
+                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#nutritionElements" style="color: #fff">2. Dietary Requirements<span class="label label-danger pull-right">Required</span></a>
+                    </div>
+                    <div id="nutritionElements" class="panel-collapse collapse in" role="tabpanel">
+                        <div class="panel-body">
+                            Fill in the table below with information about the nutrition that this feed component provides. Make sure that you're using the correct units. If you're not sure about a certain entry, or if it's not applicable, leave it at 0.
+                        </div>
+                        <table class="table table-condensed table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Nutrition</th>
+                                    <th>Quantity (% DM)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="data in formResult.nutrients">
+                                    <td>{{data.name | ucfirst}}</td>
+                                    <td>
+                                        <input class="form-control" ng-model="data.value" type="number" min="0" step="0.01" value="0" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary btn-large" ng-disabled="!formResult.name" ng-disabled="!formResult.name">
+                    <span class="fui-check"></span>&nbsp;Save Animal
+                </button>
+                <button type="reset" class="btn btn-danger btn-large pull-right" ui-sref="animal-list">
+                    <span class="fui-cross"></span>&nbsp;Cancel
+                </button>
+            </div>
         </form>
     </section>
 </div>

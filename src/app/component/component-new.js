@@ -18,7 +18,7 @@ angular.module('app.component-new', [
             }
         });
     })
-    .controller('ComponentNewCtrl', function ComponentNewController($scope, Slug, $indexedDB, $state) {
+    .controller('ComponentNewCtrl', function ComponentNewController($timeout, $scope, Slug, $indexedDB, $state) {
         $scope.formResult = {
             creationDate: new Date(),
             nutrients: {
@@ -82,12 +82,20 @@ angular.module('app.component-new', [
                     "value": 0,
                     "unit": "% DM"
                 },
-                "linoleic_acid": {
-                    "name": "Linoleic Acid",
+                "linoleic_acid_c18_2": {
+                    "name": "Linoleic Acid C18 2",
                     "value": 0,
                     "unit": "% DM"
                 }
             }
+        }
+
+        $scope.makeSticky = function() {
+            $('#nutritionPanel').sticky({
+                topSpacing: 20,
+                getWidthFrom: 'aside',
+                responsiveWidth: true
+            });
         }
 
         $scope.submit = function() {
@@ -100,5 +108,9 @@ angular.module('app.component-new', [
 
                     $state.go('component-list');
                 });
+        }
+
+        $scope.initCheckbox = function() {
+            $('input[type="radio"]').radiocheck();
         }
     });

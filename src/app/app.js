@@ -34,7 +34,7 @@ angular.module('app', [
         // Initialize the local database
         $indexedDBProvider
             .connection(DB_NAME)
-            .upgradeDatabase(2, function(_, db) {
+            .upgradeDatabase(3, function(_, db) {
                 if (db.objectStoreNames.contains(COMPONENT_TABLE_NAME)) {
                     db.deleteObjectStore(COMPONENT_TABLE_NAME);
                 }
