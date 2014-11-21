@@ -146,7 +146,7 @@
                             <div class="form-group" ng-if="formResult.compData.length > 0">
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <input id="feedWeight" class="form-control" type="number" min="0" step="0.1" ng-model="formResult.weight" ng-change="calculate()" ng-init="formResult.weight = 0"/>
+                                        <input id="feedWeight" class="form-control" type="number" min="0" step="0.1" ng-model="formResult.weight" ng-change="calculate()" ng-init="formResult.weight = 0" />
                                         <span class="input-group-addon">lb</span>
                                     </div>
                                     <span class="help-block">Provide a desired feed weight to view all component quantities in pounds. Leaving this as 0 will show component quantities as a percentage of total feed weight.</span>
@@ -168,27 +168,27 @@
                             <thead>
                                 <tr>
                                     <th>Nutrition</th>
-                                    <th>Unit</th>
-                                    <th>Quantity</th>
+                                    <th>Quantity (% Dry Matter)</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr ng-repeat="(key, data) in formResult.nutritionData">
                                     <td>{{data.name | ucfirst}}</td>
-                                    <td>{{data.unit}}</td>
-                                    <td style="width: 60%">
-                                        <div class="input-group">
-                                            <input class="form-control" ng-model="data.min" type="number" min="0" step="0.01" placeholder="Min" />
-                                            <span class="input-group-addon">≤</span>
-                                            <input class="form-control" disabled type="number" min="0" step="0.01" value="{{data.value | number: 3}}"/>
-                                            <span class="input-group-addon">≤</span>
-                                            <input class="form-control" ng-model="data.max" type="number" min="0" placeholder="Max" step="0.01" />
+                                    <td>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input class="form-control" ng-model="data.min" type="number" min="0" step="0.01" max="{{maxAchievableNutrients[key]}}" placeholder="Min" />
+                                                <span class="input-group-addon">≤</span>
+                                                <input class="form-control" disabled type="number" min="0" step="0.01" value="{{data.value | number: 3}}" />
+                                                <span class="input-group-addon">≤</span>
+                                                <input class="form-control" ng-model="data.max" type="number" min="0" placeholder="Max" step="0.01" />
+                                            </div>
+                                            <span class="help-block">The minimum quantity for this item cannot exceed {{maxAchievableNutrients[key]}}</span>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td><span class="help-block">% DM stands for "% Dry Matter"</span></td>
                                     <td>
                                         <button type="button" class="btn btn-primary" ng-click="optFeed()">Calculate Feed Proportions</button>
                                     </td>
@@ -229,15 +229,17 @@
                                     <input type="radio" ng-model="formResult.private" data-toggle="radio" name="privacySelector" id="privateRadio" value="true"><b>Private: </b> Only you can see this, and only you can make changes.
                                 </label>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-large">
-                                <span class="fui-check"></span>&nbsp;Save Feed Mixture
-                            </button>
-                            <button type="reset" class="btn btn-danger btn-large pull-right" ui-sref="feed-list">
-                                <span class="fui-cross"></span>&nbsp;Cancel
-                            </button>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div ng-if="isCalculateOnly == false && formResult.nutritionData">
+                <button type="submit" class="btn btn-primary btn-large">
+                    <span class="fui-check"></span>&nbsp;Save Feed Mixture
+                </button>
+                <button type="reset" class="btn btn-danger btn-large pull-right" ui-sref="feed-list">
+                    <span class="fui-cross"></span>&nbsp;Cancel
+                </button>
             </div>
         </form>
     </section>

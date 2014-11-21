@@ -125,17 +125,20 @@ angular.module('app.feed-new', [
 
         // Evaluate the total nutrition provided by the components
         $scope.calculate = function() {
-            var complementWeight = 0
+            ////////////////////////////////////////////////////////////////////
+            // Back-calculate Base Component proportion
+            ////////////////////////////////////////////////////////////////////
+            var complementProportion = 0
 
             if ($scope.formResult.compData.length > 2) {
-                var complementWeight = lodash.rest($scope.formResult.compData).reduce(function(acc, curr) {
+                complementProportion = lodash.rest($scope.formResult.compData).reduce(function(acc, curr) {
                     return acc + curr.value;
                 }, 0);
             } else if ($scope.formResult.compData.length === 2) {
-                var complementWeight = $scope.formResult.compData[1].value
+                complementProportion = $scope.formResult.compData[1].value
             }
 
-            var difference = 100 - complementWeight
+            var difference = 100 - complementProportion
 
             if (difference > 0) {
                 $scope.formResult.compData[0].value = difference
@@ -143,30 +146,40 @@ angular.module('app.feed-new', [
                 Messenger().post("Warning: Sum of component quantities exceeds 100%. Please delete a component or change its quantity.");
             }
 
+            ////////////////////////////////////////////////////////////////////
+            // Convert percentages to weight in pounds if specified
+            ////////////////////////////////////////////////////////////////////
             if ($scope.formResult.weight) {
                 $scope.feedCost = $scope.formResult.compData.reduce(function(acc, curr) {
                     return acc + curr.value * 0.01 * $scope.formResult.weight * curr.cost
                 }, 0);
             }
 
+            ////////////////////////////////////////////////////////////////////
+            // Tally Nutrition Elements
+            ////////////////////////////////////////////////////////////////////
+
             // Extract the nutrients associated with the current component
+            // Only proceed if at least one component has been specified
             if ($scope.formResult.compData.length === 1 && $scope.formResult.compData[0]._id === null) {
                 $scope.formResult.nutritionData = null;
             } else {
-                $scope.nutrientList = lodash.compact($scope.formResult.compData.map(function(item) {
+                $scope.compNutrients = lodash.compact($scope.formResult.compData.map(function(item) {
                     if (item._id) {
-                        var nutrients = lodash.find($scope.compData, {
+                        return lodash.find($scope.compData, {
                             _id: item._id
                         }).nutrients;
-
-                        return lodash.mapValues(nutrients, function(nutrient) {
-                            return {
-                                name: nutrient.name,
-                                value: nutrient.value * item.value * 0.01,
-                                unit: nutrient.unit
-                            };
-                        });
                     }
+                }));
+
+                $scope.nutrientList = lodash.compact($scope.compNutrients.map(function(item, index) {
+                    return lodash.mapValues(item, function(nutrient) {
+                        return {
+                            name: nutrient.name,
+                            value: nutrient.value * $scope.formResult.compData[index].value * 0.01,
+                            unit: nutrient.unit
+                        };
+                    });
                 }));
 
                 $scope.formResult.nutritionData = lodash.reduce($scope.nutrientList, function(acc, curr) {
@@ -206,6 +219,24 @@ angular.module('app.feed-new', [
                             unit: a.unit
                         };
                     });
+                });
+
+                $scope.maxAchievableNutrients = {};
+
+                Object.keys($scope.formResult.nutritionData).forEach(function(item) {
+                    var maxProvider = lodash.max($scope.compNutrients, function(comp) {
+                        if (item in comp) {
+                            return comp[item].value;
+                        } else {
+                            return 0;
+                        }
+                    });
+
+                    $scope.maxAchievableNutrients[item] = maxProvider[item].value;
+                });
+
+                Object.keys($scope.formResult.nutritionData).forEach(function(item) {
+                    $scope.formResult.nutritionData[item].maxAchievable = $scope.maxAchievableNutrients[item];
                 });
             }
         }
