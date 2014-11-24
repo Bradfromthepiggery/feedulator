@@ -37,7 +37,7 @@
                 Total Feed Cost: ${{feedCost | number: 2}}
             </div>
         </div>
-        <div class="panel panel-primary" id="nutritionPanel" ng-if="formResult.nutritionData" ng-init="makeSticky()">
+        <div class="panel panel-primary" id="nutritionPanel" ng-if="formResult.nutritionData" ng-init="makeSticky('#nutritionPanel')">
             <div class="panel-heading">
                 <h2 class="panel-title" style="font-size: 16px">
                     Nutrition Breakdown
@@ -128,7 +128,7 @@
                                         <button type="button" class="btn btn-info" ng-disabled="compCount == formResult.compData.length || formResult.compData.length >= nutrientList.length + 1 || !formResult.hasOwnProperty('nutritionData') || formResult.nutritionData === null" ng-click="addNewComp()">Add Component</button>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-danger pull-right" ng-hide="formResult.compData.length < 2" ng-click="resetComponents()">Reset</button>
+                                        <button type="button" class="btn btn-danger pull-right" ng-hide="formResult.compData.length < 2" ng-click="resetComps()">Reset</button>
                                     </td>
                                     <td></td>
                                     <td></td>

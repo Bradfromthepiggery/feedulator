@@ -21,6 +21,7 @@ angular.module('app', [
         'app.feed-edit',
         'app.feed-list',
         'app.feed-new',
+        'app.feed-service',
         'ngLodash',
         'slugifier',
         'ui.router',
