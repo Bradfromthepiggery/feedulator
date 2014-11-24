@@ -213,7 +213,7 @@ angular.module('app.feed-new', [
                         var result = a.value + b.value;
                         return {
                             name: a.name,
-                            value: +result.toFixed(3),
+                            value: +result.toPrecision(3),
                             unit: a.unit
                         };
                     });
