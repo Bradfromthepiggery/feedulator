@@ -27,6 +27,7 @@ angular.module('app.feed-new', [
                 // so the scope is updated whenever the value changes
                 $('#select' + attrs.uiSelect)
                     .select2({
+                        openOnEnter: false,
                         maximumSelectionSize: 1
                     })
                     .on('change', function(e) {
@@ -37,9 +38,6 @@ angular.module('app.feed-new', [
                         }
 
                     });
-
-                // Set the initial value of the combobox
-                // $('#select' + attrs.uiSelect).select2('val', scope.comp._id);
             });
         }
     })
@@ -376,9 +374,9 @@ angular.module('app.feed-new', [
             $('input[type="radio"]').radiocheck();
         }
 
-        // A flag to hide the feed metadata interface when the view is called
-        // from the calculator state (instead of the creation state)
-        $scope.isCalculateOnly = $state.is('feed-calculator');
+        $timeout(function() {
+           $('#select0').select2('focus');
+        });
 
         // A flag to display the optimization interface
         $scope.isOptimize = false;

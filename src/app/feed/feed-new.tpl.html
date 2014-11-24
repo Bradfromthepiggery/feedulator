@@ -90,12 +90,14 @@
                             <tbody>
                                 <tr ng-repeat="comp in formResult.compData">
                                     <td>
-                                        <select multiple id="{{'select' + $index}}" ng-model="comp._id" ng-options="data.name for data in compData track by data._id" class="form-control multiselect multiselect-inverse" style="width: 100%" ui-select="{{$index}}" autofocus="autofocus">
+                                        <div class="form-group">
+                                        <select multiple id="{{'select' + $index}}" ng-model="comp._id" ng-options="data.name for data in compData track by data._id" class="form-control multiselect multiselect-inverse" ui-select="{{$index}}" autofocus="autofocus">
                                             <option ng-if="false" value="">Choose Component</option>
                                         </select>
                                         <span ng-if="$first" class="help-block">Start typing to search for a component.</span>
+                                        </div>
                                     </td>
-                                    <td style="width: 32.5%">
+                                    <td style="width: 40%">
                                         <div class="input-group">
                                             <input class="form-control" ng-model="comp.min" type="number" min="0" max="100" placeholder="Min" ng-change="calculate()" step="0.01" />
                                             <span class="input-group-addon">≤</span>
@@ -195,7 +197,7 @@
                     </div>
                 </div>
 
-                <div class="panel panel-default" ng-if="isCalculateOnly == false && formResult.nutritionData">
+                <div class="panel panel-default" ng-if="formResult.nutritionData">
                     <div class="panel-heading" role="tab">
                         <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#feedMeta" style="color: #fff">{{formResult.compData.length > 1 ? '4' : '3'}}. About This Feed
                         <span class="label label-danger pull-right">Required</span></a>
