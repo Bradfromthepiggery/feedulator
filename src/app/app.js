@@ -18,7 +18,6 @@ angular.module('app', [
         'app.component-edit',
         'app.component-list',
         'app.component-new',
-        'app.feed-calculator',
         'app.feed-edit',
         'app.feed-list',
         'app.feed-new',

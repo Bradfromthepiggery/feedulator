@@ -57,7 +57,6 @@
     <script src="app/feed/feed-edit.js"></script>
     <script src="app/feed/feed-list.js"></script>
     <script src="app/feed/feed-new.js"></script>
-    <script src="app/feed/feed-calculator.js"></script>
 </head>
 
 <body style="margin-bottom: 20px">
@@ -70,8 +69,6 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="nav navbar-nav">
-                <li ui-sref-active="active"><a ui-sref="feed-calculator">Calculator</a>
-                </li>
                 <li ui-sref-active="active"><a ui-sref="feed-list">Feed Mixtures</a>
                 </li>
                 <li ui-sref-active="active"><a ui-sref="component-list">Feed Components</a>
@@ -80,47 +77,9 @@
                 </li>
             </ul>
             <!-- <button class="btn btn-default navbar-btn navbar-right" type="button">Sign In</button> -->
-            <!-- /.navbar-collapse -->
         </div>
     </nav>
-    <!-- /navbar -->
     <div ui-view="main" class="container-fluid"></div>
-    <!-- <div class="bottom-menu">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-2 col-lg-offset-1">
-                    <h5 class="title">Feeds</h5>
-                    <ul class="bottom-menu-list">
-                        <li><a ui-sref="mixture-list">View All Feeds</a></li>
-                        <li><a ui-sref="mixture-new">Create New Feed</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-2">
-                    <h5 class="title">Feed Components</h5>
-                    <ul class="bottom-menu-list">
-                        <li><a ui-sref="ingredient-list">View All Components</a></li>
-                        <li><a ui-sref="ingredient-new">Create New Component</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-2">
-                    <h5 class="title">Other Information</h5>
-                    <ul class="bottom-menu-list">
-                        <li><a ui-sref="terms">Terms and Conditions</a></li>
-                        <li><a ui-sref="privacy">Privacy Policy</a></li>
-                        <li><a ui-sref="acknowledgments">Acknowledgments</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3 col-lg-offset-2">
-                    <p><a class="bottom-menu-brand" href="thepiggery.net" target="_blank">The Piggery</a></p>
-                    <address>
-                        423 Franklin Street
-                        <br/>Ithaca, NY 14850, USA
-                        <br/><a href="tel:+1(607)272-2276">+1 (607) 272-2276</a>
-                    </address>
-                </div>
-            </div>
-        </div>
-    </div> -->
 </body>
 
 </html>
