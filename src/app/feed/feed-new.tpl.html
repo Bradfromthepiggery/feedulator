@@ -90,7 +90,7 @@
                             <tbody>
                                 <tr ng-repeat="comp in formResult.compData">
                                     <td>
-                                        <select multiple id="{{'select' + $index}}" ng-model="comp._id" ng-options="data.name for data in compData track by data._id" class="form-control multiselect multiselect-inverse" style="width: 100%" ui-select="{{$index}}">
+                                        <select multiple id="{{'select' + $index}}" ng-model="comp._id" ng-options="data.name for data in compData track by data._id" class="form-control multiselect multiselect-inverse" style="width: 100%" ui-select="{{$index}}" autofocus="autofocus">
                                             <option ng-if="false" value="">Choose Component</option>
                                         </select>
                                         <span ng-if="$first" class="help-block">Start typing to search for a component.</span>
