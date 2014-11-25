@@ -18,23 +18,24 @@
                     <tr>
                         <th>#</th>
                         <th>Component</th>
-                        <th>Qty
-                            <br/>(
-                            <span ng-if="!formResult.hasOwnProperty('weight') || formResult.weight === 0">%</span>
-                            <span ng-if="formResult.hasOwnProperty('weight') && formResult.weight !== 0">lb</span>)</th>
+                        <th>Qty.
+                            <br/>(<span ng-if="!formResult.hasOwnProperty('weight') || formResult.weight === 0 || formResult.weight === null">%</span><span ng-if="formResult.hasOwnProperty('weight') && formResult.weight !== 0 && formResult.weight !== null">lb</span>)</th>
+                        <th>Cost
+                            <br/>(lb)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="comp in formResult.compData">
-                        <td>{{$index+1}}</td>
-                        <td style="width: 60%">{{comp.name}}</td>
-                        <td ng-if="!formResult.hasOwnProperty('weight')  || formResult.weight === 0">{{comp.value | number: 2}}</td>
-                        <td ng-if="formResult.hasOwnProperty('weight') && formResult.weight !== 0">{{comp.value * 0.01 * formResult.weight | number: 2}}</td>
+                        <td style="width: 10%">{{$index+1}}</td>
+                        <td style="width: 50%">{{comp.name | ucfirst}}</td>
+                        <td ng-if="!formResult.hasOwnProperty('weight')  || formResult.weight === 0 || formResult.weight === null">{{comp.value | precision: 3}}</td>
+                        <td ng-if="formResult.hasOwnProperty('weight') && formResult.weight !== 0 && formResult.weight !== null">{{comp.value * 0.01 * formResult.weight | precision: 3}}</td>
+                        <td>{{comp.cost | currency}}</td>
                     </tr>
                 </tbody>
             </table>
             <div class="panel-footer" ng-if="formResult.weight" style="font-size: 14px">
-                Total Feed Cost: ${{feedCost | number: 2}}
+                Total Feed Cost: {{feedCost | currency}}
             </div>
         </div>
         <div class="panel panel-primary" id="nutritionPanel" ng-if="formResult.nutritionData" ng-init="makeSticky('#nutritionPanel')">
@@ -48,18 +49,18 @@
                     <tr>
                         <th>#</th>
                         <th>Nutrition</th>
-                        <th>Qty
-                            <br/>(% DM)</th>
+                        <th>Qty.
+                            <br/>(%&nbsp;DM)</th>
                         <th ng-if="formResult.refAnimal">Ref.
-                            <br/>(% DM)</th>
+                            <br/>(%&nbsp;DM)</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="(key, data) in formResult.nutritionData" ng-class="{ danger: formResult.refAnimal.nutrients[key].value > data.value, success: formResult.refAnimal.nutrients[key].value <= data.value }">
-                        <td>{{$index+1}}</td>
-                        <td>{{data.name | ucfirst}}</td>
-                        <td>{{data.value | number: 3}}</td>
-                        <td ng-if="formResult.refAnimal">{{formResult.refAnimal.nutrients[key].value || 0}}</td>
+                    <tr ng-repeat="(key, data) in formResult.nutritionData" ng-class="{ danger: formResult.refAnimal.nutrients[key].value > data.value, success: formResult.refAnimal.nutrients[key].value <= data.value}">
+                        <td style="width: 10%">{{$index+1}}</td>
+                        <td style="width: 50%">{{data.name | ucfirst}}</td>
+                        <td>{{data.value | precision: 3}}</td>
+                        <td ng-if="formResult.refAnimal">{{formResult.refAnimal.nutrients[key].value || 0 | precision: 3}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -169,7 +170,7 @@
                             <thead>
                                 <tr>
                                     <th>Nutrition</th>
-                                    <th>Quantity (% Dry Matter)</th>
+                                    <th>Quantity (% DM)</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -260,7 +261,9 @@
                     <p>To fix this, you can add or remove components in Step 1 above, or change the minimum and maximum values specified in Step 3. </p>
                 </div>
                 <div ng-if="results.feasible">
-                    <p>Success! We've found a set of quantities that meets all your requirements. Your feed mixture will be automatically updated with these values once you close this window.</p>
+                    <p>Success! We've found a set of quantities that meets all your requirements.</p>
+                    <p>Your total feed cost per pound is: {{results.result | currency}}</p>
+                    <p>Your feed mixture will be automatically updated with these values once you close this window.</p>
                 </div>
             </div>
             <table class="table table-condensed table-hover table-responsive table-striped" ng-if="results.feasible">
@@ -268,14 +271,16 @@
                     <tr>
                         <th>#</th>
                         <th>Component</th>
-                        <th>Qty (%)</th>
+                        <th>Qty. (%)</th>
+                        <th>Cost (lb)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="comp in formResult.compData">
                         <td>{{$index+1}}</td>
-                        <td style="width: 60%">{{comp.name}}</td>
-                        <td>{{comp.value | number: 2}}</td>
+                        <td style="width: 60%">{{comp.name | ucfirst}}</td>
+                        <td>{{comp.value | precision: 3}}</td>
+                        <td>{{comp.cost | currency}}</td>
                     </tr>
                 </tbody>
             </table>

@@ -42,6 +42,11 @@ angular.module('app.feed-new', [
             });
         }
     })
+    .filter('precision', function() {
+        return function(input, val) {
+            return Number(input.toPrecision(val));
+        };
+    })
     .controller('FeedNewCtrl', function MixtureCreationController($scope, $http, $indexedDB, lodash, Slug, $state, $timeout, feedUtil) {
         // Extract all components from the database and bind them to the scope
         $indexedDB.objectStore('components').getAll().then(function(results) {
