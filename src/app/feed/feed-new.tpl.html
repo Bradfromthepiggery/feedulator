@@ -16,21 +16,21 @@
             <table class="table table-condensed table-hover table-responsive table-striped" ng-if="formResult.compData.length > 0 && formResult.compData[0]._id !== null">
                 <thead>
                     <tr>
-                        <th>#</th>
                         <th>Component</th>
                         <th>Qty.
                             <br/>(<span ng-if="!formResult.hasOwnProperty('weight') || formResult.weight === 0 || formResult.weight === null">%</span><span ng-if="formResult.hasOwnProperty('weight') && formResult.weight !== 0 && formResult.weight !== null">lb</span>)</th>
                         <th>Cost
                             <br/>(lb)</th>
+                        <th ng-if="formResult.hasOwnProperty('weight') && formResult.weight !== 0 && formResult.weight !== null">Total Cost</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="comp in formResult.compData">
-                        <td style="width: 10%">{{$index+1}}</td>
                         <td style="width: 50%">{{comp.name | ucfirst}}</td>
                         <td ng-if="!formResult.hasOwnProperty('weight')  || formResult.weight === 0 || formResult.weight === null">{{comp.value | precision: 3}}</td>
                         <td ng-if="formResult.hasOwnProperty('weight') && formResult.weight !== 0 && formResult.weight !== null">{{comp.value * 0.01 * formResult.weight | precision: 3}}</td>
                         <td>{{comp.cost | currency}}</td>
+                        <td ng-if="formResult.hasOwnProperty('weight') && formResult.weight !== 0 && formResult.weight !== null">{{comp.value * 0.01 * formResult.weight * comp.cost | currency}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -47,7 +47,6 @@
             <table class="table table-condensed table-hover table-striped table-responsive">
                 <thead>
                     <tr>
-                        <th>#</th>
                         <th>Nutrition</th>
                         <th>Qty.
                             <br/>(%&nbsp;DM)</th>
@@ -57,7 +56,6 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat= "data in formResult.nutritionData | toArray" ng-class="{ danger: formResult.refAnimal.nutrients[key].value > data.value, success: formResult.refAnimal.nutrients[key].value <= data.value}">
-                        <td style="width: 10%">{{$index+1}}</td>
                         <td style="width: 50%">{{data.name | ucfirst}}</td>
                         <td>{{data.value | precision: 3}}</td>
                         <td ng-if="formResult.refAnimal">{{formResult.refAnimal.nutrients[key].value || 0 | precision: 3}}</td>
