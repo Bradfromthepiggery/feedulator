@@ -74,7 +74,7 @@
     <section class="col-lg-9">
         <form role="form" ng-submit="submit()" novalidate>
             <div class="panel-group" id="formAccordion" role="tablist" aria-multiselectable="true" style="margin-bottom: 8px">
-                <div class="panel panel-default">
+                <div class="panel panel-default" ng-if="!('feed-view' | isState)">
                     <div class="panel-heading" role="tab">
                         <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#feedComponents" style="color: #fff">1. Feed Components <span class="label label-danger pull-right">Required</span></a>
                     </div>
@@ -141,7 +141,7 @@
 
                 <div class="panel panel-default" ng-if="formResult.nutritionData">
                     <div class="panel-heading" role="tab">
-                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#feedWeight" style="color: #fff">2. Feed Weight Conversion <span class="label label-info pull-right">Optional</span></a>
+                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#feedWeight" style="color: #fff">{{('feed-view' | isState) ? '1' : '2'}}. Feed Weight Conversion <span class="label label-info pull-right" ng-hide="{{'feed-view' | isState}}">Optional</span></a>
                     </div>
                     <div id="feedWeight" class="panel-collapse collapse" role="tabpanel">
                         <div class="panel-body">
@@ -158,7 +158,7 @@
                     </div>
                 </div>
 
-                <div class="panel panel-default" ng-if="formResult.nutritionData && formResult.compData.length > 1">
+                <div class="panel panel-default" ng-if="formResult.nutritionData && formResult.compData.length > 1 && !('feed-view' | isState)">
                     <div class="panel-heading" role="tab">
                         <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#optimize" style="color: #fff">3. Minimize Feed Costs <span class="label label-info pull-right">Optional</span></a>
                     </div>
@@ -201,27 +201,30 @@
 
             <div class="panel panel-default" ng-if="formResult.nutritionData">
                 <div class="panel-heading" role="tab">
-                    <a href data-toggle="collapse" data-target="#feedMeta" style="color: #fff">{{formResult.compData.length > 1 ? '4' : '3'}}. About This Feed
-                <span class="label label-danger pull-right">Required</span></a>
+                    <a href data-toggle="collapse" data-target="#feedMeta" style="color: #fff">{{('feed-view' | isState) ? 2 : (formResult.compData.length > 1 ? '4' : '3')}}. About This Feed
+                <span class="label label-danger pull-right" ng-hide="{{'feed-view' | isState}}">Required</span></a>
                 </div>
                 <div id="feedMeta" class="panel-collapse collapse in" role="tabpanel">
                     <div class="panel-body">
                         <div class="form-group">
-                            <label for="feedName" class="control-label">Feed Name</label>
-                            <input id="feedName" ng-disabled="isEdit" class="form-control" type="text" ng-model="formResult.name" required />
-                            <span class="help-block">You <b>have</b> to fill this in. This shows up in the list of feeds, so keep it short but descriptive.</span>
+                            <label for="feedName" class="control-label" ng-class="{'text-muted': ('feed-edit' | isState) || ('feed-view' | isState)}">Feed Name</label>
+                            <input id="feedName" ng-hide="{{('feed-edit' | isState) || ('feed-view' | isState)}}" class="form-control" type="text" ng-model="formResult.name" required />
+                            <p class="form-control-static" ng-hide="{{'feed-new' | isState}}">{{formResult.name |ucfirst}}</p>
+                            <span class="help-block" ng-hide="{{('feed-edit' | isState) || ('feed-view' | isState)}}">You <b>have</b> to fill this in. This shows up in the list of feeds, so keep it short but descriptive.</span>
                         </div>
-                        <div class="form-group">
-                            <label for="animalBatchId" class="control-label">Animal Batch ID</label>
-                            <input id="animalBatchId" class="form-control" type="text" ng-model="formResult.batchId" />
-                            <span class="help-block">You can leave this blank. If you're creating this feed for a certain batch of animals, use this field to keep track of their identification codes.</span>
+                        <div class="form-group" ng-hide="{{('feed-view' | isState) && !formResult.batchId}}">
+                            <label for="animalBatchId" class="control-label" ng-class="{'text-muted': ('feed-view' | isState)}">Animal Batch ID</label>
+                            <input id="animalBatchId" class="form-control" type="text" ng-model="formResult.batchId" ng-hide="{{'feed-view' | isState}}" />
+                            <p class="form-control-static" ng-if="('feed-view' | isState)">{{formResult.batchId}}</p>
+                            <span class="help-block" ng-if="!('feed-view' | isState)">You can leave this blank. If you're creating this feed for a certain batch of animals, use this field to keep track of their identification codes.</span>
                         </div>
-                        <div class="form-group">
-                            <label for="feedDescription" class="control-label">Description</label>
-                            <textarea id="feedDescription" class="form-control" ng-model="formResult.description" rows="5"></textarea>
-                            <span class="help-block">You can leave this blank. Use this space to store any additional information or comments about this feed.</span>
+                        <div class="form-group" ng-hide="{{('feed-view' | isState) && !formResult.description}}">
+                            <label for="feedDescription" class="control-label" ng-class="{'text-muted': ('feed-view' | isState)}">Description</label>
+                            <textarea id="feedDescription" class="form-control" ng-model="formResult.description" rows="5" ng-hide="{{'feed-view' | isState}}"></textarea>
+                            <p class="form-control-static" ng-if="('feed-view' | isState)">{{formResult.description}}</p>
+                            <span class="help-block" ng-if="!('feed-view' | isState)">You can leave this blank. Use this space to store any additional information or comments about this feed.</span>
                         </div>
-                        <div class="form-group" ng-init="initCheckbox()">
+                        <div class="form-group" ng-init="initCheckbox()" ng-hide="{{'feed-view' | isState}}">
                             <label class="control-label">Can anyone else see this feed?</label>
                             <label class="radio" ng-init="formResult.private = 'false'">
                                 <input type="radio" ng-model="formResult.private" data-toggle="radio" name="privacySelector" id="publicRatio" value="false" checked=""><b>Public: </b> Everyone can see this, but only you can make changes.
@@ -234,7 +237,7 @@
                 </div>
             </div>
 
-            <div ng-if="formResult.nutritionData">
+            <div ng-if="formResult.nutritionData" ng-hide="{{'feed-view' | isState}}">
                 <span class="help-block has-error" ng-if="!formResult.name">You have to provide a feed name before saving this feed.</span>
                 <button type="submit" class="btn btn-primary btn-large" ng-disabled="!formResult.name">
                     <span class="fui-check"></span>&nbsp;Save Feed Mixture

@@ -31,8 +31,8 @@
         </form>
     </aside>
     <div class="col-lg-9">
-        <div class="row">
-            <section class="col-lg-4" dir-paginate="comp in compData | toArray | filter: { $: search } | itemsPerPage: 12">
+        <div class="row" isotope-container="isotope-container">
+            <section class="col-lg-4" isotope-item="isotope-item" dir-paginate="comp in compData | toArray | filter: { $: search } | itemsPerPage: 12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h2 class="panel-title" style="font-size: 16px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
@@ -74,7 +74,7 @@
             </section>
         </div>
         <div class="text-center">
-            <dir-pagination-controls boundary-links="false" template-url="./app/common/pagination.tpl.html"></dir-pagination-controls>
+            <!-- <dir-pagination-controls boundary-links="false" template-url="./app/common/pagination.tpl.html"></dir-pagination-controls> -->
         </div>
     </div>
 </div>
