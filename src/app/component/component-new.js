@@ -42,6 +42,21 @@ angular.module('app.component-new', [
                     "value": 0,
                     "unit": "% DM"
                 },
+                "sodium": {
+                    "name": "Sodium",
+                    "value": 0,
+                    "unit": "% DM"
+                },
+                "selenium": {
+                    "name": "Selenium",
+                    "value": 0,
+                    "unit": "% DM"
+                },
+                "zinc": {
+                    "name": "Zinc",
+                    "value": 0,
+                    "unit": "% DM"
+                },
                 "lysine": {
                     "name": "Lysine",
                     "value": 0,
@@ -64,21 +79,6 @@ angular.module('app.component-new', [
                 },
                 "valine": {
                     "name": "Valine",
-                    "value": 0,
-                    "unit": "% DM"
-                },
-                "sodium": {
-                    "name": "Sodium",
-                    "value": 0,
-                    "unit": "% DM"
-                },
-                "selenium": {
-                    "name": "Selenium",
-                    "value": 0,
-                    "unit": "% DM"
-                },
-                "zinc": {
-                    "name": "Zinc",
                     "value": 0,
                     "unit": "% DM"
                 },

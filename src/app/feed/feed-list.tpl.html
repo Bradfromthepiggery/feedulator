@@ -1,17 +1,17 @@
 <div class="row">
     <aside class="col-md-4 col-lg-3">
         <form role="form">
-            <div class="form-group">
+            <div class="form-group" ng-if="feedData.length >= 2">
                 <div class="input-group">
-                    <input type="search" class="form-control" ng-disabled="feedData.length < 2" ng-model="search" placeholder="Search Feeds" />
+                    <input type="search" class="form-control" ng-model="search" placeholder="Search Feeds" />
                     <span class="input-group-btn">
-                        <button type="submit" ng-disabled="feedData.length < 2" class="btn">
+                        <button type="submit" class="btn">
                             <span class="fui-search"></span>
                         </button>
                     </span>
                 </div>
+                <hr>
             </div>
-            <hr>
             <p class="lead">Hide/Show Details</p>
             <label class="checkbox" for="descCheckbox">
                 <input type="checkbox" id="descCheckbox" data-toggle="checkbox" ng-model="descriptionChecked" ng-init="descriptionChecked=true" checked ng-disabled="feedData.length == 0">Description
