@@ -285,7 +285,9 @@ angular.module('app.feed-service', ['ngLodash'])
                 scope.calculate();
             }
 
-            $('#optResultModal').modal();
+            $('#optResultModal').modal({
+                backdrop: true
+            });
         }
 
         var makeSticky = function(elemId) {

@@ -56,7 +56,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="(key, data) in formResult.nutritionData" ng-class="{ danger: formResult.refAnimal.nutrients[key].value > data.value, success: formResult.refAnimal.nutrients[key].value <= data.value}">
+                    <tr ng-repeat= "data in formResult.nutritionData | toArray" ng-class="{ danger: formResult.refAnimal.nutrients[key].value > data.value, success: formResult.refAnimal.nutrients[key].value <= data.value}">
                         <td style="width: 10%">{{$index+1}}</td>
                         <td style="width: 50%">{{data.name | ucfirst}}</td>
                         <td>{{data.value | precision: 3}}</td>
@@ -76,7 +76,7 @@
             <div class="panel-group" id="formAccordion" role="tablist" aria-multiselectable="true" style="margin-bottom: 8px">
                 <div class="panel panel-default" ng-if="!('feed-view' | isState)">
                     <div class="panel-heading" role="tab">
-                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#feedComponents" style="color: #fff">1. Feed Components <span class="label label-danger pull-right">Required</span></a>
+                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#feedComponents" style="color: #fff">1. Feed Components<span class="label label-danger pull-right">Required</span></a>
                     </div>
                     <div id="feedComponents" class="panel-collapse collapse in" role="tabpanel">
                         <table class="table table-condensed">
@@ -101,9 +101,9 @@
                                     <td style="width: 40%">
                                         <div class="input-group">
                                             <input class="form-control" ng-model="comp.min" type="number" min="0" max="100" placeholder="Min" ng-change="calculate()" step="0.01" />
-                                            <span class="input-group-addon">≤</span>
+                                            <span class="input-group-addon">&le;</span>
                                             <input class="form-control" ng-disabled="$first" ng-model="comp.value" type="number" min="0" max="100" ng-change="calculate()" step="0.01" />
-                                            <span class="input-group-addon">≤</span>
+                                            <span class="input-group-addon">&le;</span>
                                             <input class="form-control" ng-model="comp.max" type="number" min="0" max="100" placeholder="Max" ng-change="calculate()" step="0.01" />
                                         </div>
                                         <span ng-if="$first" class="help-block">This is your main component. It's value will change automatically, ensuring that your feed components always sum to 100%</span>
@@ -141,7 +141,7 @@
 
                 <div class="panel panel-default" ng-if="formResult.nutritionData">
                     <div class="panel-heading" role="tab">
-                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#feedWeight" style="color: #fff">{{('feed-view' | isState) ? '1' : '2'}}. Feed Weight Conversion <span class="label label-info pull-right" ng-hide="{{'feed-view' | isState}}">Optional</span></a>
+                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#feedWeight" style="color: #fff">{{('feed-view' | isState) ? '1' : '2'}}. Feed Weight Conversion<span class="label label-info pull-right" ng-hide="{{'feed-view' | isState}}">Optional</span></a>
                     </div>
                     <div id="feedWeight" class="panel-collapse collapse" role="tabpanel">
                         <div class="panel-body">
@@ -160,7 +160,7 @@
 
                 <div class="panel panel-default" ng-if="formResult.nutritionData && formResult.compData.length > 1 && !('feed-view' | isState)">
                     <div class="panel-heading" role="tab">
-                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#optimize" style="color: #fff">3. Minimize Feed Costs <span class="label label-info pull-right">Optional</span></a>
+                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#optimize" style="color: #fff">3. Minimize Feed Costs<span class="label label-info pull-right">Optional</span></a>
                     </div>
                     <div id="optimize" class="panel-collapse collapse" role="tabpanel">
                         <div class="panel-body">
@@ -201,8 +201,7 @@
 
             <div class="panel panel-default" ng-if="formResult.nutritionData">
                 <div class="panel-heading" role="tab">
-                    <a href data-toggle="collapse" data-target="#feedMeta" style="color: #fff">{{('feed-view' | isState) ? 2 : (formResult.compData.length > 1 ? '4' : '3')}}. About This Feed
-                <span class="label label-danger pull-right" ng-hide="{{'feed-view' | isState}}">Required</span></a>
+                    <a href data-toggle="collapse" data-target="#feedMeta" style="color: #fff">{{('feed-view' | isState) ? 2 : (formResult.compData.length > 1 ? '4' : '3')}}. About This Feed<span class="label label-danger pull-right" ng-hide="{{'feed-view' | isState}}">Required</span></a>
                 </div>
                 <div id="feedMeta" class="panel-collapse collapse in" role="tabpanel">
                     <div class="panel-body">
@@ -212,18 +211,21 @@
                             <p class="form-control-static" ng-hide="{{'feed-new' | isState}}">{{formResult.name |ucfirst}}</p>
                             <span class="help-block" ng-hide="{{('feed-edit' | isState) || ('feed-view' | isState)}}">You <b>have</b> to fill this in. This shows up in the list of feeds, so keep it short but descriptive.</span>
                         </div>
+
                         <div class="form-group" ng-hide="{{('feed-view' | isState) && !formResult.batchId}}">
                             <label for="animalBatchId" class="control-label" ng-class="{'text-muted': ('feed-view' | isState)}">Animal Batch ID</label>
                             <input id="animalBatchId" class="form-control" type="text" ng-model="formResult.batchId" ng-hide="{{'feed-view' | isState}}" />
                             <p class="form-control-static" ng-if="('feed-view' | isState)">{{formResult.batchId}}</p>
                             <span class="help-block" ng-if="!('feed-view' | isState)">You can leave this blank. If you're creating this feed for a certain batch of animals, use this field to keep track of their identification codes.</span>
                         </div>
+
                         <div class="form-group" ng-hide="{{('feed-view' | isState) && !formResult.description}}">
                             <label for="feedDescription" class="control-label" ng-class="{'text-muted': ('feed-view' | isState)}">Description</label>
                             <textarea id="feedDescription" class="form-control" ng-model="formResult.description" rows="5" ng-hide="{{'feed-view' | isState}}"></textarea>
                             <p class="form-control-static" ng-if="('feed-view' | isState)">{{formResult.description}}</p>
                             <span class="help-block" ng-if="!('feed-view' | isState)">You can leave this blank. Use this space to store any additional information or comments about this feed.</span>
                         </div>
+
                         <div class="form-group" ng-init="initCheckbox()" ng-hide="{{'feed-view' | isState}}">
                             <label class="control-label">Can anyone else see this feed?</label>
                             <label class="radio" ng-init="formResult.private = 'false'">
@@ -237,7 +239,7 @@
                 </div>
             </div>
 
-            <div ng-if="formResult.nutritionData" ng-hide="{{'feed-view' | isState}}">
+            <div ng-if="formResult.nutritionData && !('feed-view' | isState)">
                 <span class="help-block has-error" ng-if="!formResult.name">You have to provide a feed name before saving this feed.</span>
                 <button type="submit" class="btn btn-primary btn-large" ng-disabled="!formResult.name">
                     <span class="fui-check"></span>&nbsp;Save Feed Mixture
@@ -246,11 +248,17 @@
                     <span class="fui-cross"></span>&nbsp;Cancel
                 </button>
             </div>
+
+            <div ng-if="('feed-view' | isState)">
+                <button class="btn btn-primary btn-large" ng-click="genPlainText()" data-target="#shareModal" data-backdrop="static" data-toggle="modal">
+                    <span class="fui-export"></span>&nbsp;Share
+                </button>
+            </div>
         </form>
     </section>
 </div>
 
-<div class="modal fade" id="optResultModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="optResultModal" tabindex="-1" role="dialog" aria-hidden="true" ng-if="!('feed-view' | isState)">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -292,3 +300,32 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-hidden="true" ng-if="('feed-view' | isState)">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="fui-cross"></span><span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">Share Feed</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Feed Link</label>
+                    <pre>{{currentUrl}}</pre>
+                    <span class="help-block">The link above goes directly to this page. You can share it with anyone!</span>
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label class="control-label" for="plainText">Email-Friendly Format</label>
+                    <pre>{{plainText}}</pre>
+                    <span class="help-block">You can copy this into an email message.</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
