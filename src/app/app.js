@@ -8,6 +8,7 @@ var DB_NAME = 'feedulatorDB',
 
 angular.module('app', [
         'angular.filter',
+        'auth0',
         'angularMoment',
         'angularUtils.directives.dirPagination',
         'app.animal-edit',
@@ -15,6 +16,7 @@ angular.module('app', [
         'app.animal-new',
         'app.common-error',
         'app.common-home',
+        'app.common-login',
         'app.component-edit',
         'app.component-list',
         'app.component-new',
@@ -24,11 +26,13 @@ angular.module('app', [
         'app.feed-view',
         'app.feed-service',
         'ngLodash',
+        'ngAria',
+        'ngTouch',
         'slugifier',
         'ui.router',
         'xc.indexedDB',
     ])
-    .config(function($urlRouterProvider, $indexedDBProvider) {
+    .config(function($urlRouterProvider, $indexedDBProvider, authProvider) {
         // Catch bad paths and route them to the error page
         $urlRouterProvider.otherwise('/404');
 
@@ -69,6 +73,12 @@ angular.module('app', [
             extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-right',
             theme: 'block'
         }
+
+        // Configure the authentication provider
+        authProvider.init({
+            domain: 'feedulator.auth0.com',
+            clientID: 'ZlO45vSlQVp1r4EyFMaOKLiUrScgmzdW'
+        });
     })
     .controller('AppCtrl', function AppCtrl($scope, $location, $indexedDB) {
         $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
@@ -79,6 +89,9 @@ angular.module('app', [
 
         initComponents($indexedDB);
         initAnimals($indexedDB);
+    })
+    .run(function(auth) {
+       auth.hookEvents();
     });
 
 // An instance reads entries from data/components.json and bootstraps

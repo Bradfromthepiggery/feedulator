@@ -26,12 +26,16 @@
     <script src="../bower_components/sticky/jquery.sticky.js"></script>
 
     <!-- Modules -->
+    <script src="../bower_components/angular-aria/angular-aria.min.js"></script>
     <script src="../bower_components/angular-filter/dist/angular-filter.min.js"></script>
+    <script src="../bower_components/angular-moment/angular-moment.min.js"></script>
     <script src="../bower_components/angular-slugify/angular-slugify.js"></script>
+    <script src="../bower_components/angular-touch/angular-touch.min.js"></script>
     <script src="../bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="../bower_components/angular-utils-pagination/dirPagination.js"></script>
     <script src="../bower_components/angularjs-indexedDB/src/indexeddb.js"></script>
-    <script src="../bower_components/angular-moment/angular-moment.min.js"></script>
+    <script src="../bower_components/auth0-angular/build/auth0-angular.min.js"></script>
+    <script src="../bower_components/auth0-lock/build/auth0-lock.min.js"></script>
     <script src="../bower_components/ng-lodash/build/ng-lodash.min.js"></script>
 
     <!-- Application Config -->
@@ -42,6 +46,7 @@
     <!-- Common -->
     <script src="app/common/home.js"></script>
     <script src="app/common/404.js"></script>
+    <script src="app/common/login.js"></script>
 
     <!-- Animal -->
     <script src="app/animal/animal-edit.js"></script>
@@ -62,7 +67,7 @@
 
     <style>
     .logo {
-        display: inline-block !important;
+        display: inline-block;
         margin-right: 0.5vw;
         width: 1.5vw;
         height: 100%;
@@ -83,7 +88,7 @@
             </button>
             <a class="navbar-brand" ui-sref="home"><img src="../src/theme/piggery-logo.svg" class="logo pull-left">The Feedulator</a>
         </div>
-        <div class="collapse navbar-collapse" id="navbar-collapse">
+        <div class="collapse navbar-collapse" id="navbar-collapse" ng-controller="LoginCtrl">
             <ul class="nav navbar-nav">
                 <li ui-sref-active="active"><a ui-sref="feed-list">Feed Mixtures</a>
                 </li>
@@ -92,7 +97,7 @@
                 <li ui-sref-active="active"><a ui-sref="animal-list">Animals</a>
                 </li>
             </ul>
-            <!-- <button class="btn btn-default navbar-btn navbar-right" type="button">Sign In</button> -->
+            <button class="btn btn-default navbar-btn navbar-right" type="button" ng-click="signIn()" style="margin-right: 15px">Sign In</button>
         </div>
     </nav>
     <div ui-view="main" class="container-fluid"></div>
