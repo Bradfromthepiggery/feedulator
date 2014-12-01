@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('app.component-list', [
+        'ngLodash',
         'ui.router',
         'xc.indexedDB'
     ])
@@ -18,24 +19,28 @@ angular.module('app.component-list', [
             }
         });
     })
-    .controller('CompListCtrl', function CompListController($scope, $state, $indexedDB, lodash, $timeout) {
-        var compStore = $indexedDB.objectStore('components')
+    .controller('CompListCtrl', CompListController);
 
-        compStore.getAll().then(function(results) {
-            $scope.compData = results;
-        });
+CompListController.$inject = ['$scope', '$state', '$indexedDB', 'lodash', '$timeout'];
 
-        $scope.deleteComp = function(feedId) {
-            compStore.delete(feedId).then(function() {
-                Messenger().post("Successfully deleted component");
+function CompListController($scope, $state, $indexedDB, lodash, $timeout) {
+    var compStore = $indexedDB.objectStore('components')
 
-                $scope.compData = lodash.reject($scope.compData, {
-                    _id: feedId
-                });
-            });
-        }
-
-        $timeout(function() {
-            $(':checkbox').radiocheck();
-        });
+    compStore.getAll().then(function(results) {
+        $scope.compData = results;
     });
+
+    $scope.deleteComp = function(feedId) {
+        compStore.delete(feedId).then(function() {
+            Messenger().post("Successfully deleted component");
+
+            $scope.compData = lodash.reject($scope.compData, {
+                _id: feedId
+            });
+        });
+    }
+
+    $timeout(function() {
+        $(':checkbox').radiocheck();
+    });
+}

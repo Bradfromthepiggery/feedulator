@@ -1,7 +1,7 @@
 <div class="row">
     <aside class="col-md-4 col-lg-3">
         <form role="form">
-            <div class="form-group" ng-if="feedData.length >= 2">
+            <div class="form-group" ng-show="feedData.length >= 2">
                 <div class="input-group">
                     <input type="search" class="form-control" ng-model="search" placeholder="Search Feeds" />
                     <span class="input-group-btn">
@@ -14,10 +14,10 @@
             </div>
             <p class="lead">Hide/Show Details</p>
             <label class="checkbox" for="descCheckbox">
-                <input type="checkbox" id="descCheckbox" data-toggle="checkbox" ng-model="descriptionChecked" ng-init="descriptionChecked=true" checked ng-disabled="feedData.length == 0">Description
+                <input type="checkbox" id="descCheckbox" data-toggle="checkbox" ng-model="descriptionChecked" ng-init="descriptionChecked=true" checked ng-disabled="feedData.length === 0">Description
             </label>
-            <label class="checkbox" for="ingCheckbox">
-                <input type="checkbox" id="ingCheckbox" data-toggle="checkbox" ng-model="ingredientsChecked" ng-init="ingredientsChecked=true" checked ng-disabled="feedData.length == 0">Feed Components
+            <label class="checkbox" for="compCheckbox">
+                <input type="checkbox" id="compCheckbox" data-toggle="checkbox" ng-model="compsChecked" ng-init="compsChecked=true" checked ng-disabled="feedData.length === 0">Feed Components
             </label>
             <hr>
             <button class="btn btn-primary btn-block" ui-sref="feed-new">
@@ -35,26 +35,24 @@
                 <div class="panel panel-default">
                     <div class="panel-heading" ui-sref="feed-view({ feedId: feed._id})" style="cursor: pointer">
                         <h2 class="panel-title" style="font-size: 16px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                            {{feed.name | truncate: 20: '...' | ucfirst}}
+                            {{::feed.name | ucfirst}}
                             <span class="pull-right" am-time-ago="feed.creationDate"></span>
                         </h2>
                     </div>
                     <div class="panel-body" ng-if="descriptionChecked && feed.description"  ui-sref="feed-view({ feedId: feed._id})" style="cursor: pointer">
-                        <span>{{feed.description}}</span>
+                        <span>{{::feed.description}}</span>
                     </div>
-                    <table class="table table-condensed table-hover table-responsive table-striped" ng-if="ingredientsChecked"  ui-sref="feed-view({ feedId: feed._id})" style="cursor: pointer">
+                    <table class="table table-condensed table-hover table-responsive table-striped" ng-if="compsChecked"  ui-sref="feed-view({ feedId: feed._id})" style="cursor: pointer">
                         <thead>
                             <tr>
-                                <th>#</th>
                                 <th>Component</th>
                                 <th>Qty</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="component in feed.compData | orderBy: '-value'">
-                                <td>{{$index+1}}</td>
-                                <td>{{component.name}}</td>
-                                <td>{{component.value + '%'}}</td>
+                            <tr ng-repeat="component in ::feed.compData | orderBy: '-value'">
+                                <td>{{::component.name}}</td>
+                                <td>{{::component.value + '%'}}</td>
                             </tr>
                         </tbody>
                     </table>

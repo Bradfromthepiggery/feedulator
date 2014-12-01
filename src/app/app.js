@@ -11,12 +11,15 @@ angular.module('app', [
         'auth0',
         'angularMoment',
         'angularUtils.directives.dirPagination',
+        'angular-storage',
+        'angular-jwt',
         'app.animal-edit',
         'app.animal-list',
         'app.animal-new',
         'app.common-error',
         'app.common-home',
         'app.common-login',
+        'app.common-auth',
         'app.component-edit',
         'app.component-list',
         'app.component-new',
@@ -32,7 +35,7 @@ angular.module('app', [
         'ui.router',
         'xc.indexedDB',
     ])
-    .config(function($urlRouterProvider, $indexedDBProvider, authProvider) {
+    .config(function($urlRouterProvider, $indexedDBProvider) {
         // Catch bad paths and route them to the error page
         $urlRouterProvider.otherwise('/404');
 
@@ -73,26 +76,24 @@ angular.module('app', [
             extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-right',
             theme: 'block'
         }
-
-        // Configure the authentication provider
-        authProvider.init({
-            domain: 'feedulator.auth0.com',
-            clientID: 'ZlO45vSlQVp1r4EyFMaOKLiUrScgmzdW'
-        });
     })
-    .controller('AppCtrl', function AppCtrl($scope, $location, $indexedDB) {
-        $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-            if (angular.isDefined(toState.data.pageTitle)) {
-                $scope.pageTitle = toState.data.pageTitle + ' | The Feedulator';
-            }
-        });
-
-        initComponents($indexedDB);
-        initAnimals($indexedDB);
-    })
+    .controller('AppCtrl', AppController)
     .run(function(auth) {
-       auth.hookEvents();
+        auth.hookEvents();
     });
+
+AppController.$inject = ['$scope', '$location', '$indexedDB', 'auth'];
+
+function AppController($scope, $location, $indexedDB, auth) {
+    $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+        if (angular.isDefined(toState.data.pageTitle)) {
+            $scope.pageTitle = toState.data.pageTitle + ' | The Feedulator';
+        }
+    });
+
+    initComponents($indexedDB);
+    initAnimals($indexedDB);
+}
 
 // An instance reads entries from data/components.json and bootstraps
 // the components table in the local database

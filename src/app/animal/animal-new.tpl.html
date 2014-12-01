@@ -12,15 +12,13 @@
             <table class="table table-condensed table-hover table-striped table-responsive">
                 <thead>
                     <tr>
-                        <th>#</th>
                         <th>Nutrition</th>
                         <th>Qty (% DM)</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="data in formResult.nutrients | toArray">
-                        <td>{{$index+1}}</td>
-                        <td>{{data.name | ucfirst}}</td>
+                    <tr ng-repeat="data in ::formResult.nutrients | toArray">
+                        <td>{{::data.name | ucfirst}}</td>
                         <td>{{data.value}}</td>
                     </tr>
                 </tbody>
@@ -65,8 +63,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="data in formResult.nutrients | toArray">
-                                    <td>{{data.name | ucfirst}}</td>
+                                <tr ng-repeat="data in ::formResult.nutrients | toArray">
+                                    <td>{{::data.name | ucfirst}}</td>
                                     <td>
                                         <input class="form-control" ng-model="data.value" type="number" min="0" step="0.01" value="0" />
                                     </td>

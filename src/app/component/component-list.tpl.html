@@ -1,13 +1,13 @@
 <div class="row">
     <aside class="col-lg-3">
         <form role="form">
-            <div class="form-group">
+            <div class="form-group" ng-show="compData.length >= 2">
                 <div class="input-group">
                     <input type="search" class="form-control" ng-model="search" placeholder="Search Feed Components" />
                     <span class="input-group-btn">
                         <button type="submit" class="btn">
                             <span class="fui-search"></span>
-                        </button>
+                    </button>
                     </span>
                 </div>
             </div>
@@ -31,50 +31,48 @@
         </form>
     </aside>
     <div class="col-lg-9">
-        <div class="row" isotope-container="isotope-container">
-            <section class="col-lg-4" isotope-item="isotope-item" dir-paginate="comp in compData | toArray | filter: { $: search } | itemsPerPage: 12">
+        <div class="row">
+            <section class="col-lg-4" dir-paginate="comp in compData | toArray | filter: { $: search } | itemsPerPage: 12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h2 class="panel-title" style="font-size: 16px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                            {{comp.name | ucfirst}}
-                            <span class="pull-right label label-success" ng-if="gmoChecked">{{comp.gmoFree ? "GMO Free" : ""}}</span>
+                            {{::comp.name | ucfirst}}
+                            <span class="pull-right label label-success" ng-if="gmoChecked">{{::comp.gmoFree ? "GMO Free" : ""}}</span>
                         </h2>
                     </div>
                     <div class="panel-body" ng-if="comp.supplier || comp.description">
-                        <p ng-if="supplierChecked && comp.supplier">Supplier: {{comp.supplier}}</p>
-                        <p ng-if="descriptionChecked">{{comp.description}}</p>
+                        <p ng-if="supplierChecked && comp.supplier">Supplier: {{::comp.supplier}}</p>
+                        <p ng-if="descriptionChecked">{{::comp.description}}</p>
                     </div>
                     <table class="table table-condensed table-striped table-hover table-responsive" ng-if="nutrientsChecked" style="max-height: 150px; overflow-y: scroll;">
                         <thead>
                             <tr>
-                                <th>#</th>
                                 <th>Nutrient</th>
                                 <th>Qty (% DM)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-class="{ success: data.name.toLowerCase().contains(search.toLowerCase()) && search !== '' }" ng-repeat="data in comp.nutrients | toArray | orderBy: '-value'">
-                                <td>{{$index+1}}</td>
-                                <td>{{data.name | ucfirst}}</td>
-                                <td>{{data.value}}</td>
+                            <tr ng-class="{ success: data.name.toLowerCase().contains(search.toLowerCase()) && search !== '' }" ng-repeat="data in ::comp.nutrients | toArray | orderBy: '-value'">
+                                <td>{{::data.name | ucfirst}}</td>
+                                <td>{{::data.value}}</td>
                             </tr>
                         </tbody>
                     </table>
                     <div class="panel-footer">
-                        <button class="btn btn-warning btn-sm" ui-sref="component-edit({ compId: comp._id})">
+                        <button class="btn btn-warning btn-sm" ui-sref="component-edit({compId: comp._id})">
                             <span class="fui-new"></span>&nbsp;Edit
                         </button>
                         <span class="pull-right">
                             <button class="btn btn-danger btn-sm" ng-click="deleteComp(comp._id)">
                                 <span class="fui-trash"></span>&nbsp;Delete
-                            </button>
+                        </button>
                         </span>
                     </div>
                 </div>
             </section>
         </div>
-        <div class="text-center">
-            <!-- <dir-pagination-controls boundary-links="false" template-url="./app/common/pagination.tpl.html"></dir-pagination-controls> -->
+        <div class="text-center" ng-if="compData.length >= 2">
+            <dir-pagination-controls boundary-links="false" template-url="./app/common/pagination.tpl.html"></dir-pagination-controls>
         </div>
     </div>
 </div>
