@@ -27,7 +27,7 @@ angular.module('app.feed-view', [
             $scope.animalData = results;
         });
 
-        $scope.genPlainText = function() {
+        $scope.genExportData = function() {
             $scope.plainText = $scope.formResult.compData.reduce(function(acc, curr) {
                 if ($scope.formResult.weight !== 0 && $scope.formResult.weight !== null) {
                     var proportion = curr.value * 0.01 * $scope.formResult.weight,
@@ -38,9 +38,9 @@ angular.module('app.feed-view', [
 
                 return acc += curr.name + ", " + value + "\n";
             }, "");
+
+            $scope.currentUrl = window.location.href;
         }
 
-        $scope.currentUrl = window.location.href;
-        $scope.initCheckbox = lodash.partial(feedUtil.initCheckbox, $scope);
         $scope.calculate = lodash.partial(feedUtil.calculate, $scope);
     });

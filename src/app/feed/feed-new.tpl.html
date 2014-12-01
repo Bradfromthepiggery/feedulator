@@ -176,11 +176,11 @@
                                     <td>{{data.name | ucfirst}}</td>
                                     <td style="width: 80%">
                                         <div class="input-group">
-                                            <input class="form-control" ng-model="formResult.optData[key].min" type="number" min="0" step="0.01" max="{{maxAchievableNutrients[data.$key]}}" placeholder="Min" />
+                                            <input class="form-control" ng-model="formResult.optData[data.$key].min" type="number" min="0" step="0.01" max="{{maxAchievableNutrients[data.$key]}}" placeholder="Min" />
                                             <span class="input-group-addon">≤</span>
                                             <input class="form-control" disabled type="number" min="0" step="0.01" value="{{data.value | number: 3}}" />
                                             <span class="input-group-addon">≤</span>
-                                            <input class="form-control" ng-model="formResult.optData[key].max" type="number" min="0" placeholder="Max" step="0.01" />
+                                            <input class="form-control" ng-model="formResult.optData[data.$key].max" type="number" min="0" placeholder="Max" step="0.01" />
                                         </div>
                                         <span class="help-block">The minimum quantity for this item cannot exceed {{maxAchievableNutrients[data.$key]}}</span>
                                     </td>
@@ -248,7 +248,7 @@
             </div>
 
             <div ng-if="('feed-view' | isState)">
-                <button class="btn btn-primary btn-large" ng-click="genPlainText()" data-target="#shareModal" data-backdrop="static" data-toggle="modal">
+                <button class="btn btn-primary btn-large" ng-click="genExportData()" data-target="#shareModal" data-backdrop="static" data-toggle="modal">
                     <span class="fui-export"></span>&nbsp;Share
                 </button>
             </div>
@@ -271,7 +271,7 @@
                 </div>
                 <div ng-if="results.feasible">
                     <p>Success! We've found a set of quantities that meets all your requirements.</p>
-                    <p>Your total feed cost per pound is: {{results.result | currency}}</p>
+                    <p>Your total feed cost per pound is: {{results.result * 0.01 | currency}}</p>
                     <p>Your feed mixture will be automatically updated with these values once you close this window.</p>
                 </div>
             </div>
