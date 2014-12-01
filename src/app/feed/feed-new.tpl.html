@@ -55,10 +55,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat= "data in formResult.nutritionData | toArray" ng-class="{ danger: formResult.refAnimal.nutrients[key].value > data.value, success: formResult.refAnimal.nutrients[key].value <= data.value}">
+                    <tr ng-repeat="data in formResult.nutritionData | toArray: true" ng-class="{ danger: formResult.refAnimal.nutrients[data.$key].value > data.value, success: formResult.refAnimal.nutrients[data.$key].value <= data.value}">
                         <td style="width: 50%">{{data.name | ucfirst}}</td>
                         <td>{{data.value | precision: 3}}</td>
-                        <td ng-if="formResult.refAnimal">{{formResult.refAnimal.nutrients[key].value || 0 | precision: 3}}</td>
+                        <td ng-if="formResult.refAnimal">{{formResult.refAnimal.nutrients[data.$key].value || 0 | precision: 3}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -172,17 +172,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="(key, data) in formResult.nutritionData">
+                                <tr ng-repeat="data in formResult.nutritionData | toArray: true">
                                     <td>{{data.name | ucfirst}}</td>
                                     <td style="width: 80%">
                                         <div class="input-group">
-                                            <input class="form-control" ng-model="formResult.optData[key].min" type="number" min="0" step="0.01" max="{{maxAchievableNutrients[key]}}" placeholder="Min" />
+                                            <input class="form-control" ng-model="formResult.optData[key].min" type="number" min="0" step="0.01" max="{{maxAchievableNutrients[data.$key]}}" placeholder="Min" />
                                             <span class="input-group-addon">≤</span>
                                             <input class="form-control" disabled type="number" min="0" step="0.01" value="{{data.value | number: 3}}" />
                                             <span class="input-group-addon">≤</span>
                                             <input class="form-control" ng-model="formResult.optData[key].max" type="number" min="0" placeholder="Max" step="0.01" />
                                         </div>
-                                        <span class="help-block">The minimum quantity for this item cannot exceed {{maxAchievableNutrients[key]}}</span>
+                                        <span class="help-block">The minimum quantity for this item cannot exceed {{maxAchievableNutrients[data.$key]}}</span>
                                     </td>
                                 </tr>
                                 <tr>
