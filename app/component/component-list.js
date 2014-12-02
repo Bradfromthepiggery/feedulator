@@ -52,6 +52,7 @@ function CompListController($scope, $state, $indexedDB, lodash, $timeout, $http,
         if (fromState.name === 'component-new' || fromState.name === 'component-edit') {
             compStore.getAll().then(function(results) {
                 $scope.compData = results;
+                $state.reload();
             });
         }
     });

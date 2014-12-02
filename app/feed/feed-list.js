@@ -19,7 +19,7 @@ angular.module('app.feed-list', [
             }
         });
     })
-    .controller('FeedListCtrl', function FeedListController($scope, $http, $indexedDB, lodash, $rootScope) {
+    .controller('FeedListCtrl', function FeedListController($scope, $http, $indexedDB, lodash, $rootScope, $state) {
         var feedStore = $indexedDB.objectStore('feeds')
 
         feedStore.getAll().then(function(results) {
@@ -30,7 +30,9 @@ angular.module('app.feed-list', [
             feedStore.delete(feedId).then(function() {
                 Messenger().post("Successfully deleted feed");
 
-                $scope.feedData = lodash.reject($scope.feedData, { _id: feedId });
+                $scope.feedData = lodash.reject($scope.feedData, {
+                    _id: feedId
+                });
             });
         }
 
@@ -38,6 +40,7 @@ angular.module('app.feed-list', [
             if (fromState.name === 'feed-new' || fromState.name === 'feed-edit') {
                 feedStore.getAll().then(function(results) {
                     $scope.feedData = results;
+                    $state.reload();
                 });
             }
         });

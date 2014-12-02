@@ -37,6 +37,7 @@ angular.module('app.animal-list', [
             if (fromState.name === 'animal-new' || fromState.name === 'animal-edit') {
                 animalStore.getAll().then(function(results) {
                     $scope.animalData = results;
+                    $state.reload();
                 });
             }
         });
