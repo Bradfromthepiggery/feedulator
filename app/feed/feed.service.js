@@ -299,7 +299,7 @@ angular.module('app.feed-service', ['ngLodash'])
         }
 
         var initCheckbox = function() {
-            $('input[type="radio"]').radiocheck();
+            $(':radio').radiocheck();
         }
 
         this.addNewComp = addNewComp;

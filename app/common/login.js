@@ -20,7 +20,7 @@ function LoginConfig($httpProvider, $stateProvider, jwtInterceptorProvider, auth
         loginState: 'login'
     });
 
-    jwtInterceptorProvider.tokenGetter = function(aiStorage, $http, jwtHelper) {
+    jwtInterceptorProvider.tokenGetter = function(aiStorage, $http, jwtHelper, auth) {
         var idToken = aiStorage.get('idToken'),
             refreshToken = aiStorage.get('refreshToken');
 
@@ -45,8 +45,6 @@ function LoginController($rootScope, $scope, $state, auth, store) {
         store.set('refreshToken', refresh_token);
 
         $rootScope.profile = auth.profile;
-
-        $state.go('feed-list');
     }
 
     var loginFailure = function(err) {

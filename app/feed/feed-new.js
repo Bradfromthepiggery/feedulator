@@ -2,6 +2,7 @@
 
 angular.module('app.feed-new', [
         'app.feed-service',
+        'app.common-auth',
         'ngLodash',
         'ui.router',
         'xc.indexedDB'
@@ -49,9 +50,9 @@ angular.module('app.feed-new', [
     })
     .controller('FeedCreationCtrl', FeedCreationController);
 
-FeedCreationController.$inject = ['$scope', '$http', '$indexedDB', 'lodash', 'Slug', '$state', '$timeout', 'feedUtil', 'auth'];
+FeedCreationController.$inject = ['$scope', '$http', '$indexedDB', 'lodash', 'Slug', '$state', '$timeout', 'feedUtil', 'AuthUtil'];
 
-function FeedCreationController($scope, $http, $indexedDB, lodash, Slug, $state, $timeout, feedUtil, auth) {
+function FeedCreationController($scope, $http, $indexedDB, lodash, Slug, $state, $timeout, feedUtil, AuthUtil) {
     // Extract all components from the database and bind them to the scope
     $indexedDB.objectStore('components').getAll().then(function(results) {
         $scope.compData = results;
@@ -83,10 +84,24 @@ function FeedCreationController($scope, $http, $indexedDB, lodash, Slug, $state,
     $scope.removeComp = lodash.partial(feedUtil.removeComp, $scope);
     $scope.resetComps = lodash.partial(feedUtil.resetComps, $scope);
     $scope.updateComp = lodash.partial(feedUtil.updateComp, $scope);
+    $scope.isPrivilegedUser = lodash.partial(AuthUtil.isPrivilegedUser, $scope);
+    $scope.isLoggedIn = lodash.partial(AuthUtil.isLoggedIn, $scope);
 
     $scope.submit = function() {
         // Create an id using the provided name
         $scope.formResult._id = Slug.slugify($scope.formResult.name);
+
+        // Tag the feed with the owner ID
+        $scope.formResult.owner = $scope.profile.user_id;
+
+        // Set the privacy status depending on the user's privileges. Only a
+        // superuser may choose privacy state - default users can only create
+        // private feeds
+        if ($scope.isPrivilegedUser()) {
+            $scope.formResult.isPrivate = Boolean($('input[name="privacySelector"]:checked').val());
+        } else {
+            $scope.formResult.isPrivate = true;
+        }
 
         // Upsert (Update or Insert) into the local database, then
         // route the user back to the list view
