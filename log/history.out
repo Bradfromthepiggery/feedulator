@@ -1,0 +1,203 @@
+connect to default port
+======0=======
+======1=======
+======2=======
+Method: GET
+Url: /feedulator/component/all
+command: feedulator/component/all
+SUCCESS
+Method: GET
+Url: /favicon.ico
+command: favicon.ico
+INPUT_ERROR
+======3=======
+Method: GET
+Url: /feedulator/component/all
+command: feedulator/component/all
+SUCCESS
+======4=======
+Method: GET
+Url: /feedulator/component/all
+command: feedulator/component/all
+SUCCESS
+Method: GET
+Url: /feedulator/component/all
+command: feedulator/component/all
+======5=======
+SUCCESS
+======6=======
+Method: GET
+Url: /feedulator/
+command: feedulator/
+SUCCESS
+======7=======
+Method: GET
+Url: /favicon.ico
+command: favicon.ico
+INPUT_ERROR
+======8=======
+Method: GET
+Url: /feedulator/component/all
+command: feedulator/component/all
+SUCCESS
+======9=======
+Method: GET
+Url: /favicon.ico
+command: favicon.ico
+INPUT_ERROR
+======10=======
+======11=======
+======12=======
+======13=======
+======14=======
+======15=======
+======16=======
+======17=======
+Method: GET
+Url: /feedulator/component/all
+command: feedulator/component/all
+SUCCESS
+======18=======
+Method: GET
+Url: /favicon.ico
+command: favicon.ico
+INPUT_ERROR
+======19=======
+Method: GET
+Url: /feedulator/component/all
+command: feedulator/component/all
+SUCCESS
+======20=======
+======21=======
+======22=======
+======23=======
+======24=======
+======25=======
+======26=======
+======27=======
+======28=======
+======29=======
+======30=======
+Method: GET
+Url: /feedulator/component/all
+command: feedulator/component/all
+SUCCESS
+======31=======
+Method: GET
+Url: /feedulator/component/all
+command: feedulator/component/all
+SUCCESS
+======32=======
+Method: GET
+Url: /favicon.ico
+command: favicon.ico
+INPUT_ERROR
+======33=======
+Method: HEAD
+Url: /feedulator/component/all
+command: feedulator/component/all
+null
+======34=======
+Method: HEAD
+Url: /feedulator/component/all
+command: feedulator/component/all
+null
+======35=======
+Method: GET
+Url: /feedulator/component/all
+command: feedulator/component/all
+SUCCESS
+======36=======
+Method: GET
+Url: /feedulator/component/banana_flour
+command: feedulator/component/banana_flour
+SUCCESS
+======37=======
+Method: GET
+Url: /favicon.ico
+command: favicon.ico
+INPUT_ERROR
+======38=======
+Method: GET
+Url: /feedulator/component/banana_flour
+command: feedulator/component/banana_flour
+SUCCESS
+======39=======
+======40=======
+======41=======
+Method: GET
+Url: /feedulator/component/banana_flour
+command: feedulator/component/banana_flour
+SUCCESS
+======42=======
+Method: HEAD
+Url: /feedulator/component/banana_flour
+command: feedulator/component/banana_flour
+null
+======43=======
+Method: GET
+Url: /feedulator/component/banana_flour
+command: feedulator/component/banana_flour
+SUCCESS
+======44=======
+Method: GET
+Url: /feedulator/component/all
+command: feedulator/component/all
+SUCCESS
+======45=======
+======46=======
+======47=======
+======48=======
+======49=======
+Method: GET
+Url: /feedulator/component/all
+command: feedulator/component/all
+SUCCESS
+======50=======
+Method: GET
+Url: /feedulator/component/all
+command: feedulator/component/all
+SUCCESS
+======51=======
+Method: GET
+Url: /feedulator/component/all
+command: feedulator/component/all
+SUCCESS
+======52=======
+======53=======
+======54=======
+======55=======
+Method: GET
+Url: /feedulator/proxy.html
+command: feedulator/proxy.html
+INPUT_ERROR
+======56=======
+Method: GET
+Url: /favicon.ico
+command: favicon.ico
+INPUT_ERROR
+======57=======
+Method: GET
+Url: /favicon.ico
+command: favicon.ico
+INPUT_ERROR
+======58=======
+Method: GET
+Url: /feedulator/component/all
+command: feedulator/component/all
+SUCCESS
+======59=======
+Method: GET
+Url: /feedulator/component/all
+command: feedulator/component/all
+SUCCESS
+======60=======
+Method: GET
+Url: /favicon.ico
+command: favicon.ico
+INPUT_ERROR
+======61=======
+Method: GET
+Url: /feedulator/component/all
+command: feedulator/component/all
+SUCCESS
