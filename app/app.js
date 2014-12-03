@@ -1,3 +1,10 @@
+/*
+* @Author: Lim Mingjie, Kenneth
+* @Date:   2014-12-03 01:15:05
+* @Last Modified by:   Lim Mingjie, Kenneth
+* @Last Modified time: 2014-12-03 01:33:27
+*/
+
 'use strict';
 
 var appDependencies = [
@@ -12,8 +19,10 @@ var appDependencies = [
     'app.common-api',
     'app.common-auth',
     'app.common-error',
+    'app.common-filters',
     'app.common-home',
     'app.common-login',
+    'app.common-ui',
     'app.component-edit',
     'app.component-list',
     'app.component-new',
@@ -80,10 +89,12 @@ function AppController($cacheFactory, $location, $scope, auth, Restangular) {
     Restangular.setDefaultHttpFields({
         cache: cache
     });
+
     Restangular.setResponseInterceptor(function(response, operation) {
         if (operation === 'put' || operation === 'post' || operation === 'delete') {
             cache.removeAll();
         }
+
         return response;
     });
 

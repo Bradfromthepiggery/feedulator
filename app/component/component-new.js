@@ -43,26 +43,22 @@ ComponentNewController.$inject = [
     'APIUtil',
     'AuthUtil',
     'lodash',
-    'Slug'
+    'Slug',
+    'UIUtil'
 ];
 
-function ComponentNewController($scope, $state, $timeout, APIUtil, AuthUtil, lodash, Slug) {
+function ComponentNewController($scope, $state, $timeout, APIUtil, AuthUtil, lodash, Slug, UIUtil) {
     $scope.isLoggedIn = lodash.partial(AuthUtil.isLoggedIn, $scope);
     $scope.isPrivilegedUser = lodash.partial(AuthUtil.isPrivilegedUser, $scope);
+
+    $scope.initRadio = UIUtil.initRadio;
+    $scope.makeSticky = UIUtil.makeSticky;
 
     $scope.formResult = {
         creationDate: new Date(),
         nutrients: nutrientMasterList,
         gmoFree: false,
         isPrivate: true
-    }
-
-    $scope.makeSticky = function() {
-        $('#nutritionPanel').sticky({
-            topSpacing: 20,
-            getWidthFrom: 'aside',
-            responsiveWidth: true
-        });
     }
 
     $scope.submit = function() {
@@ -91,9 +87,5 @@ function ComponentNewController($scope, $state, $timeout, APIUtil, AuthUtil, lod
 
             $state.go('component-list');
         });
-    }
-
-    $scope.initCheckbox = function() {
-        $('input[type="radio"]').radiocheck();
     }
 }

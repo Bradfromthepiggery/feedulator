@@ -43,27 +43,28 @@ AnimalNewController.$inject = [
     'APIUtil',
     'AuthUtil',
     'lodash',
-    'Slug'
+    'Slug',
+    'UIUtil'
 ]
 
-function AnimalNewController($scope, $state, $timeout, APIUtil, AuthUtil, lodash, Slug) {
+function AnimalNewController($scope, $state, $timeout, APIUtil, AuthUtil, lodash, Slug, UIUtil) {
+    $scope.isLoggedIn = lodash.partial(AuthUtil.isLoggedIn, $scope);
+    $scope.isPrivilegedUser = lodash.partial(AuthUtil.isPrivilegedUser, $scope);
+
+    $scope.initRadio = UIUtil.initRadio;
+    $scope.makeSticky = UIUtil.makeSticky;
+
     $scope.formResult = {
         creationDate: new Date(),
-        nutrients: nutrientMasterList
-    }
-
-    $scope.makeSticky = function() {
-        $('#nutritionPanel').sticky({
-            topSpacing: 20,
-            getWidthFrom: 'aside',
-            responsiveWidth: true
-        });
+        nutrients: nutrientMasterList,
+        isPrivate: true
     }
 
     $scope.submit = function() {
         // Create an ID using the provided name
         $scope.formResult._id = Slug.slugify($scope.formResult.name);
 
+        // Keep only non-zero nutrient entries
         $scope.formResult.nutrients = lodash.pick($scope.formResult.nutrients, function(item) {
             return item.value !== 0;
         });
@@ -71,12 +72,9 @@ function AnimalNewController($scope, $state, $timeout, APIUtil, AuthUtil, lodash
         // Tag the feed with the owner ID
         $scope.formResult.owner = $scope.profile.user_id;
 
-        // Set the privacy status depending on the user's privileges. Only a
-        // superuser may choose privacy state - default users can only create
-        // private feeds
-        if (AuthUtil.isPrivilegedUser($scope)) {
-            $scope.formResult.isPrivate = Boolean($('input[name="privacySelector"]:checked').val());
-        } else {
+        // If the user is not privileged, automatically force their feeds to be
+        // private so they can't spam the system
+        if (!$scope.isPrivilegedUser()) {
             $scope.formResult.isPrivate = true;
         }
 

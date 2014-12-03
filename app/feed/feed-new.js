@@ -1,62 +1,63 @@
+/*
+ * @Author: Lim Mingjie, Kenneth
+ * @Date:   2014-12-03 01:01:28
+ * @Last Modified by:   Lim Mingjie, Kenneth
+ * @Last Modified time: 2014-12-03 01:35:51
+ */
+
 'use strict';
 
 angular.module('app.feed-new', [
         'app.common-api',
         'app.common-auth',
+        'app.common-ui',
         'app.feed-service',
         'ngLodash',
         'slugifier',
         'ui.router'
     ])
-    .config(function config($stateProvider) {
-        $stateProvider.state('feed-new', {
-            url: '/feeds/new',
-            views: {
-                "main": {
-                    controller: 'FeedNewCtrl',
-                    templateUrl: 'app/feed/feed-new.tpl.html'
-                }
-            },
-            data: {
-                pageTitle: 'Create New Feed'
-            }
-        });
-    })
-    .directive('uiSelect', function() {
-        return function(scope, element, attrs) {
-            // Watch for changes to the list of selected components
-            scope.$watch('formResult.compData', function() {
-                // Initialize the Select2 combobox, then bind an event handler
-                // so the scope is updated whenever the value changes
-                $('#select' + attrs.uiSelect)
-                    .select2({
-                        openOnEnter: false,
-                        maximumSelectionSize: 1,
-                        sortResults: function(results) {
-                            return results.sort();
-                        }
-                    })
-                    .on('change', function(e) {
-                        if (e.added) {
-                            scope.$apply('updateComp(' + attrs.uiSelect + ', \'' + e.val + '\')');
-                        } else if (e.removed) {
-                            scope.$apply('nullifyComp(' + attrs.uiSelect + ')');
-                        }
-
-                    });
-            });
-        }
-    })
-    .filter('precision', function() {
-        return function(input, val) {
-            if (input && !isNaN(input)) {
-                return Number(input.toPrecision(val));
-            } else {
-                return input;
-            }
-        };
-    })
+    .config(FeedNewConfig)
+    .directive('uiSelect', uiSelectDirective)
     .controller('FeedNewCtrl', FeedNewController);
+
+FeedNewConfig.$inject = ['$stateProvider'];
+
+function FeedNewConfig($stateProvider) {
+    $stateProvider.state('feed-new', {
+        url: '/feeds/new',
+        views: {
+            "main": {
+                controller: 'FeedNewCtrl',
+                templateUrl: 'app/feed/feed-new.tpl.html'
+            }
+        },
+        data: {
+            pageTitle: 'Create New Feed'
+        }
+    });
+}
+
+function uiSelectDirective() {
+    return function(scope, element, attrs) {
+        // Watch for changes to the list of selected components
+        scope.$watch('formResult.compData', function() {
+            // Initialize the Select2 combobox, then bind an event handler
+            // so the scope is updated whenever the value changes
+            $('#select' + attrs.uiSelect)
+                .select2({
+                    openOnEnter: false,
+                    maximumSelectionSize: 1
+                })
+                .on('change', function(e) {
+                    if (e.added) {
+                        scope.$apply('updateComp(' + attrs.uiSelect + ', \'' + e.val + '\')');
+                    } else if (e.removed) {
+                        scope.$apply('nullifyComp(' + attrs.uiSelect + ')');
+                    }
+                });
+        });
+    }
+}
 
 FeedNewController.$inject = [
     '$scope',
@@ -64,23 +65,26 @@ FeedNewController.$inject = [
     '$timeout',
     'APIUtil',
     'AuthUtil',
-    'feedUtil',
+    'FeedUtil',
     'lodash',
-    'Slug'
+    'Slug',
+    'UIUtil'
 ];
 
-function FeedNewController($scope, $state, $timeout, APIUtil, AuthUtil, feedUtil, lodash, Slug) {
-    $scope.addNewComp = lodash.partial(feedUtil.addNewComp, $scope);
-    $scope.calculate = lodash.partial(feedUtil.calculate, $scope);
-    $scope.initCheckbox = feedUtil.initCheckbox;
+function FeedNewController($scope, $state, $timeout, APIUtil, AuthUtil, FeedUtil, lodash, Slug, UIUtil) {
+    $scope.addNewComp = lodash.partial(FeedUtil.addNewComp, $scope);
+    $scope.calculate = lodash.partial(FeedUtil.calculate, $scope);
+    $scope.nullifyComp = lodash.partial(FeedUtil.nullifyComp, $scope);
+    $scope.optFeed = lodash.partial(FeedUtil.optFeed, $scope);
+    $scope.removeComp = lodash.partial(FeedUtil.removeComp, $scope);
+    $scope.resetComps = lodash.partial(FeedUtil.resetComps, $scope);
+    $scope.updateComp = lodash.partial(FeedUtil.updateComp, $scope);
+
     $scope.isLoggedIn = lodash.partial(AuthUtil.isLoggedIn, $scope);
     $scope.isPrivilegedUser = lodash.partial(AuthUtil.isPrivilegedUser, $scope);
-    $scope.makeSticky = feedUtil.makeSticky;
-    $scope.nullifyComp = lodash.partial(feedUtil.nullifyComp, $scope);
-    $scope.optFeed = lodash.partial(feedUtil.optFeed, $scope);
-    $scope.removeComp = lodash.partial(feedUtil.removeComp, $scope);
-    $scope.resetComps = lodash.partial(feedUtil.resetComps, $scope);
-    $scope.updateComp = lodash.partial(feedUtil.updateComp, $scope);
+
+    $scope.initRadio = UIUtil.initRadio;
+    $scope.makeSticky = UIUtil.makeSticky;
 
     APIUtil.getAllComponents($scope).then(function() {
         $scope.compData = lodash.sortBy($scope.compData, function(item) {

@@ -1,0 +1,4 @@
+var authorizedUsers = [
+  "kl545@cornell.edu",
+  "brad@thepiggery.net"
+];

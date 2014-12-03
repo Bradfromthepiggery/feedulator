@@ -1,7 +1,18 @@
+/*
+* @Author: Lim Mingjie, Kenneth
+* @Date:   2014-12-03 01:02:53
+* @Last Modified by:   Lim Mingjie, Kenneth
+* @Last Modified time: 2014-12-03 01:11:33
+*/
+
 'use strict';
 
 angular.module('app.feed-service', ['ngLodash'])
-    .service('feedUtil', function($timeout, lodash) {
+    .service('FeedUtil', FeedUtil);
+
+FeedUtil.$inject = ['lodash'];
+
+function FeedUtil(lodash) {
         // Add an entry to the component selector
         var addNewComp = function(scope) {
             scope.formResult.compData.push({
@@ -290,25 +301,11 @@ angular.module('app.feed-service', ['ngLodash'])
             });
         }
 
-        var makeSticky = function(elemId) {
-            $(elemId).sticky({
-                topSpacing: 20,
-                getWidthFrom: 'aside',
-                responsiveWidth: true
-            });
-        }
-
-        var initCheckbox = function() {
-            $(':radio').radiocheck();
-        }
-
         this.addNewComp = addNewComp;
         this.calculate = calculate;
-        this.initCheckbox = initCheckbox;
-        this.makeSticky = makeSticky;
         this.nullifyComp = nullifyComp;
         this.optFeed = optFeed;
         this.removeComp = removeComp;
         this.resetComps = resetComps;
         this.updateComp = updateComp;
-    });
+    }

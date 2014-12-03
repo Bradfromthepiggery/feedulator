@@ -1,11 +1,19 @@
+/*
+ * @Author: Lim Mingjie, Kenneth
+ * @Date:   2014-12-03 01:16:25
+ * @Last Modified by:   Lim Mingjie, Kenneth
+ * @Last Modified time: 2014-12-03 01:50:00
+ */
+
 'use strict';
 
 angular.module('app.feed-edit', [
         'app.common-api',
         'app.common-auth',
+        'app.common-ui',
         'app.feed-service',
         'ngLodash',
-        'ui.router',
+        'ui.router'
     ])
     .config(function config($stateProvider) {
         $stateProvider.state('feed-edit', {
@@ -17,7 +25,7 @@ angular.module('app.feed-edit', [
                 }
             },
             data: {
-                pageTitle: 'Edit Feed'
+                pageTitle: 'Edit Feed Mixture'
             }
         });
     })
@@ -30,22 +38,26 @@ FeedEditController.$inject = [
     '$timeout',
     'APIUtil',
     'AuthUtil',
-    'feedUtil',
-    'lodash'
+    'FeedUtil',
+    'lodash',
+    'Slug',
+    'UIUtil'
 ];
 
-function FeedEditController($scope, $state, $stateParams, $timeout, APIUtil, AuthUtil, feedUtil, lodash) {
-    $scope.addNewComp = lodash.partial(feedUtil.addNewComp, $scope);
-    $scope.calculate = lodash.partial(feedUtil.calculate, $scope);
-    $scope.initCheckbox = feedUtil.initCheckbox;
+function FeedEditController($scope, $state, $stateParams, $timeout, APIUtil, AuthUtil, FeedUtil, lodash, Slug, UIUtil) {
+    $scope.addNewComp = lodash.partial(FeedUtil.addNewComp, $scope);
+    $scope.calculate = lodash.partial(FeedUtil.calculate, $scope);
+    $scope.nullifyComp = lodash.partial(FeedUtil.nullifyComp, $scope);
+    $scope.optFeed = lodash.partial(FeedUtil.optFeed, $scope);
+    $scope.removeComp = lodash.partial(FeedUtil.removeComp, $scope);
+    $scope.resetComps = lodash.partial(FeedUtil.resetComps, $scope);
+    $scope.updateComp = lodash.partial(FeedUtil.updateComp, $scope);
+
     $scope.isLoggedIn = lodash.partial(AuthUtil.isLoggedIn, $scope);
     $scope.isPrivilegedUser = lodash.partial(AuthUtil.isPrivilegedUser, $scope);
-    $scope.makeSticky = feedUtil.makeSticky;
-    $scope.nullifyComp = lodash.partial(feedUtil.nullifyComp, $scope);
-    $scope.optFeed = lodash.partial(feedUtil.optFeed, $scope);
-    $scope.removeComp = lodash.partial(feedUtil.removeComp, $scope);
-    $scope.resetComps = lodash.partial(feedUtil.resetComps, $scope);
-    $scope.updateComp = lodash.partial(feedUtil.updateComp, $scope);
+
+    $scope.initRadio = UIUtil.initRadio;
+    $scope.makeSticky = UIUtil.makeSticky;
 
     // Extract the feed data from the database and bind to the scope
     APIUtil.getFeed($scope, $stateParams.feedId);
@@ -72,7 +84,7 @@ function FeedEditController($scope, $state, $stateParams, $timeout, APIUtil, Aut
         result[$scope.formResult._id] = $scope.formResult;
 
         APIUtil.updateFeed($scope.formResult._id, result).then(function() {
-            Messenger().post("Saved feed mixture " + $scope.formResult.name);
+            Messenger().post("Saved feed mixture '" + $scope.formResult.name + "'");
 
             $state.go('feed-list');
         });

@@ -42,21 +42,28 @@ AnimalListController.$inject = [
     '$timeout',
     'APIUtil',
     'AuthUtil',
-    'lodash'
+    'lodash',
+    'UIUtil'
 ];
 
-function AnimalListController($rootScope, $scope, $state, $timeout, APIUtil, AuthUtil, lodash) {
+function AnimalListController($rootScope, $scope, $state, $timeout, APIUtil, AuthUtil, lodash, UIUtil) {
+    $scope.isLoggedIn = lodash.partial(AuthUtil.isLoggedIn, $scope);
+    $scope.isPrivilegedUser = lodash.partial(AuthUtil.isPrivilegedUser, $scope);
+
     $scope.userFilter = lodash.partial(AuthUtil.itemFilter, $scope);
+
+    $scope.masonryInit = UIUtil.masonryInit;
+    $scope.masonryUpdate = UIUtil.masonryUpdate;
 
     APIUtil.getAllAnimals($scope);
 
     $scope.deleteAnimal = function(animalId) {
-        $scope.animalData = lodash.reject($scope.animalData, {
-            _id: animalId
-        });
-
         APIUtil.deleteAnimal(animalId).then(function() {
             Messenger().post("Successfully deleted animal");
+
+            $scope.animalData = lodash.reject($scope.animalData, {
+                _id: animalId
+            });
         });
     }
 

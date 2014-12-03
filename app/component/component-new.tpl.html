@@ -1,6 +1,6 @@
 <div class="row">
     <aside class="col-lg-3">
-        <div class="panel panel-primary" id="nutritionPanel" ng-init="makeSticky()">
+        <div class="panel panel-primary" id="nutritionPanel" ng-init="makeSticky('#nutritionPanel')">
             <div class="panel-heading">
                 <h2 class="panel-title component-panel-title">
                     {{formResult.name || "New Feed Component" | truncate: 25: '&hellip;' | ucfirst}}
@@ -40,17 +40,20 @@
                                 <input id="mixtureName" ng-disabled="isEdit" class="form-control" type="text" ng-model="formResult.name" required />
                                 <span class="help-block">You <b>have</b> to fill this in. This shows up in the list of feed components, so keep it short but descriptive.</span>
                             </div>
+
                             <div class="form-group">
                                 <label for="mixtureName" class="control-label">Supplier</label>
                                 <input id="mixtureName" class="form-control" type="text" ng-model="formResult.supplier" />
                                 <span class="help-block">You can leave this blank. "Corn" can come from many different farms&mdash;specify a supplier so you don't get confused.</span>
                             </div>
+
                             <div class="form-group">
                                 <label for="mixtureDescription" class="control-label">Description</label>
                                 <textarea id="mixtureDescription" class="form-control" ng-model="formResult.description" rows="5"></textarea>
                                 <span class="help-block">You can leave this blank. Put any comments or additional information about this component here.</span>
                             </div>
-                            <div class="form-group" ng-init="initCheckbox()">
+
+                            <div class="form-group" ng-init="initRadio()">
                                 <label class="control-label">Is this component GMO free?</label>
                                 <label class="radio">
                                     <input type="radio" ng-model="formResult.gmoFree" data-toggle="radio" name="gmoSelector" id="gmoYes" ng-value="true">Yes
@@ -59,12 +62,22 @@
                                     <input type="radio" ng-model="formResult.gmoFree" data-toggle="radio" name="gmoSelector" id="gmoNo" ng-value="false" checked>No
                                 </label>
                             </div>
+
+                            <div class="form-group" ng-init="initRadio()" ng-if="isPrivilegedUser()">
+                                <label class="control-label">Can anyone else see this component?</label>
+                                <label class="radio">
+                                    <input type="radio" ng-model="formResult.isPrivate" data-toggle="radio" name="privacySelector" id="publicRadio" ng-value="false"><b>Public: </b> Everyone can see this, but only you can make changes.
+                                </label>
+                                <label class="radio">
+                                    <input type="radio" ng-model="formResult.isPrivate" data-toggle="radio" name="privacySelector" id="privateRadio" ng-value="true" checked><b>Private: </b> Only you can see this, and only you can make changes.
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading panel-link" role="tab" data-toggle="collapse" data-parent="#formAccordion" data-target="#nutritionElements">
-                        2. Nutrition Data<span class="label label-danger">Required</span>
+                        2. Nutrition Data<span class="label label-danger pull-right">Required</span>
                     </div>
                     <div id="nutritionElements" class="panel-collapse collapse in" role="tabpanel">
                         <div class="panel-body">

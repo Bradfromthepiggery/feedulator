@@ -1,12 +1,33 @@
+/*
+* @Author: Lim Mingjie, Kenneth
+* @Date:   2014-12-02 14:37:58
+* @Last Modified by:   Lim Mingjie, Kenneth
+* @Last Modified time: 2014-12-03 02:54:01
+*/
+
 'use strict';
 
 angular.module('app.common-auth', [
-        'auth0'
+        'auth0',
+        'ngLodash'
     ])
-    .service('AuthUtil', function() {
+    .service('AuthUtil', AuthUtil)
+    .controller('AuthCtrl', AuthController);
+
+AuthController.$inject = ['$scope', 'auth'];
+
+function AuthController($scope, auth) {
+    auth.profilePromise.then(function() {
+        $scope.profile = auth.profile;
+    });
+}
+
+AuthUtil.$inject = ['lodash'];
+
+function AuthUtil(lodash) {
         var isPrivilegedUser = function(scope) {
             if (scope.profile) {
-                return scope.profile.email === 'kenlimmj@gmail.com';
+                return lodash.contains(authorizedUsers, scope.profile.email);
             } else {
                 return false;
             }
@@ -38,13 +59,4 @@ angular.module('app.common-auth', [
         this.isPrivilegedUser = isPrivilegedUser;
         this.isLoggedIn = isLoggedIn;
         this.itemFilter = itemFilter;
-    })
-    .controller('AuthCtrl', AuthController);
-
-AuthController.$inject = ['$scope', 'auth'];
-
-function AuthController($scope, auth) {
-    auth.profilePromise.then(function() {
-        $scope.profile = auth.profile;
-    });
-}
+    }

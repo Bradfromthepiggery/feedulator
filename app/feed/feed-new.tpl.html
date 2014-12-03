@@ -62,7 +62,7 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="panel-footer" style="font-size: 14px">
+            <div class="panel-footer" style="font-size: 14px" ng-if="animalData.length > 0">
                 <select id="animalSelect" ng-model="formResult.refAnimal" ng-options="animal.name for animal in animalData track by animal._id" class="form-control">
                     <option value="">Compare to Animal</option>
                 </select>
@@ -223,7 +223,7 @@
                             <span class="help-block" ng-if="!('feed-view' | isState)">You can leave this blank. Use this space to store any additional information or comments about this feed.</span>
                         </div>
 
-                        <div class="form-group" ng-init="initCheckbox();" ng-if="!('feed-view' | isState) && isPrivilegedUser()">
+                        <div class="form-group" ng-init="initRadio();" ng-if="!('feed-view' | isState) && isPrivilegedUser()">
                             <label class="control-label">Can anyone else see this feed?</label>
                             <label class="radio">
                                 <input type="radio" ng-model="formResult.isPrivate" data-toggle="radio" name="privacySelector" id="publicRadio" ng-value="false"><b>Public: </b> Everyone can see this, but only you can make changes.

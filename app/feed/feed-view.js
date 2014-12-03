@@ -19,9 +19,9 @@ angular.module('app.feed-view', [
     })
     .controller('FeedViewCtrl', FeedViewController);
 
-FeedViewController.$inject = ['$scope', '$stateParams', 'Slug', 'feedUtil', 'lodash', '$timeout', 'Restangular'];
+FeedViewController.$inject = ['$scope', '$stateParams', 'Slug', 'FeedUtil', 'lodash', '$timeout', 'Restangular'];
 
-function FeedViewController($scope, $stateParams, Slug, feedUtil, lodash, $timeout, Restangular) {
+function FeedViewController($scope, $stateParams, Slug, FeedUtil, lodash, $timeout, Restangular) {
     var feedAPI = Restangular.all('mixture'),
         animalAPI = Restangular.all('animal');
 
@@ -50,5 +50,5 @@ function FeedViewController($scope, $stateParams, Slug, feedUtil, lodash, $timeo
         $scope.currentUrl = window.location.href;
     }
 
-    $scope.calculate = lodash.partial(feedUtil.calculate, $scope);
+    $scope.calculate = lodash.partial(FeedUtil.calculate, $scope);
 }

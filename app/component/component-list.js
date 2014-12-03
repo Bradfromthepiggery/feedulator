@@ -3,11 +3,13 @@
 angular.module('app.component-list', [
         'app.common-api',
         'app.common-auth',
+        'app.common-ui',
         'ngLodash',
         'ui.router'
     ])
     .config(CompListConfig)
     .controller('CompListCtrl', CompListController);
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Component List Configuration ////////////////////////////////////////////////
@@ -42,11 +44,18 @@ CompListController.$inject = [
     '$timeout',
     'APIUtil',
     'AuthUtil',
-    'lodash'
+    'lodash',
+    'UIUtil'
 ];
 
-function CompListController($rootScope, $scope, $state, $timeout, APIUtil, AuthUtil, lodash) {
+function CompListController($rootScope, $scope, $state, $timeout, APIUtil, AuthUtil, lodash, UIUtil) {
+    $scope.isLoggedIn = lodash.partial(AuthUtil.isLoggedIn, $scope);
+    $scope.isPrivilegedUser = lodash.partial(AuthUtil.isPrivilegedUser, $scope);
+
     $scope.userFilter = lodash.partial(AuthUtil.itemFilter, $scope);
+
+    $scope.masonryInit = UIUtil.masonryInit;
+    $scope.masonryUpdate = UIUtil.masonryUpdate;
 
     APIUtil.getAllComponents($scope);
 
@@ -61,6 +70,6 @@ function CompListController($rootScope, $scope, $state, $timeout, APIUtil, AuthU
     }
 
     $timeout(function() {
-        $(':checkbox').radiocheck();
+        UIUtil.initCheckbox();
     });
 }

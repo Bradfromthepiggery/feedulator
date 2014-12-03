@@ -3,6 +3,7 @@
 angular.module('app.feed-list', [
         'app.common-api',
         'app.common-auth',
+        'app.common-ui',
         'ngLodash',
         'ui.router'
     ])
@@ -42,11 +43,18 @@ FeedListController.$inject = [
     '$timeout',
     'APIUtil',
     'AuthUtil',
-    'lodash'
+    'lodash',
+    'UIUtil'
 ];
 
-function FeedListController($rootScope, $scope, $state, $timeout, APIUtil, AuthUtil, lodash) {
+function FeedListController($rootScope, $scope, $state, $timeout, APIUtil, AuthUtil, lodash, UIUtil) {
+    $scope.isLoggedIn = lodash.partial(AuthUtil.isLoggedIn, $scope);
+    $scope.isPrivilegedUser = lodash.partial(AuthUtil.isPrivilegedUser, $scope);
+
     $scope.userFilter = lodash.partial(AuthUtil.itemFilter, $scope);
+
+    $scope.masonryInit = UIUtil.masonryInit;
+    $scope.masonryUpdate = UIUtil.masonryUpdate;
 
     APIUtil.getAllFeeds($scope);
 
@@ -61,6 +69,6 @@ function FeedListController($rootScope, $scope, $state, $timeout, APIUtil, AuthU
     }
 
     $timeout(function() {
-        $(':checkbox').radiocheck();
+        UIUtil.initCheckbox();
     });
 }

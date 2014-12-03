@@ -7,17 +7,17 @@
                     <span class="input-group-btn">
                         <button type="submit" class="btn">
                             <span class="fui-search"></span>
-                        </button>
+                    </button>
                     </span>
                 </div>
                 <hr>
             </div>
             <p class="lead">Hide/Show Details</p>
             <label class="checkbox" for="nutrientsCheckbox">
-                <input type="checkbox" id="nutrientsCheckbox" data-toggle="checkbox" ng-model="nutrientsChecked" ng-init="nutrientsChecked=true">Nutrients
+                <input type="checkbox" id="nutrientsCheckbox" data-toggle="checkbox" ng-model="nutrientsChecked" ng-init="nutrientsChecked=true" ng-disabled="animalCount === 0">Nutrients
             </label>
             <label class="checkbox" for="descCheckbox">
-                <input type="checkbox" id="descCheckbox" data-toggle="checkbox" ng-model="descriptionChecked" ng-init="descriptionChecked=false">Description
+                <input type="checkbox" id="descCheckbox" data-toggle="checkbox" ng-model="descriptionChecked" ng-init="descriptionChecked=false" ng-disabled="animalCount === 0">Description
             </label>
             <hr>
             <button class="btn btn-primary btn-block" ui-sref="animal-new">
@@ -25,16 +25,22 @@
         </form>
     </aside>
     <div class="col-lg-9">
-        <div class="row">
-            <section class="col-lg-4" dir-paginate="animal in animalData | toArray | filter: { $: search } | orderBy: 'name' | itemsPerPage: 12">
+        <div class="row" id="animalList">
+            <div ng-if="animalCount === 0" class="text-center">
+                <img src="app/assets/pig.svg" class="empty-state-img">
+                <p class="lead">You currently have no animals in the system.
+                    <br/>Animals you create will show up here. Get growin'!</p>
+            </div>
+
+            <section class="col-lg-4 animalItem" dir-paginate="animal in animalData | filter: userFilter | filter: { $: search } | orderBy: 'name' | itemsPerPage: 12" ng-init="masonryInit('#animalList')">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h2 class="panel-title component-panel-title">
-                            {{animal.name | ucfirst}}
+                            {{::animal.name | ucfirst}}
                         </h2>
                     </div>
                     <div class="panel-body" ng-if="animal.description && descriptionChecked">
-                        {{animal.description}}
+                        {{::animal.description}}
                     </div>
                     <table class="table table-condensed table-striped table-hover table-responsive" ng-if="nutrientsChecked">
                         <thead>
@@ -50,21 +56,21 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div class="panel-footer">
+                    <div class="panel-footer" ng-if="isPrivilegedUser() || (isLoggedIn() && profile.user_id === comp.owner)">
                         <button class="btn btn-warning btn-sm" ui-sref="animal-edit({ animalId: animal._id})">
                             <span class="fui-new"></span>&nbsp;Edit
                         </button>
                         <span class="pull-right">
                             <button class="btn btn-danger btn-sm" ng-click="deleteAnimal(animal._id)">
                                 <span class="fui-trash"></span>&nbsp;Delete
-                            </button>
+                        </button>
                         </span>
                     </div>
                 </div>
             </section>
         </div>
-        <div class="text-center">
-            <dir-pagination-controls boundary-links="false" template-url="./app/common/pagination.tpl.html"></dir-pagination-controls>
+        <div class="text-center" ng-if="animalCount >= 2">
+            <dir-pagination-controls boundary-links="false" on-page-change="masonryUpdate('#animalList')" template-url="./app/common/pagination.tpl.html"></dir-pagination-controls>
         </div>
     </div>
 </div>

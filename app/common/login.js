@@ -71,6 +71,8 @@ function LoginController($rootScope, $scope, $state, auth, store) {
         store.remove('profile');
         store.remove('idToken');
         store.remove('refreshToken');
+
+        $state.reload();
     }
 }
 

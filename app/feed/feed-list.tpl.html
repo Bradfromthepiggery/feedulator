@@ -1,5 +1,5 @@
 <div class="row">
-    <aside class="col-md-4 col-lg-3">
+    <aside class="col-lg-3">
         <form role="form">
             <div class="form-group" ng-show="feedCount >= 2">
                 <div class="input-group">
@@ -7,7 +7,7 @@
                     <span class="input-group-btn">
                         <button type="submit" class="btn">
                             <span class="fui-search"></span>
-                    </button>
+                        </button>
                     </span>
                 </div>
                 <hr>
@@ -25,14 +25,14 @@
         </form>
     </aside>
     <div class="col-lg-9">
-        <div class="row">
+        <div class="row" id="feedList">
             <div ng-if="feedCount === 0" class="text-center">
-                <img src="app/assets/pig.svg" width="100vw" style="margin: 50px 0">
+                <img src="app/assets/pig.svg" class="empty-state-img">
                 <p class="lead">You currently have no feeds in the system.
                     <br/>Feeds you create will show up here. Get mixin'!</p>
             </div>
 
-            <section class="col-lg-4" dir-paginate="feed in feedData | filter: userFilter | filter: {$: search} | orderBy: 'name' | itemsPerPage: 12">
+            <section class="col-lg-4 feedItem" dir-paginate="feed in feedData | filter: userFilter | filter: {$: search} | orderBy: 'name' | itemsPerPage: 12" ng-init="masonryInit('#feedList')">
                 <div class="panel panel-default">
                     <div class="panel-heading panel-link" ui-sref="feed-view({ feedId: feed._id})">
                         <h2 class="panel-title component-panel-title">
@@ -57,7 +57,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div class="panel-footer">
+                    <div class="panel-footer" ng-if="isPrivilegedUser() || (isLoggedIn() && profile.user_id === comp.owner)">
                         <button class="btn btn-warning btn-sm" ui-sref="feed-edit({ feedId: feed._id })">
                             <span class="fui-new"></span>&nbsp;Edit
                         </button>
@@ -71,7 +71,7 @@
             </section>
         </div>
         <div class="text-center" ng-if="feedCount >= 2">
-            <dir-pagination-controls boundary-links="false" template-url="./app/common/pagination.tpl.html"></dir-pagination-controls>
+            <dir-pagination-controls boundary-links="false" on-page-change="masonryUpdate('#feedList')" template-url="./app/common/pagination.tpl.html"></dir-pagination-controls>
         </div>
     </div>
 </div>
