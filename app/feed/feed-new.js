@@ -1,18 +1,19 @@
 'use strict';
 
 angular.module('app.feed-new', [
-        'app.feed-service',
+        'app.common-api',
         'app.common-auth',
+        'app.feed-service',
         'ngLodash',
-        'ui.router',
-        'xc.indexedDB'
+        'slugifier',
+        'ui.router'
     ])
     .config(function config($stateProvider) {
         $stateProvider.state('feed-new', {
             url: '/feeds/new',
             views: {
                 "main": {
-                    controller: 'FeedCreationCtrl',
+                    controller: 'FeedNewCtrl',
                     templateUrl: 'app/feed/feed-new.tpl.html'
                 }
             },
@@ -30,7 +31,10 @@ angular.module('app.feed-new', [
                 $('#select' + attrs.uiSelect)
                     .select2({
                         openOnEnter: false,
-                        maximumSelectionSize: 1
+                        maximumSelectionSize: 1,
+                        sortResults: function(results) {
+                            return results.sort();
+                        }
                     })
                     .on('change', function(e) {
                         if (e.added) {
@@ -45,75 +49,80 @@ angular.module('app.feed-new', [
     })
     .filter('precision', function() {
         return function(input, val) {
-            return Number(input.toPrecision(val));
+            if (input && !isNaN(input)) {
+                return Number(input.toPrecision(val));
+            } else {
+                return input;
+            }
         };
     })
-    .controller('FeedCreationCtrl', FeedCreationController);
+    .controller('FeedNewCtrl', FeedNewController);
 
-FeedCreationController.$inject = ['$scope', '$http', '$indexedDB', 'lodash', 'Slug', '$state', '$timeout', 'feedUtil', 'AuthUtil'];
+FeedNewController.$inject = [
+    '$scope',
+    '$state',
+    '$timeout',
+    'APIUtil',
+    'AuthUtil',
+    'feedUtil',
+    'lodash',
+    'Slug'
+];
 
-function FeedCreationController($scope, $http, $indexedDB, lodash, Slug, $state, $timeout, feedUtil, AuthUtil) {
-    // Extract all components from the database and bind them to the scope
-    $indexedDB.objectStore('components').getAll().then(function(results) {
-        $scope.compData = results;
-        $scope.compCount = Object.keys($scope.compData).length;
-    });
-
-    // Extract all animals from the database and bind them to the scope
-    $indexedDB.objectStore('animals').getAll().then(function(results) {
-        $scope.animalData = results;
-    });
-
-    // Initialize an object to collect all the input data
-    $scope.formResult = {
-        compData: [{
-            _id: null,
-            name: null,
-            value: 100,
-            cost: 0
-        }],
-        creationDate: new Date()
-    };
-
+function FeedNewController($scope, $state, $timeout, APIUtil, AuthUtil, feedUtil, lodash, Slug) {
     $scope.addNewComp = lodash.partial(feedUtil.addNewComp, $scope);
     $scope.calculate = lodash.partial(feedUtil.calculate, $scope);
     $scope.initCheckbox = feedUtil.initCheckbox;
+    $scope.isLoggedIn = lodash.partial(AuthUtil.isLoggedIn, $scope);
+    $scope.isPrivilegedUser = lodash.partial(AuthUtil.isPrivilegedUser, $scope);
     $scope.makeSticky = feedUtil.makeSticky;
     $scope.nullifyComp = lodash.partial(feedUtil.nullifyComp, $scope);
     $scope.optFeed = lodash.partial(feedUtil.optFeed, $scope);
     $scope.removeComp = lodash.partial(feedUtil.removeComp, $scope);
     $scope.resetComps = lodash.partial(feedUtil.resetComps, $scope);
     $scope.updateComp = lodash.partial(feedUtil.updateComp, $scope);
-    $scope.isPrivilegedUser = lodash.partial(AuthUtil.isPrivilegedUser, $scope);
-    $scope.isLoggedIn = lodash.partial(AuthUtil.isLoggedIn, $scope);
+
+    APIUtil.getAllComponents($scope).then(function() {
+        $scope.compData = lodash.sortBy($scope.compData, function(item) {
+            return item.name;
+        });
+    });
+
+    APIUtil.getAllAnimals($scope);
+
+    // Initialize an object to collect all the input data
+    $scope.formResult = {
+        creationDate: new Date(),
+        compData: [{
+            _id: null,
+            name: null,
+            value: 100,
+            cost: 0
+        }],
+        isPrivate: true
+    };
 
     $scope.submit = function() {
-        // Create an id using the provided name
+        // Create an ID using the provided name
         $scope.formResult._id = Slug.slugify($scope.formResult.name);
 
         // Tag the feed with the owner ID
         $scope.formResult.owner = $scope.profile.user_id;
 
-        // Set the privacy status depending on the user's privileges. Only a
-        // superuser may choose privacy state - default users can only create
-        // private feeds
-        if ($scope.isPrivilegedUser()) {
-            $scope.formResult.isPrivate = Boolean($('input[name="privacySelector"]:checked').val());
-        } else {
+        // If the user is not privileged, automatically force their feeds to be
+        // private so they can't spam the system
+        if (!$scope.isPrivilegedUser()) {
             $scope.formResult.isPrivate = true;
         }
 
-        // Upsert (Update or Insert) into the local database, then
-        // route the user back to the list view
-        $indexedDB.objectStore('feeds')
-            .upsert($scope.formResult)
-            .then(function(e) {
-                Messenger().post('Saved feed ' + $scope.formResult.name);
+        var result = {};
+        result[$scope.formResult._id] = $scope.formResult;
 
-                $state.go('feed-list', null, {
-                    reload: true
-                });
-            });
+        APIUtil.addFeed(result).then(function() {
+            Messenger().post("Saved feed '" + $scope.formResult.name + "'");
+
+            $state.go('feed-list');
+        });
     }
 
     $timeout(function() {

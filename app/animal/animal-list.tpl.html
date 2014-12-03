@@ -1,23 +1,23 @@
 <div class="row">
     <aside class="col-lg-3">
         <form role="form">
-            <div class="form-group">
+            <div class="form-group" ng-if="animalCount >= 2">
                 <div class="input-group">
-                    <input type="search" class="form-control" ng-model="search" placeholder="Search Animals" />
+                    <input type="search" class="form-control" ng-model="search" placeholder="Search {{animalCount}} Animals" />
                     <span class="input-group-btn">
                         <button type="submit" class="btn">
                             <span class="fui-search"></span>
                         </button>
                     </span>
                 </div>
+                <hr>
             </div>
-            <hr>
             <p class="lead">Hide/Show Details</p>
             <label class="checkbox" for="nutrientsCheckbox">
                 <input type="checkbox" id="nutrientsCheckbox" data-toggle="checkbox" ng-model="nutrientsChecked" ng-init="nutrientsChecked=true">Nutrients
             </label>
             <label class="checkbox" for="descCheckbox">
-                <input type="checkbox" id="descCheckbox" data-toggle="checkbox" ng-model="descriptionChecked" ng-init="descriptionChecked=false" checked>Description
+                <input type="checkbox" id="descCheckbox" data-toggle="checkbox" ng-model="descriptionChecked" ng-init="descriptionChecked=false">Description
             </label>
             <hr>
             <button class="btn btn-primary btn-block" ui-sref="animal-new">
@@ -26,29 +26,27 @@
     </aside>
     <div class="col-lg-9">
         <div class="row">
-            <section class="col-lg-4" dir-paginate="animal in animalData | toArray | filter: { $: search } | itemsPerPage: 12">
+            <section class="col-lg-4" dir-paginate="animal in animalData | toArray | filter: { $: search } | orderBy: 'name' | itemsPerPage: 12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h2 class="panel-title" style="font-size: 16px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+                        <h2 class="panel-title component-panel-title">
                             {{animal.name | ucfirst}}
                         </h2>
                     </div>
                     <div class="panel-body" ng-if="animal.description && descriptionChecked">
                         {{animal.description}}
                     </div>
-                    <table class="table table-condensed table-striped table-hover table-responsive" ng-if="nutrientsChecked" style="max-height: 150px; overflow-y: scroll;">
+                    <table class="table table-condensed table-striped table-hover table-responsive" ng-if="nutrientsChecked">
                         <thead>
                             <tr>
-                                <th>#</th>
                                 <th>Nutrient</th>
-                                <th>Qty (% DM)</th>
+                                <th>Qty (%&nbsp;DM)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-class="{ success: data.name.toLowerCase().contains(search.toLowerCase()) && search !== '' }" ng-repeat="data in animal.nutrients | toArray | orderBy: '-value' ">
-                                <td>{{$index+1}}</td>
-                                <td>{{data.name | ucfirst}}</td>
-                                <td>{{data.value}}</td>
+                            <tr ng-class="{ success: data.name.toLowerCase().contains(search.toLowerCase()) && search !== '' }" ng-repeat="data in ::animal.nutrients track by data.name | toArray | orderBy: '-value'">
+                                <td>{{::data.name | ucfirst}}</td>
+                                <td>{{::data.value}}</td>
                             </tr>
                         </tbody>
                     </table>

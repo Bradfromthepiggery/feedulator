@@ -1,56 +1,66 @@
 'use strict';
 
 angular.module('app.feed-list', [
+        'app.common-api',
+        'app.common-auth',
         'ngLodash',
-        'ui.router',
-        'xc.indexedDB',
-        'app.common-auth'
+        'ui.router'
     ])
-    .config(function config($stateProvider) {
-        $stateProvider.state('feed-list', {
-            url: '/feeds/list',
-            views: {
-                "main": {
-                    controller: 'FeedListCtrl',
-                    templateUrl: 'app/feed/feed-list.tpl.html'
-                }
-            },
-            data: {
-                pageTitle: 'All Feeds'
-            }
-        });
-    })
+    .config(FeedListConfig)
     .controller('FeedListCtrl', FeedListController);
 
-FeedListController.$inject = ['$scope', '$http', '$indexedDB', '$rootScope', '$state', 'lodash', 'AuthUtil'];
+////////////////////////////////////////////////////////////////////////////////
+// Feed List Configuration /////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-function FeedListController($scope, $http, $indexedDB, $rootScope, $state, lodash, AuthUtil) {
-    var feedStore = $indexedDB.objectStore('feeds')
+FeedListConfig.$inject = ['$stateProvider'];
 
-    feedStore.getAll().then(function(results) {
-        $scope.feedData = results;
+function FeedListConfig($stateProvider) {
+    $stateProvider.state('feed-list', {
+        url: '/feeds/list',
+        views: {
+            "main": {
+                controller: 'FeedListCtrl',
+                templateUrl: 'app/feed/feed-list.tpl.html'
+            }
+        },
+        data: {
+            pageTitle: 'Feed Mixtures'
+        }
     });
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Feed List Controller ////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+FeedListController.$inject = [
+    '$rootScope',
+    '$scope',
+    '$state',
+    '$timeout',
+    'APIUtil',
+    'AuthUtil',
+    'lodash'
+];
+
+function FeedListController($rootScope, $scope, $state, $timeout, APIUtil, AuthUtil, lodash) {
+    $scope.userFilter = lodash.partial(AuthUtil.itemFilter, $scope);
+
+    APIUtil.getAllFeeds($scope);
 
     $scope.deleteFeed = function(feedId) {
-        feedStore.delete(feedId).then(function() {
-            Messenger().post("Successfully deleted feed.");
+        $scope.feedData = lodash.reject($scope.feedData, {
+            _id: feedId
+        });
 
-            $scope.feedData = lodash.reject($scope.feedData, {
-                _id: feedId
-            });
+        APIUtil.deleteFeed(feedId).then(function() {
+            Messenger().post("Successfully deleted feed.");
         });
     }
 
-    $scope.userFilter = lodash.partial(AuthUtil.itemFilter, $scope);
-
-    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-        if (fromState.name === 'feed-new' || fromState.name === 'feed-edit') {
-            feedStore.getAll().then(function(results) {
-                $scope.feedData = results;
-                $state.reload();
-            });
-        }
+    $timeout(function() {
+        $(':checkbox').radiocheck();
     });
-
-    $(':checkbox').radiocheck();
 }

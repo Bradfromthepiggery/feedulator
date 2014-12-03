@@ -1,112 +1,92 @@
 'use strict';
 
 angular.module('app.animal-new', [
-        'ui.router',
-        'xc.indexedDB'
+        'app.common-api',
+        'app.common-auth',
+        'ngLodash',
+        'slugifier',
+        'ui.router'
     ])
-    .config(function config($stateProvider) {
-        $stateProvider.state('animal-new', {
-            url: '/animals/new',
-            views: {
-                "main": {
-                    controller: 'AnimalCreationCtrl',
-                    templateUrl: 'app/animal/animal-new.tpl.html'
-                }
-            },
-            data: {
-                pageTitle: 'Create Animal'
+    .config(AnimalNewConfig)
+    .controller('AnimalNewCtrl', AnimalNewController);
+
+////////////////////////////////////////////////////////////////////////////////
+// Animal New Configuration ////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+AnimalNewConfig.$inject = ['$stateProvider'];
+
+function AnimalNewConfig($stateProvider) {
+    $stateProvider.state('animal-new', {
+        url: '/animals/new',
+        views: {
+            "main": {
+                controller: 'AnimalNewCtrl',
+                templateUrl: 'app/animal/animal-new.tpl.html'
             }
-        });
-    })
-    .controller('AnimalCreationCtrl', function AnimalCreationController($scope, Slug, $indexedDB, $state) {
-        $scope.formResult = {
-            creationDate: new Date(),
-            nutrients: {
-                "crude_protein": {
-                    "name": "Crude Protein",
-                    "value": 0,
-                    "unit": "% DM"
-                },
-                "crude_fiber": {
-                    "name": "Crude Fiber",
-                    "value": 0,
-                    "unit": "% DM"
-                },
-                "calcium": {
-                    "name": "Calcium",
-                    "value": 0,
-                    "unit": "% DM"
-                },
-                "phosphorus": {
-                    "name": "Phosphorus",
-                    "value": 0,
-                    "unit": "% DM"
-                },
-                "sodium": {
-                    "name": "Sodium",
-                    "value": 0,
-                    "unit": "% DM"
-                },
-                "selenium": {
-                    "name": "Selenium",
-                    "value": 0,
-                    "unit": "% DM"
-                },
-                "zinc": {
-                    "name": "Zinc",
-                    "value": 0,
-                    "unit": "% DM"
-                },
-                "lysine": {
-                    "name": "Lysine",
-                    "value": 0,
-                    "unit": "% DM"
-                },
-                "methionine": {
-                    "name": "Methionine",
-                    "value": 0,
-                    "unit": "% DM"
-                },
-                "threonine": {
-                    "name": "Threonine",
-                    "value": 0,
-                    "unit": "% DM"
-                },
-                "tryptophan": {
-                    "name": "Tryptophan",
-                    "value": 0,
-                    "unit": "% DM"
-                },
-                "valine": {
-                    "name": "Valine",
-                    "value": 0,
-                    "unit": "% DM"
-                },
-                "linoleic_acid_c18_2": {
-                    "name": "Linoleic Acid C18 2",
-                    "value": 0,
-                    "unit": "% DM"
-                }
-            }
-        }
-
-        $scope.makeSticky = function() {
-            $('#nutritionPanel').sticky({
-                topSpacing: 20,
-                getWidthFrom: 'aside',
-                responsiveWidth: true
-            });
-        }
-
-        $scope.submit = function() {
-            $scope.formResult._id = Slug.slugify($scope.formResult.name);
-
-            $indexedDB.objectStore('animals')
-                .upsert($scope.formResult)
-                .then(function(e) {
-                    Messenger().post("Saved animal " + $scope.formResult.name);
-
-                    $state.go('animal-list');
-                });
+        },
+        data: {
+            pageTitle: 'Create Animal'
         }
     });
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Animal New Controller ///////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+AnimalNewController.$inject = [
+    '$scope',
+    '$state',
+    '$timeout',
+    'APIUtil',
+    'AuthUtil',
+    'lodash',
+    'Slug'
+]
+
+function AnimalNewController($scope, $state, $timeout, APIUtil, AuthUtil, lodash, Slug) {
+    $scope.formResult = {
+        creationDate: new Date(),
+        nutrients: nutrientMasterList
+    }
+
+    $scope.makeSticky = function() {
+        $('#nutritionPanel').sticky({
+            topSpacing: 20,
+            getWidthFrom: 'aside',
+            responsiveWidth: true
+        });
+    }
+
+    $scope.submit = function() {
+        // Create an ID using the provided name
+        $scope.formResult._id = Slug.slugify($scope.formResult.name);
+
+        $scope.formResult.nutrients = lodash.pick($scope.formResult.nutrients, function(item) {
+            return item.value !== 0;
+        });
+
+        // Tag the feed with the owner ID
+        $scope.formResult.owner = $scope.profile.user_id;
+
+        // Set the privacy status depending on the user's privileges. Only a
+        // superuser may choose privacy state - default users can only create
+        // private feeds
+        if (AuthUtil.isPrivilegedUser($scope)) {
+            $scope.formResult.isPrivate = Boolean($('input[name="privacySelector"]:checked').val());
+        } else {
+            $scope.formResult.isPrivate = true;
+        }
+
+        var result = {};
+        result[$scope.formResult._id] = $scope.formResult;
+
+        APIUtil.addAnimal(result).then(function() {
+            Messenger().post("Saved animal '" + $scope.formResult.name + "'");
+
+            $state.go('animal-list');
+        });
+    }
+}

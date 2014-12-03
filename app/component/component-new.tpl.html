@@ -2,8 +2,9 @@
     <aside class="col-lg-3">
         <div class="panel panel-primary" id="nutritionPanel" ng-init="makeSticky()">
             <div class="panel-heading">
-                <h2 class="panel-title" style="font-size: 16px">
-                    {{formResult.name || "New Feed Component" | truncate: 30: '...' | ucfirst}}
+                <h2 class="panel-title component-panel-title">
+                    {{formResult.name || "New Feed Component" | truncate: 25: '&hellip;' | ucfirst}}
+                    <span class="pull-right label label-success" ng-if="formResult.gmoFree">GMO Free</span>
                 </h2>
             </div>
             <div class="panel-body" ng-if="formResult.description">
@@ -13,13 +14,13 @@
                 <thead>
                     <tr>
                         <th>Nutrition</th>
-                        <th>Qty. (% DM)</th>
+                        <th>Qty. (%&nbsp;DM)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="(key, data) in formResult.nutrients | toArray">
                         <td>{{::data.name | ucfirst}}</td>
-                        <td>{{data.value}}</td>
+                        <td>{{data.value | precision: 3}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -29,8 +30,8 @@
         <form role="form" ng-submit="submit()">
             <div class="panel-group" id="formAccordion" role="tablist" aria-multiselectable="true">
                 <div class="panel panel-default">
-                    <div class="panel-heading" role="tab">
-                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#componentMeta" style="color: #fff">1. About This Component<span class="label label-danger pull-right">Required</span></a>
+                    <div class="panel-heading panel-link" role="tab" data-toggle="collapse" data-parent="#formAccordion" data-target="#componentMeta">
+                        1. About This Component<span class="pull-right"><span class="label label-warning" ng-if="!formResult.name">Incomplete</span> <span class="label label-danger">Required</span></span>
                     </div>
                     <div id="componentMeta" class="panel-collapse collapse in" role="tabpanel">
                         <div class="panel-body">
@@ -51,19 +52,19 @@
                             </div>
                             <div class="form-group" ng-init="initCheckbox()">
                                 <label class="control-label">Is this component GMO free?</label>
-                                <label class="radio" ng-init="formResult.private = 'false'">
-                                    <input type="radio" ng-model="formResult.private" data-toggle="radio" name="gmoSelector" id="gmoYes" value="true" checked="">Yes
+                                <label class="radio">
+                                    <input type="radio" ng-model="formResult.gmoFree" data-toggle="radio" name="gmoSelector" id="gmoYes" ng-value="true">Yes
                                 </label>
                                 <label class="radio">
-                                    <input type="radio" ng-model="formResult.private" data-toggle="radio" name="gmoSelector" id="gmoNo" value="false">No
+                                    <input type="radio" ng-model="formResult.gmoFree" data-toggle="radio" name="gmoSelector" id="gmoNo" ng-value="false" checked>No
                                 </label>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="panel panel-default">
-                    <div class="panel-heading" role="tab">
-                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#nutritionElements" style="color: #fff">2. Nutrition Data<span class="label label-danger pull-right">Required</span></a>
+                    <div class="panel-heading panel-link" role="tab" data-toggle="collapse" data-parent="#formAccordion" data-target="#nutritionElements">
+                        2. Nutrition Data<span class="label label-danger">Required</span>
                     </div>
                     <div id="nutritionElements" class="panel-collapse collapse in" role="tabpanel">
                         <div class="panel-body">
@@ -73,7 +74,7 @@
                             <thead>
                                 <tr>
                                     <th>Nutrition</th>
-                                    <th>Qty. (% DM)</th>
+                                    <th>Qty. (%&nbsp;DM)</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -90,7 +91,7 @@
             </div>
             <div>
                 <span class="help-block" ng-if="!formResult.name">You have to provide a component name before saving this feed.</span>
-                <button type="submit" class="btn btn-primary btn-large" ng-disabled="!formResult.name">
+                <button type="submit" class="btn btn-primary btn-large" ng-disabled="!formResult.name" data-loading-text="Creating Feed Component&hellip;">
                     <span class="fui-check"></span>&nbsp;Save Feed Component
                 </button>
                 <button type="reset" class="btn btn-danger btn-large pull-right" ui-sref="component-list">

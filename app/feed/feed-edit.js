@@ -1,7 +1,11 @@
 'use strict';
 
 angular.module('app.feed-edit', [
-        'ui.router'
+        'app.common-api',
+        'app.common-auth',
+        'app.feed-service',
+        'ngLodash',
+        'ui.router',
     ])
     .config(function config($stateProvider) {
         $stateProvider.state('feed-edit', {
@@ -17,54 +21,60 @@ angular.module('app.feed-edit', [
             }
         });
     })
-    .controller('FeedEditCtrl', function FeedEditController($state, $scope, $stateParams, Slug, $indexedDB, feedUtil, lodash, $timeout) {
-        $indexedDB.objectStore('components').getAll().then(function(results) {
-            $scope.compData = results;
-            $scope.compCount = Object.keys($scope.compData).length;
+    .controller('FeedEditCtrl', FeedEditController);
 
-            // Populate the component selection fields once the component data
-            // has loaded. This is wrapped in a timeout to enqueue it onto the
-            // digest stack so the select2 field is guaranteed to initialize first
-            $timeout(function() {
-                $scope.formResult.compData.forEach(function(item, index) {
-                    $('#select' + index).select2('val', item._id);
-                });
+FeedEditController.$inject = [
+    '$scope',
+    '$state',
+    '$stateParams',
+    '$timeout',
+    'APIUtil',
+    'AuthUtil',
+    'feedUtil',
+    'lodash'
+];
 
-                $scope.calculate();
+function FeedEditController($scope, $state, $stateParams, $timeout, APIUtil, AuthUtil, feedUtil, lodash) {
+    $scope.addNewComp = lodash.partial(feedUtil.addNewComp, $scope);
+    $scope.calculate = lodash.partial(feedUtil.calculate, $scope);
+    $scope.initCheckbox = feedUtil.initCheckbox;
+    $scope.isLoggedIn = lodash.partial(AuthUtil.isLoggedIn, $scope);
+    $scope.isPrivilegedUser = lodash.partial(AuthUtil.isPrivilegedUser, $scope);
+    $scope.makeSticky = feedUtil.makeSticky;
+    $scope.nullifyComp = lodash.partial(feedUtil.nullifyComp, $scope);
+    $scope.optFeed = lodash.partial(feedUtil.optFeed, $scope);
+    $scope.removeComp = lodash.partial(feedUtil.removeComp, $scope);
+    $scope.resetComps = lodash.partial(feedUtil.resetComps, $scope);
+    $scope.updateComp = lodash.partial(feedUtil.updateComp, $scope);
+
+    // Extract the feed data from the database and bind to the scope
+    APIUtil.getFeed($scope, $stateParams.feedId);
+
+    // Extract all animals from the database and bind them to the scope
+    APIUtil.getAllAnimals($scope);
+
+    // Extract all components from the database and bind them to the scope
+    APIUtil.getAllComponents($scope).then(function(data) {
+        // Populate the component selection fields once the component data
+        // has loaded. This is wrapped in a timeout to enqueue it onto the
+        // digest stack so the select2 field is guaranteed to initialize first
+        $timeout(function() {
+            $scope.formResult.compData.forEach(function(item, index) {
+                $('#select' + index).select2('val', item._id);
             });
+
+            $scope.calculate();
         });
-
-        // Extract all animals from the database and bind them to the scope
-        $indexedDB.objectStore('animals').getAll().then(function(results) {
-            $scope.animalData = results;
-        });
-
-        $indexedDB.objectStore('feeds').find($stateParams.feedId).then(function(result) {
-            $scope.formResult = result;
-        });
-
-        $scope.addNewComp = lodash.partial(feedUtil.addNewComp, $scope);
-        $scope.calculate = lodash.partial(feedUtil.calculate, $scope);
-        $scope.initCheckbox = feedUtil.initCheckbox;
-        $scope.makeSticky = feedUtil.makeSticky;
-        $scope.nullifyComp = lodash.partial(feedUtil.nullifyComp, $scope);
-        $scope.optFeed = lodash.partial(feedUtil.optFeed, $scope);
-        $scope.removeComp = lodash.partial(feedUtil.removeComp, $scope);
-        $scope.resetComps = lodash.partial(feedUtil.resetComps, $scope);
-        $scope.updateComp = lodash.partial(feedUtil.updateComp, $scope);
-
-        $scope.submit = function() {
-            // Create an id using the provided name
-            $scope.formResult._id = Slug.slugify($scope.formResult.name);
-
-            // Upsert (Update or Insert) into the local database, then
-            // route the user back to the list view
-            $indexedDB.objectStore('feeds')
-                .upsert($scope.formResult)
-                .then(function(e) {
-                    Messenger().post('Saved feed ' + $scope.formResult.name);
-
-                    $state.go('feed-list');
-                });
-        }
     });
+
+    $scope.submit = function() {
+        var result = {};
+        result[$scope.formResult._id] = $scope.formResult;
+
+        APIUtil.updateFeed($scope.formResult._id, result).then(function() {
+            Messenger().post("Saved feed mixture " + $scope.formResult.name);
+
+            $state.go('feed-list');
+        });
+    }
+}

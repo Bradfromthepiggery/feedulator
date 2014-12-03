@@ -2,8 +2,8 @@
     <aside class="col-lg-3">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h2 class="panel-title" style="font-size: 16px">
-                    {{formResult.name || "New Feed" | truncate: 20: '...' | ucfirst}}
+                <h2 class="panel-title component-panel-title">
+                    {{formResult.name || "New Feed" | truncate: 30: '&hellip;' | ucfirst}}
                 </h2>
             </div>
             <div class="panel-body" ng-if="!formResult.hasOwnProperty('nutritionData') || formResult.nutritionData === null">
@@ -58,7 +58,7 @@
                     <tr ng-repeat="data in formResult.nutritionData | toArray: true" ng-class="{ danger: formResult.refAnimal.nutrients[data.$key].value > data.value, success: formResult.refAnimal.nutrients[data.$key].value <= data.value}">
                         <td style="width: 50%">{{data.name | ucfirst}}</td>
                         <td>{{data.value | precision: 3}}</td>
-                        <td ng-if="formResult.refAnimal">{{formResult.refAnimal.nutrients[data.$key].value || 0 | precision: 3}}</td>
+                        <td ng-if="formResult.refAnimal">{{formResult.refAnimal.nutrients[data.$key].value | precision: 3 | defaults: 0}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -73,8 +73,8 @@
         <form role="form" ng-submit="submit()" novalidate>
             <div class="panel-group" id="formAccordion" role="tablist" aria-multiselectable="true" style="margin-bottom: 8px">
                 <div class="panel panel-default" ng-if="!('feed-view' | isState)">
-                    <div class="panel-heading" role="tab">
-                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#feedComponents" style="color: #fff">1. Feed Components<span class="label label-danger pull-right">Required</span></a>
+                    <div class="panel-heading panel-link" role="tab" data-toggle="collapse" data-parent="#formAccordion" data-target="#feedComponents">
+                        1. Feed Components<span class="pull-right"><span class="label label-warning" ng-if="!formResult.nutritionData">Incomplete</span> <span class="label label-danger">Required</span></span>
                     </div>
                     <div id="feedComponents" class="panel-collapse collapse in" role="tabpanel">
                         <table class="table table-condensed">
@@ -83,14 +83,13 @@
                                     <th>Component</th>
                                     <th>Quantity (%)</th>
                                     <th>Cost</th>
-                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr ng-repeat="comp in formResult.compData">
                                     <td>
                                         <div class="form-group">
-                                            <select multiple id="{{'select' + $index}}" ng-model="comp._id" ng-options="data.name for data in compData track by data._id" class="form-control multiselect multiselect-inverse" ui-select="{{$index}}" autofocus="autofocus">
+                                            <select multiple id="{{'select' + $index}}" ng-model="comp._id" ng-options="data.name for data in compData track by data._id"  class="form-control multiselect multiselect-inverse" ui-select="{{$index}}" autofocus="autofocus">
                                                 <option ng-if="false" value="">Choose Component</option>
                                             </select>
                                             <span ng-if="$first" class="help-block">Start typing to search for a component.</span>
@@ -138,15 +137,15 @@
                 </div>
 
                 <div class="panel panel-default" ng-if="formResult.nutritionData">
-                    <div class="panel-heading" role="tab">
-                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#feedWeight" style="color: #fff">{{('feed-view' | isState) ? '1' : '2'}}. Feed Weight Conversion<span class="label label-info pull-right" ng-hide="{{'feed-view' | isState}}">Optional</span></a>
+                    <div class="panel-heading panel-link" role="tab" data-toggle="collapse" data-parent="#formAccordion" data-target="#feedWeight">
+                        {{('feed-view' | isState) ? '1' : '2'}}. Feed Weight Conversion<span class="label label-info pull-right" ng-hide="{{'feed-view' | isState}}">Optional</span>
                     </div>
                     <div id="feedWeight" class="panel-collapse collapse" role="tabpanel">
                         <div class="panel-body">
                             <div class="form-group" ng-if="formResult.compData.length > 0">
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <input id="feedWeight" class="form-control" type="number" min="0" step="0.1" ng-model="formResult.weight" ng-change="calculate()" ng-init="formResult.weight = 0" />
+                                        <input id="feedWeight" class="form-control" type="number" min="0" step="0.1" ng-model="formResult.weight" ng-change="calculate()" ng-init="formResult.weight=0" />
                                         <span class="input-group-addon">lb</span>
                                     </div>
                                     <span class="help-block">Provide a desired feed weight to view all component quantities in pounds. Leaving this as 0 will show component quantities as a percentage of total feed weight.</span>
@@ -157,8 +156,8 @@
                 </div>
 
                 <div class="panel panel-default" ng-if="formResult.nutritionData && formResult.compData.length > 1 && !('feed-view' | isState)">
-                    <div class="panel-heading" role="tab">
-                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#optimize" style="color: #fff">3. Minimize Feed Costs<span class="label label-info pull-right">Optional</span></a>
+                    <div class="panel-heading panel-link" role="tab" data-toggle="collapse" data-parent="#formAccordion" data-target="#optimize">
+                        3. Minimize Feed Costs<span class="label label-info pull-right">Optional</span>
                     </div>
                     <div id="optimize" class="panel-collapse collapse" role="tabpanel">
                         <div class="panel-body">
@@ -198,15 +197,15 @@
             </div>
 
             <div class="panel panel-default" ng-if="formResult.nutritionData">
-                <div class="panel-heading" role="tab">
-                    <a href data-toggle="collapse" data-target="#feedMeta" style="color: #fff">{{('feed-view' | isState) ? 2 : (formResult.compData.length > 1 ? '4' : '3')}}. About This Feed<span class="pull-right"><span class="label label-warning" ng-if="!formResult.name">Incomplete</span> <span class="label label-danger" ng-if="!('feed-view' | isState)">Required</span></span></a>
+                <div class="panel-heading panel-link" role="tab" data-toggle="collapse" data-target="#feedMeta">
+                    {{('feed-view' | isState) ? 2 : (formResult.compData.length > 1 ? '4' : '3')}}. About This Feed<span class="pull-right"><span class="label label-warning" ng-if="!formResult.name">Incomplete</span> <span class="label label-danger" ng-if="!('feed-view' | isState)">Required</span></span>
                 </div>
                 <div id="feedMeta" class="panel-collapse collapse in" role="tabpanel">
                     <div class="panel-body">
                         <div class="form-group">
                             <label for="feedName" class="control-label" ng-class="{'text-muted': ('feed-edit' | isState) || ('feed-view' | isState)}">Feed Name</label>
                             <input id="feedName" ng-hide="{{('feed-edit' | isState) || ('feed-view' | isState)}}" class="form-control" type="text" ng-model="formResult.name" required />
-                            <p class="form-control-static" ng-hide="{{'feed-new' | isState}}">{{formResult.name |ucfirst}}</p>
+                            <p class="form-control-static" ng-hide="{{'feed-new' | isState}}">{{formResult.name | ucfirst}}</p>
                             <span class="help-block" ng-hide="{{('feed-edit' | isState) || ('feed-view' | isState)}}">You <b>have</b> to fill this in. This shows up in the list of feeds, so keep it short but descriptive.</span>
                         </div>
 
@@ -224,13 +223,13 @@
                             <span class="help-block" ng-if="!('feed-view' | isState)">You can leave this blank. Use this space to store any additional information or comments about this feed.</span>
                         </div>
 
-                        <div class="form-group" ng-init="initCheckbox(); formResult.private='false'" ng-if="!('feed-view' | isState) && isPrivilegedUser()">
+                        <div class="form-group" ng-init="initCheckbox();" ng-if="!('feed-view' | isState) && isPrivilegedUser()">
                             <label class="control-label">Can anyone else see this feed?</label>
                             <label class="radio">
-                                <input type="radio" ng-model="formResult.private" data-toggle="radio" name="privacySelector" id="publicRatio" value="false"><b>Public: </b> Everyone can see this, but only you can make changes.
+                                <input type="radio" ng-model="formResult.isPrivate" data-toggle="radio" name="privacySelector" id="publicRadio" ng-value="false"><b>Public: </b> Everyone can see this, but only you can make changes.
                             </label>
                             <label class="radio">
-                                <input type="radio" ng-model="formResult.private" data-toggle="radio" name="privacySelector" id="privateRadio" value="true"><b>Private: </b> Only you can see this, and only you can make changes.
+                                <input type="radio" ng-model="formResult.isPrivate" data-toggle="radio" name="privacySelector" id="privateRadio" ng-value="true" checked><b>Private: </b> Only you can see this, and only you can make changes.
                             </label>
                         </div>
                     </div>

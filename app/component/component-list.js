@@ -1,67 +1,66 @@
 'use strict';
 
 angular.module('app.component-list', [
+        'app.common-api',
+        'app.common-auth',
         'ngLodash',
-        'ui.router',
-        'xc.indexedDB'
+        'ui.router'
     ])
-    .config(function config($stateProvider) {
-        $stateProvider.state('component-list', {
-            url: '/components/list',
-            views: {
-                "main": {
-                    controller: 'CompListCtrl',
-                    templateUrl: 'app/component/component-list.tpl.html'
-                }
-            },
-            data: {
-                pageTitle: 'Feed Components'
-            }
-        });
-    })
+    .config(CompListConfig)
     .controller('CompListCtrl', CompListController);
 
-CompListController.$inject = ['$scope', '$state', '$indexedDB', 'lodash', '$timeout', '$http', '$rootScope'];
+////////////////////////////////////////////////////////////////////////////////
+// Component List Configuration ////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-function CompListController($scope, $state, $indexedDB, lodash, $timeout, $http, $rootScope) {
-    // $http.get('http://thepiggery.net:8011/feedulator/component/all')
-    //     .success(function(data, status, headers, config) {
-    //         $scope.compData = data;
-    //     })
-    //     .error(function(data) {
-    //         debugger;
-    //     });
+CompListConfig.$inject = ['$stateProvider'];
 
-    var compStore = $indexedDB.objectStore('components')
-
-    compStore.getAll().then(function(results) {
-        $scope.compData = results;
-    });
-
-    $scope.deleteComp = function(feedId) {
-        compStore.delete(feedId).then(function() {
-            Messenger().post("Successfully deleted component");
-
-            $scope.compData = lodash.reject($scope.compData, {
-                _id: feedId
-            });
-        });
-    }
-
-    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-        if (fromState.name === 'component-new' || fromState.name === 'component-edit') {
-            compStore.getAll().then(function(results) {
-                $scope.compData = results;
-                $state.reload();
-            });
+function CompListConfig($stateProvider) {
+    $stateProvider.state('component-list', {
+        url: '/components/list',
+        views: {
+            "main": {
+                controller: 'CompListCtrl',
+                templateUrl: 'app/component/component-list.tpl.html'
+            }
+        },
+        data: {
+            pageTitle: 'Feed Components'
         }
     });
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Component List Controller ///////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+CompListController.$inject = [
+    '$rootScope',
+    '$scope',
+    '$state',
+    '$timeout',
+    'APIUtil',
+    'AuthUtil',
+    'lodash'
+];
+
+function CompListController($rootScope, $scope, $state, $timeout, APIUtil, AuthUtil, lodash) {
+    $scope.userFilter = lodash.partial(AuthUtil.itemFilter, $scope);
+
+    APIUtil.getAllComponents($scope);
+
+    $scope.deleteComp = function(feedId) {
+        $scope.compData = lodash.reject($scope.compData, {
+            _id: feedId
+        });
+
+        APIUtil.deleteComponent(feedId).then(function() {
+            Messenger().post("Successfully deleted component.");
+        });
+    }
 
     $timeout(function() {
         $(':checkbox').radiocheck();
     });
-}
-
-var getCompData = function() {
-
 }

@@ -3,7 +3,7 @@
         <div class="panel panel-primary" id="nutritionPanel" ng-init="makeSticky()">
             <div class="panel-heading">
                 <h2 class="panel-title" style="font-size: 16px">
-                    {{formResult.name || "New Feed Component" | truncate: 30: '...' | ucfirst}}
+                    {{formResult.name || "New Feed Component" | truncate: 30: '&hellip;' | ucfirst}}
                 </h2>
             </div>
             <div class="panel-body" ng-if="formResult.description">
@@ -13,13 +13,13 @@
                 <thead>
                     <tr>
                         <th>Nutrition</th>
-                        <th>Qty (% DM)</th>
+                        <th>Qty (%&nbsp;DM)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="data in ::formResult.nutrients | toArray">
                         <td>{{::data.name | ucfirst}}</td>
-                        <td>{{data.value}}</td>
+                        <td>{{data.value | precision: 3}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -29,8 +29,8 @@
         <form role="form" ng-submit="submit()">
             <div class="panel-group" id="formAccordion" role="tablist" aria-multiselectable="true">
                 <div class="panel panel-default">
-                    <div class="panel-heading" role="tab">
-                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#animalMeta" style="color: #fff">1. About This Animal<span class="label label-danger pull-right">Required</span></a>
+                    <div class="panel-heading panel-link" role="tab" data-toggle="collapse" data-parent="#formAccordion" data-target="#animalMeta">
+                        1. About This Animal<span class="pull-right"><span class="label label-warning" ng-if="!formResult.name">Incomplete</span> <span class="label label-danger">Required</span></span>
                     </div>
                     <div id="animalMeta" class="panel-collapse collapse in" role="tabpanel">
                         <div class="panel-body">
@@ -48,8 +48,8 @@
                     </div>
                 </div>
                 <div class="panel panel-default">
-                    <div class="panel-heading" role="tab">
-                        <a href data-toggle="collapse" data-parent="#formAccordion" data-target="#nutritionElements" style="color: #fff">2. Dietary Requirements<span class="label label-danger pull-right">Required</span></a>
+                    <div class="panel-heading panel-link" role="tab" data-toggle="collapse" data-parent="#formAccordion" data-target="#nutritionElements">
+                        2. Dietary Requirements<span class="label label-danger pull-right">Required</span>
                     </div>
                     <div id="nutritionElements" class="panel-collapse collapse in" role="tabpanel">
                         <div class="panel-body">
@@ -59,7 +59,7 @@
                             <thead>
                                 <tr>
                                     <th>Nutrition</th>
-                                    <th>Quantity (% DM)</th>
+                                    <th>Quantity (%&nbsp;DM)</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -75,7 +75,7 @@
                 </div>
             </div>
             <div>
-                <button type="submit" class="btn btn-primary btn-large" ng-disabled="!formResult.name" ng-disabled="!formResult.name">
+                <button type="submit" class="btn btn-primary btn-large" ng-disabled="!formResult.name" data-loading-text="Creating Animal&hellip;">
                     <span class="fui-check"></span>&nbsp;Save Animal
                 </button>
                 <button type="reset" class="btn btn-danger btn-large pull-right" ui-sref="animal-list">

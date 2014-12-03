@@ -1,9 +1,9 @@
 <div class="row">
     <aside class="col-md-4 col-lg-3">
         <form role="form">
-            <div class="form-group" ng-show="feedData.length >= 2">
+            <div class="form-group" ng-show="feedCount >= 2">
                 <div class="input-group">
-                    <input type="search" class="form-control" ng-model="search" placeholder="Search Feeds" />
+                    <input type="search" class="form-control" ng-model="search" placeholder="Search {{feedCount}} Feeds" />
                     <span class="input-group-btn">
                         <button type="submit" class="btn">
                             <span class="fui-search"></span>
@@ -14,10 +14,10 @@
             </div>
             <p class="lead">Hide/Show Details</p>
             <label class="checkbox" for="descCheckbox">
-                <input type="checkbox" id="descCheckbox" data-toggle="checkbox" ng-model="descriptionChecked" ng-init="descriptionChecked=true" checked ng-disabled="feedData.length === 0">Description
+                <input type="checkbox" id="descCheckbox" data-toggle="checkbox" ng-model="descriptionChecked" ng-init="descriptionChecked=true" ng-disabled="feedCount === 0">Description
             </label>
             <label class="checkbox" for="compCheckbox">
-                <input type="checkbox" id="compCheckbox" data-toggle="checkbox" ng-model="compsChecked" ng-init="compsChecked=true" checked ng-disabled="feedData.length === 0">Feed Components
+                <input type="checkbox" id="compCheckbox" data-toggle="checkbox" ng-model="compsChecked" ng-init="compsChecked=true" ng-disabled="feedCount === 0">Feed Components
             </label>
             <hr>
             <button class="btn btn-primary btn-block" ui-sref="feed-new">
@@ -26,38 +26,39 @@
     </aside>
     <div class="col-lg-9">
         <div class="row">
-            <div ng-if="feedData.length == 0" class="text-center">
-                <img src="app/assets/pig.svg" width="100vw" style="margin:50px 0">
+            <div ng-if="feedCount === 0" class="text-center">
+                <img src="app/assets/pig.svg" width="100vw" style="margin: 50px 0">
                 <p class="lead">You currently have no feeds in the system.
                     <br/>Feeds you create will show up here. Get mixin'!</p>
             </div>
-            <section class="col-lg-4" dir-paginate="feed in feedData | toArray | filter: userFilter | itemsPerPage: 12">
+
+            <section class="col-lg-4" dir-paginate="feed in feedData | filter: userFilter | filter: {$: search} | orderBy: 'name' | itemsPerPage: 12">
                 <div class="panel panel-default">
-                    <div class="panel-heading" ui-sref="feed-view({ feedId: feed._id})" style="cursor: pointer">
-                        <h2 class="panel-title" style="font-size: 16px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+                    <div class="panel-heading panel-link" ui-sref="feed-view({ feedId: feed._id})">
+                        <h2 class="panel-title component-panel-title">
                             {{::feed.name | ucfirst}}
                             <span class="pull-right" am-time-ago="feed.creationDate"></span>
                         </h2>
                     </div>
-                    <div class="panel-body" ng-if="descriptionChecked && feed.description" ui-sref="feed-view({ feedId: feed._id})" style="cursor: pointer">
+                    <div class="panel-body panel-link" ng-if="descriptionChecked && feed.description" ui-sref="feed-view({ feedId: feed._id })">
                         <span>{{::feed.description}}</span>
                     </div>
-                    <table class="table table-condensed table-hover table-responsive table-striped" ng-if="compsChecked" ui-sref="feed-view({ feedId: feed._id})" style="cursor: pointer">
+                    <table class="table table-condensed table-hover table-responsive table-striped panel-link" ng-if="compsChecked" ui-sref="feed-view({ feedId: feed._id })">
                         <thead>
                             <tr>
                                 <th>Component</th>
-                                <th>Qty</th>
+                                <th>Qty.&nbsp;(%)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="component in ::feed.compData | orderBy: '-value'">
-                                <td>{{::component.name}}</td>
-                                <td>{{::component.value + '%'}}</td>
+                            <tr ng-class="{ success: component.name.toLowerCase().contains(search.toLowerCase()) && search !== '' }" ng-repeat="component in ::feed.compData track by component.name | orderBy: '-value'">
+                                <td>{{::component.name | ucfirst}}</td>
+                                <td>{{::component.value}}</td>
                             </tr>
                         </tbody>
                     </table>
                     <div class="panel-footer">
-                        <button class="btn btn-warning btn-sm" ui-sref="feed-edit({ feedId: feed._id})">
+                        <button class="btn btn-warning btn-sm" ui-sref="feed-edit({ feedId: feed._id })">
                             <span class="fui-new"></span>&nbsp;Edit
                         </button>
                         <span class="pull-right">
@@ -69,7 +70,7 @@
                 </div>
             </section>
         </div>
-        <div class="text-center">
+        <div class="text-center" ng-if="feedCount >= 2">
             <dir-pagination-controls boundary-links="false" template-url="./app/common/pagination.tpl.html"></dir-pagination-controls>
         </div>
     </div>

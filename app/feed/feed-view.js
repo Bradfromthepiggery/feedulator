@@ -17,30 +17,38 @@ angular.module('app.feed-view', [
             }
         });
     })
-    .controller('FeedViewCtrl', function FeedViewController($scope, $stateParams, Slug, $indexedDB, feedUtil, lodash, $timeout) {
-        $indexedDB.objectStore('feeds').find($stateParams.feedId).then(function(result) {
-            $scope.formResult = result;
-        });
+    .controller('FeedViewCtrl', FeedViewController);
 
-        // Extract all animals from the database and bind them to the scope
-        $indexedDB.objectStore('animals').getAll().then(function(results) {
-            $scope.animalData = results;
-        });
+FeedViewController.$inject = ['$scope', '$stateParams', 'Slug', 'feedUtil', 'lodash', '$timeout', 'Restangular'];
 
-        $scope.genExportData = function() {
-            $scope.plainText = $scope.formResult.compData.reduce(function(acc, curr) {
-                if ($scope.formResult.weight !== 0 && $scope.formResult.weight !== null) {
-                    var proportion = curr.value * 0.01 * $scope.formResult.weight,
-                        value = Number(proportion.toPrecision(3)) + " lb";
-                } else {
-                    var value = curr.value + "%";
-                }
+function FeedViewController($scope, $stateParams, Slug, feedUtil, lodash, $timeout, Restangular) {
+    var feedAPI = Restangular.all('mixture'),
+        animalAPI = Restangular.all('animal');
 
-                return acc += curr.name + ", " + value + "\n";
-            }, "");
-
-            $scope.currentUrl = window.location.href;
-        }
-
-        $scope.calculate = lodash.partial(feedUtil.calculate, $scope);
+    // Extract the feed data from the database and bind to the scope
+    feedAPI.get($stateParams.feedId).then(function(data) {
+        $scope.formResult = Restangular.stripRestangular(data[$stateParams.feedId]);
     });
+
+    // Extract all animals from the database and bind them to the scope
+    animalAPI.get('all').then(function(data) {
+        $scope.animalData = Restangular.stripRestangular(data);
+    });
+
+    $scope.genExportData = function() {
+        $scope.plainText = $scope.formResult.compData.reduce(function(acc, curr) {
+            if ($scope.formResult.weight !== 0 && $scope.formResult.weight !== null) {
+                var proportion = curr.value * 0.01 * $scope.formResult.weight,
+                    value = Number(proportion.toPrecision(3)) + " lb";
+            } else {
+                var value = curr.value + "%";
+            }
+
+            return acc += curr.name + ", " + value + "\n";
+        }, "");
+
+        $scope.currentUrl = window.location.href;
+    }
+
+    $scope.calculate = lodash.partial(feedUtil.calculate, $scope);
+}

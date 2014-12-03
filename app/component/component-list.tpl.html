@@ -1,29 +1,29 @@
 <div class="row">
     <aside class="col-lg-3">
         <form role="form">
-            <div class="form-group" ng-show="compData.length >= 2">
+            <div class="form-group" ng-if="compCount >= 2">
                 <div class="input-group">
-                    <input type="search" class="form-control" ng-model="search" placeholder="Search Feed Components" />
+                    <input type="search" class="form-control" ng-model="$parent.search" placeholder="Search {{compCount}} Feed Components" />
                     <span class="input-group-btn">
                         <button type="submit" class="btn">
                             <span class="fui-search"></span>
                     </button>
                     </span>
                 </div>
+                <hr>
             </div>
-            <hr>
             <p class="lead">Hide/Show Details</p>
             <label class="checkbox" for="nutrientsCheckbox">
-                <input type="checkbox" id="nutrientsCheckbox" data-toggle="checkbox" ng-model="nutrientsChecked" ng-init="nutrientsChecked=true">Nutrients
+                <input type="checkbox" id="nutrientsCheckbox" data-toggle="checkbox" ng-model="nutrientsChecked" ng-init="nutrientsChecked=true" ng-disabled="compCount === 0">Nutrients
             </label>
             <label class="checkbox" for="gmoCheckbox">
-                <input type="checkbox" id="gmoCheckbox" data-toggle="checkbox" ng-model="gmoChecked" ng-init="gmoChecked=true" checked>GMO Status
+                <input type="checkbox" id="gmoCheckbox" data-toggle="checkbox" ng-model="gmoChecked" ng-init="gmoChecked=true" ng-disabled="compCount === 0">GMO Status
             </label>
             <label class="checkbox" for="descCheckbox">
-                <input type="checkbox" id="descCheckbox" data-toggle="checkbox" ng-model="descriptionChecked" ng-init="descriptionChecked=false" checked>Description
+                <input type="checkbox" id="descCheckbox" data-toggle="checkbox" ng-model="descriptionChecked" ng-init="descriptionChecked=false" ng-disabled="compCount === 0">Description
             </label>
             <label class="checkbox" for="supplierCheckbox">
-                <input type="checkbox" id="supplierCheckbox" data-toggle="checkbox" ng-model="supplierChecked" ng-init="supplierChecked=false" checked>Supplier
+                <input type="checkbox" id="supplierCheckbox" data-toggle="checkbox" ng-model="supplierChecked" ng-init="supplierChecked=false" ng-disabled="compCount === 0">Supplier
             </label>
             <hr>
             <button class="btn btn-primary btn-block" ui-sref="component-new">
@@ -32,10 +32,16 @@
     </aside>
     <div class="col-lg-9">
         <div class="row">
-            <section class="col-lg-4" dir-paginate="comp in compData | toArray | filter: { $: search } | itemsPerPage: 12">
+            <div ng-if="compCount === 0" class="text-center">
+                <img src="app/assets/pig.svg" width="100vw" style="margin: 50px 0">
+                <p class="lead">You currently have no feed components in the system.
+                    <br/>Components you create will show up here. Get copyin'!</p>
+            </div>
+
+            <section class="col-lg-4" dir-paginate="comp in compData | filter: {$: search} | orderBy: 'name' | itemsPerPage: 12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h2 class="panel-title" style="font-size: 16px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+                        <h2 class="panel-title component-panel-title">
                             {{::comp.name | ucfirst}}
                             <span class="pull-right label label-success" ng-if="gmoChecked">{{::comp.gmoFree ? "GMO Free" : ""}}</span>
                         </h2>
@@ -44,15 +50,15 @@
                         <p ng-if="supplierChecked && comp.supplier">Supplier: {{::comp.supplier}}</p>
                         <p ng-if="descriptionChecked">{{::comp.description}}</p>
                     </div>
-                    <table class="table table-condensed table-striped table-hover table-responsive" ng-if="nutrientsChecked" style="max-height: 150px; overflow-y: scroll;">
+                    <table class="table table-condensed table-striped table-hover table-responsive" ng-if="nutrientsChecked">
                         <thead>
                             <tr>
                                 <th>Nutrient</th>
-                                <th>Qty (% DM)</th>
+                                <th>Qty. (% DM)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-class="{ success: data.name.toLowerCase().contains(search.toLowerCase()) && search !== '' }" ng-repeat="data in ::comp.nutrients | toArray | orderBy: '-value'">
+                            <tr ng-class="{ success: data.name.toLowerCase().contains(search.toLowerCase()) && search !== '' }" ng-repeat="data in ::comp.nutrients track by data.name | toArray | orderBy: '-value'">
                                 <td>{{::data.name | ucfirst}}</td>
                                 <td>{{::data.value}}</td>
                             </tr>
@@ -71,7 +77,7 @@
                 </div>
             </section>
         </div>
-        <div class="text-center" ng-if="compData.length >= 2">
+        <div class="text-center" ng-if="compCount >= 2">
             <dir-pagination-controls boundary-links="false" template-url="./app/common/pagination.tpl.html"></dir-pagination-controls>
         </div>
     </div>
