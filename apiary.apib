@@ -29,6 +29,8 @@ From The Piggery Inc.:
 
 - [Bradley Marshall](http://thepiggery.net)
 
+# Group General Resources
+
 ## Root [/]
 API Entry Point. This resource does not have any attributes. Instead it offers the initial API affordances in the form of HTTP headers and a JSON object.
 
@@ -82,8 +84,12 @@ Resource for performing CRUD operations on a single animal entry. This is used w
         }
 
 ### Query Animal [GET]
+Retrieve the entry for an animal at the index specified by ``{id}``. Returns a JSON object if the query was successful (i.e. the entry exists in the database), and an error message otherwise.
+
 + Response 200 (application/json)
     [Single Animal][]
+
++ Response 422
 
 ### Add Animal [POST]
 Upsert an animal into the database at the index specified by ``{id}``. If the entry already exists, it will be overwritten, otherwise a new entry will be created. The user who requests the upsert must have a valid ``user_id`` in their OAuth profile.
@@ -94,11 +100,17 @@ Upsert an animal into the database at the index specified by ``{id}``. If the en
 + Response 200 (application/json)
     [Single Animal][]
 
++ Response 201 (application/json)
+    [Single Animal][]
+
++ Response 422
+
 ### Delete Animal [DELETE]
 Delete the animal indexed by ``{id}``. The user who requests the deletion must have a ``user_id`` derived from their OAuth profile that corresponds to the ``owner`` field in the animal object, or be a privileged user, in order for this operation to be successful.
 
 + Response 204
 
++ Response 422
 
 # Group Feed Components
 A feed component entry in the database is a key-value pair indexed by a unique ID assigned to the component, and a string-representation of a JSON object containing fields such as the component's name, nutritional breakdown, GMO status, description, and user ID.
@@ -123,8 +135,12 @@ Resource for performing CRUD operations on a single component entry. This is use
         }
 
 ### Query Feed Component [GET]
+Retrieve the entry for a feed component at the index specified by ``{id}``. Returns a JSON object if the query was successful (i.e. the entry exists in the database), and an error message otherwise.
+
 + Response 200 (application/json)
     [Single Feed Component][]
+
++ Response 422
 
 ### Add Feed Component [POST]
 Upsert a feed component into the database at the index specified by ``{id}``. If the entry already exists, it will be overwritten, otherwise a new entry will be created. The user who requests the upsert must have a valid ``user_id`` in their OAuth profile.
@@ -135,11 +151,17 @@ Upsert a feed component into the database at the index specified by ``{id}``. If
 + Response 200 (application/json)
     [Single Feed Component][]
 
++ Response 201 (application/json)
+    [Single Feed Component][]
+
++ Response 422
+
 ### Delete Feed Component [DELETE]
 Delete the feed component indexed by ``{id}``. The user who requests the deletion must have a ``user_id`` derived from their OAuth profile that corresponds to the ``owner`` field in the component object, or be a privileged user, in order for this operation to be successful.
 
-+ Response 204 (application/json)
++ Response 204
 
++ Response 422
 
 # Group Feed Mixtures
 A feed mixture entry in the database is a key-value pair indexed by a unique ID assigned to the feed mixture, and a string-representation of a JSON object containing fields such as the mixture's name, constituent components and quantities, optimization constraints, costs, description, animal batch ID and user ID.
@@ -164,19 +186,30 @@ Resource for performing CRUD operations on a single mixture entry. This is used 
         }
 
 ### Query Feed Mixture [GET]
+Retrieve the entry for a feed mixture at the index specified by ``{id}``. Returns a JSON object if the query was successful (i.e. the entry exists in the database), and an error message otherwise.
+
 + Response 200 (application/json)
-    [Single Feed Component][]
+    [Single Feed Mixture][]
+
++ Response 422
 
 ### Add Feed Mixture [POST]
 Upsert a feed mixture into the database at the index specified by ``{id}``. If the entry already exists, it will be overwritten, otherwise a new entry will be created. The user who requests the upsert must have a valid ``user_id`` in their OAuth profile.
 
 + Request (application/json)
-    [Single Feed Component][]
+    [Single Feed Mixture][]
 
 + Response 200 (application/json)
-    [Single Feed Component][]
+    [Single Feed Mixture][]
+
++ Response 201 (application/json)
+    [Single Feed Mixture][]
+
++ Response 422
 
 ### Delete Feed Mixture [DELETE]
 Delete the feed mixture indexed by ``{id}``. The user who requests the deletion must have a ``user_id`` derived from their OAuth profile that corresponds to the ``owner`` field in the component object, or be a privileged user, in order for this operation to be successful.
 
-+ Response 204 (application/json)
++ Response 204
+
++ Response 422
