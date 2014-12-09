@@ -1,46 +1,182 @@
 FORMAT: 1A
+HOST: http://thepiggery.net:8011/feedulator
 
-# feedulator
-Notes API is a *short texts saving* service similar to its physical paper presence on your table.
+# Feedulator API
+The Feedulator API is a JSON interface service that provides hooks to a server database. Client instances make requests to the API, which caches and black-boxes database queries. While this API is available for public usage and not rate-limited at this time, it is primarily designed to support the front-end application versioned [here](http://github.com/kenlimmj/feedulator).
 
-# Group Notes
-Notes related resources of the **Notes API**
+### System Architecture
+The database is a swappable MySQL instance with three tables (storing data related to animals, feed components, and feed mixtures). To maintain scalability, the database schema is enforced by the client and the MySQL instance serves as a simple key-value lookup database with no server-side validation. While this limits the extent to which the database can be efficiently queried, it allows for greater flexibility and maintainability because there is no need to write database migrations when expanding application functionality.
 
-## Notes Collection [/notes]
-### List all Notes [GET]
+As a default, the API expects and responds to CORS requests made from browsers, assigning access privileges upon successful connection. Since the front-end application utilizes the AngularJS framework, the API will correctly return ``X-Header`` tokens that are automatically sent by Angular's ``$http`` provider when making an ``OPTIONS`` request.
+
+The API also implements a transparent LRU cache to decrease the hit-rate on the database. This decreases the load on the server infrastructure, which supports services other than this API. The round-trip response time is also improved significantly because the number of API endpoints is small to begin with, and thick client applications normally download all data from the server in order to cache it on the client side. Performance for repeated lookups for unique database entries will not benefit from caching.
+
+### License and Acknowledgments
+This API was designed as part of a collaboration between students at [Cornell University](http://cornell.edu), and [The Piggery Inc.](http://thepiggery.net) in Ithaca, New York, USA. Student involvement in this project was supported by the course and course staff of CS 5150: Software Engineering. Maintainance or access requests should be directed to the latter party.
+
+From Cornell University:
+
+- Yicheng Liang
+- Junyu Zhang
+- [Lim Mingjie, Kenneth](http://github.com/kenlimmj)
+- Steven Lam
+- Jie Li
+- Yang Li
+- Mengnan Zhao
+- Mingxuan Cai
+
+From The Piggery Inc.:
+
+- [Bradley Marshall](http://thepiggery.net)
+
+## Root [/]
+API Entry Point. This resource does not have any attributes. Instead it offers the initial API affordances in the form of HTTP headers and a JSON object.
+
+### Retrieve Entry Point [GET]
 + Response 200 (application/json)
+    + Headers
+    
+            Access-Control-Allow-Origin: *
+            Content-Length: 498
+            Server: Feedulator_Server/1.1
+        
+    + Body
+    
+            {
+                "animal_all_url": "http://thepiggery.net:8011/feedulator/animal/all",
+                "animal_one_url": "http://thepiggery.net:8011/feedulator/animal/{animal_id}",
+                "component_all_url": "http://thepiggery.net:8011/feedulator/component/all",
+                "component_one_url": "http://thepiggery.net:8011/feedulator/component/{component_id}",
+                "feed_all_url": "http://thepiggery.net:8011/feedulator/mixture/all",
+                "feed_one_url": "http://thepiggery.net:8011/feedulator/mixture/{mixture_id}"
+            }
+        
+# Group Animals
+An animal entry in the database is a key-value pair indexed by a unique ID assigned to the animal, and a string-representation of a JSON object containing fields such as the animal's name, nutritional/dietary requirements, description, and user ID.
 
-        [{
-          "id": 1, "title": "Jogging in park"
-        }, {
-          "id": 2, "title": "Pick-up posters from post-office"
-        }]
+## All Animals [/animal/all]
+Resource for retrieving all animal entries in the database. This is used to populate list views and should be called sparingly because it does not paginate on the server-side.
 
-### Create a Note [POST]
-+ Request (application/json)
-
-        { "title": "Buy cheese and bread for breakfast." }
-
-+ Response 201 (application/json)
-
-        { "id": 3, "title": "Buy cheese and bread for breakfast." }
-
-## Note [/notes/{id}]
-A single Note object with all its details
-
-+ Parameters
-    + id (required, number, `1`) ... Numeric `id` of the Note to perform action with. Has example value.
-
-### Retrieve a Note [GET]
+### List all Animals [GET]
 + Response 200 (application/json)
-
-    + Header
-
-            X-My-Header: The Value
+    + Headers
+    
+            Access-Control-Allow-Origin: *
+            Access-Control-Allow-Methods: GET, POST, DELETE
+            Access-Control-Allow-Headers: {Received Headers}
 
     + Body
+    
 
-            { "id": 2, "title": "Pick-up posters from post-office" }
+## Single Animal [/animal/{id}]
+Resource for performing CRUD operations on a single animal entry. This is used when adding, updating, or deleting animals. Requests to this resource should have the appropriate CORS privileges or be made via XHR in order to be successful.
 
-### Remove a Note [DELETE]
++ Parameters
+    + id (string, `growing-pig-7-11-lbs`) ... A reference ID generated by slugfiying the animal's name.
+    
++ Model
+
+        {
+            "key": "value"
+            ...
+        }
+
+### Query Animal [GET]
++ Response 200 (application/json)
+    [Single Animal][]
+
+### Add Animal [POST]
+Upsert an animal into the database at the index specified by ``{id}``. If the entry already exists, it will be overwritten, otherwise a new entry will be created. The user who requests the upsert must have a valid ``user_id`` in their OAuth profile.
+
++ Request (application/json)
+    [Single Animal][]
+
++ Response 200 (application/json)
+    [Single Animal][]
+
+### Delete Animal [DELETE]
+Delete the animal indexed by ``{id}``. The user who requests the deletion must have a ``user_id`` derived from their OAuth profile that corresponds to the ``owner`` field in the animal object, or be a privileged user, in order for this operation to be successful.
+
 + Response 204
+
+
+# Group Feed Components
+A feed component entry in the database is a key-value pair indexed by a unique ID assigned to the component, and a string-representation of a JSON object containing fields such as the component's name, nutritional breakdown, GMO status, description, and user ID.
+
+## All Feed Components [/component/all]
+Resource for retrieving all component entries in the database. This is used to populate list views and should be called sparingly because it does not paginate on the server-side.
+
+### List all Feed Components [GET]
++ Response 200 (application/json)
+
+## Single Feed Component [/component/{id}]
+Resource for performing CRUD operations on a single component entry. This is used when adding, updating, or deleting components. Requests to this resource should have the appropriate CORS privileges or be made via XHR in order to be successful.
+
++ Parameters
+    + id (string, `maize-grain-north-america`) ... A reference ID generated by slugfiying the component name.
+    
++ Model
+
+        {
+            "key": "value"
+            ...
+        }
+
+### Query Feed Component [GET]
++ Response 200 (application/json)
+    [Single Feed Component][]
+
+### Add Feed Component [POST]
+Upsert a feed component into the database at the index specified by ``{id}``. If the entry already exists, it will be overwritten, otherwise a new entry will be created. The user who requests the upsert must have a valid ``user_id`` in their OAuth profile.
+
++ Request (application/json)
+    [Single Feed Component][]
+
++ Response 200 (application/json)
+    [Single Feed Component][]
+
+### Delete Feed Component [DELETE]
+Delete the feed component indexed by ``{id}``. The user who requests the deletion must have a ``user_id`` derived from their OAuth profile that corresponds to the ``owner`` field in the component object, or be a privileged user, in order for this operation to be successful.
+
++ Response 204 (application/json)
+
+
+# Group Feed Mixtures
+A feed mixture entry in the database is a key-value pair indexed by a unique ID assigned to the feed mixture, and a string-representation of a JSON object containing fields such as the mixture's name, constituent components and quantities, optimization constraints, costs, description, animal batch ID and user ID.
+
+## All Feed Mixtures [/mixtures/all]
+Resource for retrieving all mixture entries in the database. This is used to populate list views and should be called sparingly because it does not paginate on the server-side.
+
+### List all Feed Mixtures [GET]
++ Response 200 (application/json)
+
+## Single Feed Mixture [/mixtures/{id}]
+Resource for performing CRUD operations on a single mixture entry. This is used when adding, updating, or deleting mixtures. Requests to this resource should have the appropriate CORS privileges or be made via XHR in order to be successful.
+
++ Parameters
+    + id (string, `experimental-feed-a1`) ... A reference ID generated by slugfiying the mixture name.
+
++ Model
+
+        {
+            "key": "value"
+            ...
+        }
+
+### Query Feed Mixture [GET]
++ Response 200 (application/json)
+    [Single Feed Component][]
+
+### Add Feed Mixture [POST]
+Upsert a feed mixture into the database at the index specified by ``{id}``. If the entry already exists, it will be overwritten, otherwise a new entry will be created. The user who requests the upsert must have a valid ``user_id`` in their OAuth profile.
+
++ Request (application/json)
+    [Single Feed Component][]
+
++ Response 200 (application/json)
+    [Single Feed Component][]
+
+### Delete Feed Mixture [DELETE]
+Delete the feed mixture indexed by ``{id}``. The user who requests the deletion must have a ``user_id`` derived from their OAuth profile that corresponds to the ``owner`` field in the component object, or be a privileged user, in order for this operation to be successful.
+
++ Response 204 (application/json)
