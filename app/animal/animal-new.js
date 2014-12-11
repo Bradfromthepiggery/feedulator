@@ -1,3 +1,10 @@
+/*
+* @Author: Lim Mingjie, Kenneth
+* @Date:   2014-12-10 22:09:04
+* @Last Modified by:   Lim Mingjie, Kenneth
+* @Last Modified time: 2014-12-11 01:21:42
+*/
+
 'use strict';
 
 angular.module('app.animal-new', [
@@ -22,7 +29,7 @@ function AnimalNewConfig($stateProvider) {
         views: {
             "main": {
                 controller: 'AnimalNewCtrl',
-                templateUrl: 'app/animal/animal-new.tpl.html'
+                templateUrl: 'app/animal/animal-new.tpl.min.html'
             }
         },
         data: {

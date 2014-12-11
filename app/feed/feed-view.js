@@ -1,3 +1,10 @@
+/*
+* @Author: Lim Mingjie, Kenneth
+* @Date:   2014-12-10 22:09:23
+* @Last Modified by:   Lim Mingjie, Kenneth
+* @Last Modified time: 2014-12-11 01:22:39
+*/
+
 'use strict';
 
 angular.module('app.feed-view', [
@@ -9,12 +16,13 @@ angular.module('app.feed-view', [
             views: {
                 "main": {
                     controller: 'FeedViewCtrl',
-                    templateUrl: 'app/feed/feed-new.tpl.html'
+                    templateUrl: 'app/feed/feed-new.tpl.min.html'
                 }
             },
             data: {
                 pageTitle: 'View Feed'
             }
+
         });
     })
     .controller('FeedViewCtrl', FeedViewController);

@@ -1,3 +1,10 @@
+/*
+* @Author: Lim Mingjie, Kenneth
+* @Date:   2014-12-10 22:09:20
+* @Last Modified by:   Lim Mingjie, Kenneth
+* @Last Modified time: 2014-12-11 01:22:31
+*/
+
 'use strict';
 
 angular.module('app.feed-list', [
@@ -22,7 +29,7 @@ function FeedListConfig($stateProvider) {
         views: {
             "main": {
                 controller: 'FeedListCtrl',
-                templateUrl: 'app/feed/feed-list.tpl.html'
+                templateUrl: 'app/feed/feed-list.tpl.min.html'
             }
         },
         data: {

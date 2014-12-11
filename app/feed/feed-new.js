@@ -2,7 +2,7 @@
  * @Author: Lim Mingjie, Kenneth
  * @Date:   2014-12-03 01:01:28
  * @Last Modified by:   Lim Mingjie, Kenneth
- * @Last Modified time: 2014-12-05 13:49:53
+ * @Last Modified time: 2014-12-11 00:58:00
  */
 
 'use strict';
@@ -28,7 +28,7 @@ function FeedNewConfig($stateProvider) {
         views: {
             "main": {
                 controller: 'FeedNewCtrl',
-                templateUrl: 'app/feed/feed-new.tpl.html'
+                templateUrl: 'app/feed/feed-new.tpl.min.html'
             }
         },
         data: {

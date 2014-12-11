@@ -2,7 +2,7 @@
 * @Author: Lim Mingjie, Kenneth
 * @Date:   2014-12-03 01:02:53
 * @Last Modified by:   Lim Mingjie, Kenneth
-* @Last Modified time: 2014-12-05 12:37:16
+* @Last Modified time: 2014-12-11 01:54:21
 */
 
 'use strict';
@@ -12,8 +12,25 @@ angular.module('app.feed-service', ['ngLodash'])
 
 FeedUtil.$inject = ['lodash'];
 
+/**
+ * @ngdoc  service
+ * @name  app.feed-service.FeedUtil
+ * @requires  ngLodash
+ *
+ * @description
+ * Provides convenience utilities for manipulating feeds
+ */
 function FeedUtil(lodash) {
-        // Add an entry to the component selector
+        /**
+         * @ngdoc method
+         * @name  app.feed-service.FeedUtil#addNewComp
+         * @methodOf app.feed-service.FeedUtil
+         * @name  addNewComp
+         * @param {Object} scope The scope which this function will act upon. The function expects this scope to contain the key "formResult"
+         *
+         * @description
+         * Add an entry to the component selector
+         */
         var addNewComp = function(scope) {
             scope.formResult.compData.push({
                 _id: null,
@@ -26,8 +43,19 @@ function FeedUtil(lodash) {
             scope.calculate();
         }
 
-        // Update an entry in the component selector. This is called when
-        // the watcher for the Select2 combobox triggers a change event
+        /**
+         * @ngdoc method
+         * @name  app.feed-service.FeedUtil#updateComp
+         * @methodOf app.feed-service.FeedUtil
+         * @name  updateComp
+         * @param {Object} scope The scope which this function will act upon. The function expects this scope to contain the key "formResult"
+         * @param {Number} index The index value of the array to update
+         * @param {Object} value The data to be updated into the array
+         *
+         * @description
+         * Update an entry in the component selector. This is called when
+         * the watcher for the Select2 combobox triggers a change event
+         */
         var updateComp = function(scope, index, value) {
             scope.formResult.compData[index]._id = value;
 
@@ -44,6 +72,17 @@ function FeedUtil(lodash) {
             }
         }
 
+        /**
+         * @ngdoc method
+         * @name  app.feed-service.FeedUtil#nullifyComp
+         * @methodOf app.feed-service.FeedUtil
+         * @name  nullifyComp
+         * @param {Object} scope The scope which this function will act upon. The function expects this scope to contain the key "formResult"
+         * @param {Number} index The index value of the array to nullify
+         *
+         * @description
+         * Nullifies an entry from the component array
+         */
         var nullifyComp = function(scope, index) {
             scope.formResult.compData[index]._id = null;
             scope.formResult.compData[index].name = null;
@@ -52,7 +91,17 @@ function FeedUtil(lodash) {
             scope.calculate();
         }
 
-        // Remove an entry from the component selector
+        /**
+         * @ngdoc method
+         * @name  app.feed-service.FeedUtil#removeCmop
+         * @methodOf app.feed-service.FeedUtil
+         * @name  removeComp
+         * @param {Object} scope The scope which this function will act upon. The function expects this scope to contain the key "formResult"
+         * @param {Number} index The index value of the array to remove
+         *
+         * @description
+         * Removes an entry from the component selector
+         */
         var removeComp = function(scope, index) {
             scope.formResult.compData.splice(index, 1);
 
@@ -60,7 +109,16 @@ function FeedUtil(lodash) {
             scope.calculate();
         }
 
-        // Reset all fields in the component selector to 0
+        /**
+         * @ngdoc method
+         * @name  app.feed-service.FeedUtil#resetComps
+         * @methodOf app.feed-service.FeedUtil
+         * @name  resetComps
+         * @param {Object} scope The scope which this function will act upon. The function expects this scope to contain the key "formResult"
+         *
+         * @description
+         * Reset all fields in the component selector to 0
+         */
         var resetComps = function(scope) {
             lodash.map(scope.formResult.compData, function(item) {
                 item.value = 0;
@@ -75,7 +133,16 @@ function FeedUtil(lodash) {
             scope.calculate();
         }
 
-        // Evaluate the total nutrition provided by the components
+        /**
+         * @ngdoc method
+         * @name  app.feed-service.FeedUtil#calculate
+         * @methodOf app.feed-service.FeedUtil
+         * @name  calculate
+         * @param {Object} scope The scope which this function will act upon. The function expects this scope to contain the key "formResult"
+         *
+         * @description
+         * Evaluate the total nutrition provided by the components
+         */
         var calculate = function(scope) {
             ////////////////////////////////////////////////////////////////////
             // Back-calculate Base Component proportion
@@ -198,7 +265,16 @@ function FeedUtil(lodash) {
             }
         }
 
-        // Optimize the feed based on constraints provided by the user
+        /**
+         * @ngdoc method
+         * @name  app.feed-service.FeedUtil#optFeed
+         * @methodOf app.feed-service.FeedUtil
+         * @name  optFeed
+         * @param {Object} scope The scope which this function will act upon. The function expects this scope to contain the key "formResult"
+         *
+         * @description
+         * Optimize the feed based on constraints provided by the user
+         */
         var optFeed = function(scope) {
             var solver = new Solver();
             scope.model = {

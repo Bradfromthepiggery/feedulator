@@ -1,0 +1,110 @@
+<h1><code ng:non-bindable="">APIUtil</code>
+<div><span class="hint">service in module <code ng:non-bindable="">app.common-api</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="app-common-api-apiutil-page"><p>Provides convenience functions for making requests to the API</p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="#/api/AuthUtil">AuthUtil</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="#/api/Restangular">Restangular</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="#/api/lodash">lodash</a></code>
+</li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_addanimal">addAnimal(scope, data)</h3>
+<div class="addanimal"><div class="addanimal-page"><p>Inserts an animal into the database via a POST request</p>
+</div><h5 id="methods_addanimal_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="addanimal-page"><p>The scope which this function will act upon.</p>
+</div></td></tr><tr><td>data</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="addanimal-page"><p>The data for the animal to be inserted. This should be a string representation of a JSON object.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_addcomponent">addComponent(scope, data)</h3>
+<div class="addcomponent"><div class="addcomponent-page"><p>Inserts an component into the database via a POST request</p>
+</div><h5 id="methods_addcomponent_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="addcomponent-page"><p>The scope which this function will act upon.</p>
+</div></td></tr><tr><td>data</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="addcomponent-page"><p>The data for the component to be inserted. This should be a string representation of a JSON object.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_addfeed">addFeed(scope, data)</h3>
+<div class="addfeed"><div class="addfeed-page"><p>Inserts an feed into the database via a POST request</p>
+</div><h5 id="methods_addfeed_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="addfeed-page"><p>The scope which this function will act upon.</p>
+</div></td></tr><tr><td>data</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="addfeed-page"><p>The data for the feed to be inserted. This should be a string representation of a JSON object.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_deleteanimal">deleteAnimal(scope, animalId)</h3>
+<div class="deleteanimal"><div class="deleteanimal-page"><p>Deletes an animal in the database via a DELETE request</p>
+</div><h5 id="methods_deleteanimal_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="deleteanimal-page"><p>The scope which this function will act upon.</p>
+</div></td></tr><tr><td>animalId</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="deleteanimal-page"><p>The id associated with the animal to be deleted</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_deletecomponent">deleteComponent(scope, componentId)</h3>
+<div class="deletecomponent"><div class="deletecomponent-page"><p>Deletes an component in the database via a DELETE request</p>
+</div><h5 id="methods_deletecomponent_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="deletecomponent-page"><p>The scope which this function will act upon.</p>
+</div></td></tr><tr><td>componentId</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="deletecomponent-page"><p>The id associated with the component to be deleted</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_deletefeed">deleteFeed(scope, feedId)</h3>
+<div class="deletefeed"><div class="deletefeed-page"><p>Deletes an feed in the database via a DELETE request</p>
+</div><h5 id="methods_deletefeed_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="deletefeed-page"><p>The scope which this function will act upon.</p>
+</div></td></tr><tr><td>feedId</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="deletefeed-page"><p>The id associated with the feed to be deleted</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_getallanimals">getAllAnimals(scope)</h3>
+<div class="getallanimals"><div class="getallanimals-page"><p>Retrieves all animal entries from the database</p>
+</div><h5 id="methods_getallanimals_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getallanimals-page"><p>The scope which this function will act upon.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_getallcomponents">getAllComponents(scope)</h3>
+<div class="getallcomponents"><div class="getallcomponents-page"><p>Retrieves all component entries from the database</p>
+</div><h5 id="methods_getallcomponents_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getallcomponents-page"><p>The scope which this function will act upon.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_getallfeeds">getAllFeeds(scope)</h3>
+<div class="getallfeeds"><div class="getallfeeds-page"><p>Retrieves all feed entries from the database</p>
+</div><h5 id="methods_getallfeeds_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getallfeeds-page"><p>The scope which this function will act upon.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_getanimal">getAnimal(scope, animalId)</h3>
+<div class="getanimal"><div class="getanimal-page"><p>Retrieves a specific animal from the database</p>
+</div><h5 id="methods_getanimal_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getanimal-page"><p>The scope which this function will act upon.</p>
+</div></td></tr><tr><td>animalId</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="getanimal-page"><p>The id associated with the animal to be retrieved</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_getcomponent">getComponent(scope, componentId)</h3>
+<div class="getcomponent"><div class="getcomponent-page"><p>Retrieves a specific component from the database</p>
+</div><h5 id="methods_getcomponent_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getcomponent-page"><p>The scope which this function will act upon.</p>
+</div></td></tr><tr><td>componentId</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="getcomponent-page"><p>The id associated with the component to be retrieved</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_getfeed">getFeed(scope, feedId)</h3>
+<div class="getfeed"><div class="getfeed-page"><p>Retrieves a specific feed from the database</p>
+</div><h5 id="methods_getfeed_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getfeed-page"><p>The scope which this function will act upon.</p>
+</div></td></tr><tr><td>feedId</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="getfeed-page"><p>The id associated with the feed to be retrieved</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_updateanimal">updateAnimal(scope, animalId, data)</h3>
+<div class="updateanimal"><div class="updateanimal-page"><p>Updates an animal in the database. Note that this uses a POST request instead of a PATCH request to keep things simple.</p>
+</div><h5 id="methods_updateanimal_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="updateanimal-page"><p>The scope which this function will act upon.</p>
+</div></td></tr><tr><td>animalId</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="updateanimal-page"><p>The id associated with the animal to be updated</p>
+</div></td></tr><tr><td>data</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="updateanimal-page"><p>The data for the animal to be updated. This should be a string representation of a JSON object.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_updatecomponent">updateComponent(scope, componentId, data)</h3>
+<div class="updatecomponent"><div class="updatecomponent-page"><p>Updates an component in the database. Note that this uses a POST request instead of a PATCH request to keep things simple.</p>
+</div><h5 id="methods_updatecomponent_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="updatecomponent-page"><p>The scope which this function will act upon.</p>
+</div></td></tr><tr><td>componentId</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="updatecomponent-page"><p>The id associated with the component to be updated</p>
+</div></td></tr><tr><td>data</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="updatecomponent-page"><p>The data for the component to be updated. This should be a string representation of a JSON object.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_updatefeed">updateFeed(scope, feedId, data)</h3>
+<div class="updatefeed"><div class="updatefeed-page"><p>Updates an feed in the database. Note that this uses a POST request instead of a PATCH request to keep things simple.</p>
+</div><h5 id="methods_updatefeed_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="updatefeed-page"><p>The scope which this function will act upon.</p>
+</div></td></tr><tr><td>feedId</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="updatefeed-page"><p>The id associated with the feed to be updated</p>
+</div></td></tr><tr><td>data</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="updatefeed-page"><p>The data for the feed to be updated. This should be a string representation of a JSON object.</p>
+</div></td></tr></tbody></table></div>
+</li>
+</ul>
+</div>
+</div>

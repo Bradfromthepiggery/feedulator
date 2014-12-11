@@ -31,11 +31,16 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="bower_components/messenger/build/css/messenger-theme-air.css">
-    <link rel="stylesheet" href="bower_components/messenger/build/css/messenger.css">
-    <link rel="stylesheet" href="theme/app.css">
+    <link rel="stylesheet" href="theme/messenger-theme-air.min.css">
+    <link rel="stylesheet" href="theme/messenger.min.css">
+    <link rel="stylesheet" href="theme/app.min.css">
     <link rel="stylesheet" href="theme/flat-ui/dist/css/flat-ui-pro.min.css">
     <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.min.css">
+
+    <!-- Prefetching -->
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="//cdn.polyfill.io">
+    <link rel="dns-prefetch" href="//ajax.googleapis.com">
 </head>
 
 <body style="margin-bottom: 20px">
@@ -73,61 +78,61 @@
 
 <!-- Core -->
 <script async src="//cdn.polyfill.io/v1/polyfill.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
-<script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/jquery/dist/jquery.min.js"></script>
-<script src="bower_components/jsLPSolver/src/solver.js"></script>
-<script src="bower_components/messenger/build/js/messenger.min.js"></script>
-<script src="bower_components/moment/min/moment.min.js"></script>
-<script src="bower_components/sticky/jquery.sticky.js"></script>
-<script src="theme/flat-ui/dist/js/flat-ui-pro.min.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+<script async src="bower_components/jsLPSolver/src/solver.js"></script>
+<script defer src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"></script>
+<script defer src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script defer src="//cdnjs.cloudflare.com/ajax/libs/messenger/1.4.0/js/messenger.min.js"></script>
+<script defer src="bower_components/sticky/jquery.sticky.js"></script>
+<script defer src="theme/flat-ui/dist/js/flat-ui-pro.min.js"></script>
 
 <!-- Modules -->
-<script src="bower_components/angular-aria/angular-aria.min.js"></script>
-<script src="bower_components/angular-filter/dist/angular-filter.min.js"></script>
-<script src="bower_components/angular-jwt/dist/angular-jwt.min.js"></script>
-<script src="bower_components/angular-moment/angular-moment.min.js"></script>
-<script src="bower_components/angular-slugify/angular-slugify.js"></script>
-<script src="bower_components/angular-storage/dist/angular-storage.min.js"></script>
-<script src="bower_components/angular-touch/angular-touch.min.js"></script>
-<script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
-<script src="bower_components/angular-utils-pagination/dirPagination.js"></script>
-<script src="bower_components/auth0-angular/build/auth0-angular.min.js"></script>
-<script src="bower_components/auth0-lock/build/auth0-lock.min.js"></script>
-<script src="bower_components/masonry/dist/masonry.pkgd.min.js"></script>
-<script src="bower_components/ng-lodash/build/ng-lodash.min.js"></script>
-<script src="bower_components/restangular/dist/restangular.min.js"></script>
-<script src="bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
+<script defer src="//cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.1/angular-filter.min.js"></script>
+<script defer src="//cdnjs.cloudflare.com/ajax/libs/angular-moment/0.8.3/angular-moment.min.js"></script>
+<script defer src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.11/angular-ui-router.min.js"></script>
+<script defer src="//cdnjs.cloudflare.com/ajax/libs/masonry/3.2.1/masonry.pkgd.min.js"></script>
+<script defer src="//cdnjs.cloudflare.com/ajax/libs/restangular/1.4.0/restangular.min.js"></script>
+<script defer src="bower_components/angular-aria/angular-aria.min.js"></script>
+<script defer src="bower_components/angular-jwt/dist/angular-jwt.min.js"></script>
+<script defer src="bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
+<script defer src="bower_components/angular-slugify/angular-slugify.js"></script>
+<script defer src="bower_components/angular-storage/dist/angular-storage.min.js"></script>
+<script defer src="bower_components/angular-touch/angular-touch.min.js"></script>
+<script defer src="bower_components/angular-utils-pagination/dirPagination.js"></script>
+<script defer src="bower_components/auth0-angular/build/auth0-angular.min.js"></script>
+<script defer src="bower_components/auth0-lock/build/auth0-lock.min.js"></script>
+<script defer src="bower_components/ng-lodash/build/ng-lodash.min.js"></script>
 
 <!-- Application Config -->
-<script src="app/app.js"></script>
-<script src="data/nutrientMasterList.json"></script>
-<script src="data/authorizedUsers.json"></script>
+<script async src="data/authorizedUsers.json"></script>
+<script async src="data/nutrientMasterList.json"></script>
+<script defer src="app/app.min.js"></script>
 
 <!-- Common -->
-<script src="app/common/404.js"></script>
-<script src="app/common/api.service.js"></script>
-<script src="app/common/authentication.service.js"></script>
-<script src="app/common/home.js"></script>
-<script src="app/common/login.js"></script>
-<script src="app/common/ui.service.js"></script>
-<script src="app/common/filters.js"></script>
+<script defer src="app/common/404.min.js"></script>
+<script defer src="app/common/api.service.min.js"></script>
+<script defer src="app/common/authentication.service.min.js"></script>
+<script defer src="app/common/home.min.js"></script>
+<script defer src="app/common/login.min.js"></script>
+<script defer src="app/common/ui.service.min.js"></script>
+<script defer src="app/common/filters.min.js"></script>
 
 <!-- Animal -->
-<script src="app/animal/animal-edit.js"></script>
-<script src="app/animal/animal-list.js"></script>
-<script src="app/animal/animal-new.js"></script>
+<script defer src="app/animal/animal-edit.min.js"></script>
+<script defer src="app/animal/animal-list.min.js"></script>
+<script defer src="app/animal/animal-new.min.js"></script>
 
 <!-- Ingredients -->
-<script src="app/component/component-edit.js"></script>
-<script src="app/component/component-list.js"></script>
-<script src="app/component/component-new.js"></script>
+<script defer src="app/component/component-edit.min.js"></script>
+<script defer src="app/component/component-list.min.js"></script>
+<script defer src="app/component/component-new.min.js"></script>
 
 <!-- Mixtures -->
-<script src="app/feed/feed-edit.js"></script>
-<script src="app/feed/feed-list.js"></script>
-<script src="app/feed/feed-new.js"></script>
-<script src="app/feed/feed-view.js"></script>
-<script src="app/feed/feed.service.js"></script>
+<script defer src="app/feed/feed-edit.min.js"></script>
+<script defer src="app/feed/feed-list.min.js"></script>
+<script defer src="app/feed/feed-new.min.js"></script>
+<script defer src="app/feed/feed-view.min.js"></script>
+<script defer src="app/feed/feed.service.min.js"></script>
 
 </html>

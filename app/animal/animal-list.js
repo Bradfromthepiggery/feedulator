@@ -1,3 +1,10 @@
+/*
+* @Author: Lim Mingjie, Kenneth
+* @Date:   2014-12-10 22:09:03
+* @Last Modified by:   Lim Mingjie, Kenneth
+* @Last Modified time: 2014-12-11 01:21:47
+*/
+
 'use strict';
 
 angular.module('app.animal-list', [
@@ -21,7 +28,7 @@ function AnimalListConfig($stateProvider) {
         views: {
             "main": {
                 controller: 'AnimalListCtrl',
-                templateUrl: 'app/animal/animal-list.tpl.html'
+                templateUrl: 'app/animal/animal-list.tpl.min.html'
             }
         },
         data: {

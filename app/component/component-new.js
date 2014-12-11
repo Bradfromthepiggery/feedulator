@@ -1,3 +1,10 @@
+/*
+* @Author: Lim Mingjie, Kenneth
+* @Date:   2014-12-10 22:09:18
+* @Last Modified by:   Lim Mingjie, Kenneth
+* @Last Modified time: 2014-12-11 01:22:14
+*/
+
 'use strict';
 
 angular.module('app.component-new', [
@@ -22,7 +29,7 @@ function ComponentNewConfig($stateProvider) {
         views: {
             "main": {
                 controller: 'ComponentNewCtrl',
-                templateUrl: 'app/component/component-new.tpl.html'
+                templateUrl: 'app/component/component-new.tpl.min.html'
             }
         },
         data: {

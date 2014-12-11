@@ -1,0 +1,56 @@
+<h1><code ng:non-bindable="">FeedUtil</code>
+<div><span class="hint">service in module <code ng:non-bindable="">app.feed-service</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="app-feed-service-feedutil-page"><p>Provides convenience utilities for manipulating feeds</p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="#/api/ngLodash">ngLodash</a></code>
+</li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_addnewcomp">addNewComp(scope)</h3>
+<div class="addnewcomp"><div class="addnewcomp-page"><p>Add an entry to the component selector</p>
+</div><h5 id="methods_addnewcomp_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="addnewcomp-page"><p>The scope which this function will act upon. The function expects this scope to contain the key &quot;formResult&quot;</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_calculate">calculate(scope)</h3>
+<div class="calculate"><div class="calculate-page"><p>Evaluate the total nutrition provided by the components</p>
+</div><h5 id="methods_calculate_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="calculate-page"><p>The scope which this function will act upon. The function expects this scope to contain the key &quot;formResult&quot;</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_nullifycomp">nullifyComp(scope, index)</h3>
+<div class="nullifycomp"><div class="nullifycomp-page"><p>Nullifies an entry from the component array</p>
+</div><h5 id="methods_nullifycomp_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="nullifycomp-page"><p>The scope which this function will act upon. The function expects this scope to contain the key &quot;formResult&quot;</p>
+</div></td></tr><tr><td>index</td><td><a href="" class="label type-hint type-hint-number">Number</a></td><td><div class="nullifycomp-page"><p>The index value of the array to nullify</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_optfeed">optFeed(scope)</h3>
+<div class="optfeed"><div class="optfeed-page"><p>Optimize the feed based on constraints provided by the user</p>
+</div><h5 id="methods_optfeed_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="optfeed-page"><p>The scope which this function will act upon. The function expects this scope to contain the key &quot;formResult&quot;</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_removecomp">removeComp(scope, index)</h3>
+<div class="removecomp"><div class="removecomp-page"><p>Removes an entry from the component selector</p>
+</div><h5 id="methods_removecomp_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="removecomp-page"><p>The scope which this function will act upon. The function expects this scope to contain the key &quot;formResult&quot;</p>
+</div></td></tr><tr><td>index</td><td><a href="" class="label type-hint type-hint-number">Number</a></td><td><div class="removecomp-page"><p>The index value of the array to remove</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_resetcomps">resetComps(scope)</h3>
+<div class="resetcomps"><div class="resetcomps-page"><p>Reset all fields in the component selector to 0</p>
+</div><h5 id="methods_resetcomps_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="resetcomps-page"><p>The scope which this function will act upon. The function expects this scope to contain the key &quot;formResult&quot;</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_updatecomp">updateComp(scope, index, value)</h3>
+<div class="updatecomp"><div class="updatecomp-page"><p>Update an entry in the component selector. This is called when
+the watcher for the Select2 combobox triggers a change event</p>
+</div><h5 id="methods_updatecomp_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="updatecomp-page"><p>The scope which this function will act upon. The function expects this scope to contain the key &quot;formResult&quot;</p>
+</div></td></tr><tr><td>index</td><td><a href="" class="label type-hint type-hint-number">Number</a></td><td><div class="updatecomp-page"><p>The index value of the array to update</p>
+</div></td></tr><tr><td>value</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="updatecomp-page"><p>The data to be updated into the array</p>
+</div></td></tr></tbody></table></div>
+</li>
+</ul>
+</div>
+</div>

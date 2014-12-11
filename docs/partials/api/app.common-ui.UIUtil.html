@@ -1,0 +1,55 @@
+<h1><code ng:non-bindable="">UIUtil</code>
+<div><span class="hint">service in module <code ng:non-bindable="">app.common-ui</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="app-common-ui-uiutil-page"><p>Provides convenience functions for manipulating the user interface</p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="#/api/ng.$timeout">$timeout</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="#/api/aiStorage">aiStorage</a></code>
+</li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_getlocalform">getLocalForm(key)</h3>
+<div class="getlocalform"><div class="getlocalform-page"><p>Retrieves the data for a form from local storage.</p>
+</div><h5 id="methods_getlocalform_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>key</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="getlocalform-page"><p>The key to be retrieved from localStorage.</p>
+</div></td></tr></tbody></table><h5 id="methods_getlocalform_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="getlocalform-page"><p>A string representation of the JSON object retrieved from storage.</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_initcheckbox">initCheckbox()</h3>
+<div class="initcheckbox"><div class="initcheckbox-page"><p>Initializes the Flat-UI checkboxes for all checkbox elements on-screen</p>
+</div></div>
+</li>
+<li><h3 id="methods_initradiobox">initRadiobox()</h3>
+<div class="initradiobox"><div class="initradiobox-page"><p>Initializes the Flat-UI radioboxes for all radiobox elements on-screen.</p>
+</div></div>
+</li>
+<li><h3 id="methods_makesticky">makeSticky(elemId)</h3>
+<div class="makesticky"><div class="makesticky-page"><p>Calls jQuery Sticky to set <code>position: fixed</code> on the specified element.</p>
+</div><h5 id="methods_makesticky_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>elemId</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="makesticky-page"><p>The DOM selector for the element to be made sticky.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_masonryinit">masonryInit(elemId)</h3>
+<div class="masonryinit"><div class="masonryinit-page"><p>Initializes the Masonry layout manager on the element specified.</p>
+</div><h5 id="methods_masonryinit_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>elemId</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="masonryinit-page"><p>The DOM selector for the element to be laid out.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_masonryinit">masonryInit(elemId)</h3>
+<div class="masonryinit"><div class="masonryinit-page"><p>Updates the Masonry layout associated with the specified element. This does two things.
+First, it reloads all items which are currently on-screen, then queues a re-layout
+on Angular&#39;s $digest loop to actually perform the rearrangement.</p>
+</div><h5 id="methods_masonryinit_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>elemId</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="masonryinit-page"><p>The DOM selector for the element to be laid out.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_savelocalform">saveLocalForm(key, value)</h3>
+<div class="savelocalform"><div class="savelocalform-page"><p>Stores the data for a form in local storage on browsers that support it.</p>
+</div><h5 id="methods_savelocalform_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>key</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="savelocalform-page"><p>The key to be inserted into localStorage.</p>
+</div></td></tr><tr><td>value</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="savelocalform-page"><p>The value to be inserted into localStorage.</p>
+</div></td></tr></tbody></table></div>
+</li>
+</ul>
+</div>
+</div>

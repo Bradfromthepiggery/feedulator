@@ -2,7 +2,7 @@
  * @Author: Lim Mingjie, Kenneth
  * @Date:   2014-12-03 01:15:05
  * @Last Modified by:   Lim Mingjie, Kenneth
- * @Last Modified time: 2014-12-05 14:39:00
+ * @Last Modified time: 2014-12-11 02:04:45
  */
 
 'use strict';
@@ -41,6 +41,44 @@ var appDependencies = [
     'ui.router'
 ]
 
+/**
+ * @ngdoc  overview
+ * @name  app
+ * @requires  angular-jwt
+ * @requires  angular-loading-bar
+ * @requires  angular-storage
+ * @requires  angular.filter
+ * @requires  angularMoment
+ * @requires  angularUtils.directives.dirPagination
+ * @requires  app.animal-edit
+ * @requires  app.animal-list
+ * @requires  app.animal-new
+ * @requires  app.common-api
+ * @requires  app.common-auth
+ * @requires  app.common-error
+ * @requires  app.common-filters
+ * @requires  app.common-home
+ * @requires  app.common-login
+ * @requires  app.common-ui
+ * @requires  app.component-edit
+ * @requires  app.component-list
+ * @requires  app.component-new
+ * @requires  app.feed-edit
+ * @requires  app.feed-list
+ * @requires  app.feed-new
+ * @requires  app.feed-service
+ * @requires  app.feed-view
+ * @requires  auth0
+ * @requires  ngAria
+ * @requires  ngLodash
+ * @requires  ngTouch
+ * @requires  restangular
+ * @requires  slugifier
+ * @requires  ui.route
+ *
+ * @description
+ * The Feedulator Main Application
+ */
 angular.module('app', appDependencies)
     .config(AppConfig)
     .controller('AppCtrl', AppController)

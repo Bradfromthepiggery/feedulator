@@ -2,7 +2,7 @@
  * @Author: Lim Mingjie, Kenneth
  * @Date:   2014-12-03 01:16:25
  * @Last Modified by:   Lim Mingjie, Kenneth
- * @Last Modified time: 2014-12-05 08:50:14
+ * @Last Modified time: 2014-12-11 02:04:31
  */
 
 'use strict';
@@ -21,7 +21,7 @@ angular.module('app.feed-edit', [
             views: {
                 "main": {
                     controller: 'FeedEditCtrl',
-                    templateUrl: 'app/feed/feed-new.tpl.html'
+                    templateUrl: 'app/feed/feed-new.tpl.min.html'
                 }
             },
             data: {

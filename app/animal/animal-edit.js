@@ -2,7 +2,7 @@
  * @Author: Lim Mingjie, Kenneth
  * @Date:   2014-12-03 01:41:47
  * @Last Modified by:   Lim Mingjie, Kenneth
- * @Last Modified time: 2014-12-03 01:49:29
+ * @Last Modified time: 2014-12-11 01:21:13
  */
 
 'use strict';
@@ -25,7 +25,7 @@ function AnimalEditConfig($stateProvider) {
         views: {
             "main": {
                 controller: 'AnimalEditCtrl',
-                templateUrl: 'app/animal/animal-new.tpl.html'
+                templateUrl: 'app/animal/animal-new.tpl.min.html'
             }
         },
         data: {

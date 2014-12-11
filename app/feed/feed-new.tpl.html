@@ -1,333 +1,279 @@
 <div class="row">
-    <aside class="col-lg-3">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h2 class="panel-title component-panel-title">
-                    {{formResult.name || "New Feed" | truncate: 30: '&hellip;' | ucfirst}}
-                </h2>
-            </div>
-            <div class="panel-body" ng-if="!formResult.hasOwnProperty('nutritionData') || formResult.nutritionData === null">
-                <p ng-if="formResult.batchId">
-                    <small>Batch ID: {{formResult.batchId}}</small>
-                </p>
-                <p ng-if="formResult.description">{{formResult.description}}</p>
-                <span ng-if="!formResult.hasOwnProperty('nutritionData') || formResult.nutritionData === null"><small>This panel will update with information as soon as you select a component.</small></span>
-            </div>
-            <table class="table table-condensed table-hover table-responsive table-striped" ng-if="formResult.compData.length > 0 && formResult.compData[0]._id !== null">
-                <thead>
-                    <tr>
-                        <th>Component</th>
-                        <th>Qty.
-                            <br/>(<span ng-if="!formResult.hasOwnProperty('weight') || formResult.weight === 0 || formResult.weight === null">%</span><span ng-if="formResult.hasOwnProperty('weight') && formResult.weight !== 0 && formResult.weight !== null">lb</span>)</th>
-                        <th>Cost
-                            <br/>(lb)</th>
-                        <th ng-if="formResult.hasOwnProperty('weight') && formResult.weight !== 0 && formResult.weight !== null">Total Cost</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="comp in formResult.compData">
-                        <td style="width: 50%">{{comp.name | ucfirst}}</td>
-                        <td ng-if="!formResult.hasOwnProperty('weight')  || formResult.weight === 0 || formResult.weight === null">{{comp.value | precision: 3}}</td>
-                        <td ng-if="formResult.hasOwnProperty('weight') && formResult.weight !== 0 && formResult.weight !== null">{{comp.value * 0.01 * formResult.weight | precision: 3}}</td>
-                        <td>{{comp.cost | currency}}</td>
-                        <td ng-if="formResult.hasOwnProperty('weight') && formResult.weight !== 0 && formResult.weight !== null" style="max-width: 25%">{{comp.value * 0.01 * formResult.weight * comp.cost | currency}}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="panel-footer" ng-if="formResult.weight" style="font-size: 14px">
-                Total Feed Cost: {{feedCost | currency}}
-            </div>
-        </div>
-        <div class="panel panel-primary" id="nutritionPanel" ng-if="formResult.nutritionData" ng-init="makeSticky('#nutritionPanel')">
-            <div class="panel-heading">
-                <h2 class="panel-title" style="font-size: 16px">
-                    Nutrition Breakdown
-                </h2>
-            </div>
-            <table class="table table-condensed table-hover table-striped table-responsive">
-                <thead>
-                    <tr>
-                        <th>Nutrition</th>
-                        <th>Qty.
-                            <br/>(%&nbsp;DM)</th>
-                        <th ng-if="formResult.refAnimal">Ref.
-                            <br/>(%&nbsp;DM)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="data in formResult.nutritionData | toArray: true" ng-class="{ danger: formResult.refAnimal.nutrients[data.$key].value > data.value, success: formResult.refAnimal.nutrients[data.$key].value <= data.value}">
-                        <td style="width: 50%">{{data.name | ucfirst}}</td>
-                        <td>{{data.value | precision: 3}}</td>
-                        <td ng-if="formResult.refAnimal">{{formResult.refAnimal.nutrients[data.$key].value | precision: 3 | defaults: 0}}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="panel-footer" style="font-size: 14px" ng-if="animalData.length > 0">
-                <select id="animalSelect" ng-model="formResult.refAnimal" ng-options="animal.name for animal in animalData track by animal._id" class="form-control">
-                    <option value="">Compare to Animal</option>
-                </select>
-            </div>
-        </div>
-    </aside>
-    <section class="col-lg-9">
-        <form role="form" ng-submit="submit()" novalidate>
-            <div class="panel-group" id="formAccordion" role="tablist" aria-multiselectable="true" style="margin-bottom: 8px">
-                <div class="panel panel-default" ng-if="!('feed-view' | isState)">
-                    <div class="panel-heading panel-link" role="tab" data-toggle="collapse" data-parent="#formAccordion" data-target="#feedComponents">
-                        1. Feed Components<span class="pull-right"><span class="label label-warning" ng-if="!formResult.nutritionData">Incomplete</span> <span class="label label-danger">Required</span></span>
+  <aside class="col-lg-3">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h2 class="panel-title component-panel-title"> {{formResult.name || "New Feed" | truncate: 30: '&hellip;' | ucfirst}}</h2>
+      </div>
+      <div class="panel-body" ng-if="!formResult.hasOwnProperty('nutritionData') || formResult.nutritionData === null">
+        <p ng-if="formResult.batchId"> <small>Batch ID: {{formResult.batchId}}</small>
+        </p>
+        <p ng-if="formResult.description">{{formResult.description}}</p> <span ng-if="!formResult.hasOwnProperty('nutritionData') || formResult.nutritionData === null"><small>This panel will update with information as soon as you select a component.</small></span>
+      </div>
+      <table class="table table-condensed table-hover table-responsive table-striped" ng-if="formResult.compData.length> 0 && formResult.compData[0]._id !== null">
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Qty.
+              <br/>(<span ng-if="!formResult.hasOwnProperty('weight') || formResult.weight === 0 || formResult.weight === null">%</span><span ng-if="formResult.hasOwnProperty('weight') && formResult.weight !== 0 && formResult.weight !== null">lb</span>)</th>
+            <th>Cost
+              <br/>(lb)</th>
+            <th ng-if="formResult.hasOwnProperty('weight') && formResult.weight !== 0 && formResult.weight !== null">Total Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="comp in formResult.compData">
+            <td style="width: 50%">{{comp.name | ucfirst}}</td>
+            <td ng-if="!formResult.hasOwnProperty('weight')  || formResult.weight === 0 || formResult.weight === null">{{comp.value | precision: 3}}</td>
+            <td ng-if="formResult.hasOwnProperty('weight') && formResult.weight !== 0 && formResult.weight !== null">{{comp.value * 0.01 * formResult.weight | precision: 3}}</td>
+            <td>{{comp.cost | currency}}</td>
+            <td ng-if="formResult.hasOwnProperty('weight') && formResult.weight !== 0 && formResult.weight !== null" style="max-width: 25%">{{comp.value * 0.01 * formResult.weight * comp.cost | currency}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="panel-footer" ng-if="formResult.weight" style="font-size: 14px"> Total Feed Cost: {{feedCost | currency}}</div>
+    </div>
+    <div class="panel panel-primary" id="nutritionPanel" ng-if="formResult.nutritionData" ng-init="makeSticky('#nutritionPanel')">
+      <div class="panel-heading">
+        <h2 class="panel-title" style="font-size: 16px"> Nutrition Breakdown</h2>
+      </div>
+      <table class="table table-condensed table-hover table-striped table-responsive">
+        <thead>
+          <tr>
+            <th>Nutrition</th>
+            <th>Qty.
+              <br/>(%&nbsp;DM)</th>
+            <th ng-if="formResult.refAnimal">Ref.
+              <br/>(%&nbsp;DM)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="data in formResult.nutritionData | toArray: true" ng-class="{ danger: formResult.refAnimal.nutrients[data.$key].value> data.value, success: formResult.refAnimal.nutrients[data.$key].value<=data.value}">
+            <td style="width: 50%">{{data.name | ucfirst}}</td>
+            <td>{{data.value | precision: 3}}</td>
+            <td ng-if="formResult.refAnimal">{{formResult.refAnimal.nutrients[data.$key].value | precision: 3 | defaults: 0}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="panel-footer" style="font-size: 14px" ng-if="animalData.length> 0">
+        <select id="animalSelect" ng-model="formResult.refAnimal" ng-options="animal.name for animal in animalData track by animal._id" class="form-control">
+          <option value="">Compare to Animal</option>
+        </select>
+      </div>
+    </div>
+  </aside>
+  <section class="col-lg-9">
+    <form role="form" ng-submit="submit()" novalidate>
+      <div class="panel-group" id="formAccordion" role="tablist" aria-multiselectable="true" style="margin-bottom: 8px">
+        <div class="panel panel-default" ng-if="!('feed-view' | isState)">
+          <div class="panel-heading panel-link" role="tab" data-toggle="collapse" data-parent="#formAccordion" data-target="#feedComponents"> 1. Feed Components<span class="pull-right"><span class="label label-warning" ng-if="!formResult.nutritionData">Incomplete</span> <span class="label label-danger">Required</span></span>
+          </div>
+          <div id="feedComponents" class="panel-collapse collapse in" role="tabpanel">
+            <table class="table table-condensed">
+              <thead>
+                <tr>
+                  <th>Component</th>
+                  <th>Quantity (%)</th>
+                  <th>Cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="comp in formResult.compData">
+                  <td>
+                    <div class="form-group">
+                      <select multiple id="{{'select' + $index}}" ng-model="comp._id" ng-options="data.name for data in compData track by data._id" class="form-control multiselect multiselect-inverse" ui-select="{{$index}}" autofocus="autofocus">
+                        <option ng-if="false" value="">Choose Component</option>
+                      </select> <span ng-if="$first" class="help-block">Start typing to search for a component.</span>
                     </div>
-                    <div id="feedComponents" class="panel-collapse collapse in" role="tabpanel">
-                        <table class="table table-condensed">
-                            <thead>
-                                <tr>
-                                    <th>Component</th>
-                                    <th>Quantity (%)</th>
-                                    <th>Cost</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="comp in formResult.compData">
-                                    <td>
-                                        <div class="form-group">
-                                            <select multiple id="{{'select' + $index}}" ng-model="comp._id" ng-options="data.name for data in compData track by data._id"  class="form-control multiselect multiselect-inverse" ui-select="{{$index}}" autofocus="autofocus">
-                                                <option ng-if="false" value="">Choose Component</option>
-                                            </select>
-                                            <span ng-if="$first" class="help-block">Start typing to search for a component.</span>
-                                        </div>
-                                    </td>
-                                    <td style="width: 40%">
-                                        <div class="input-group">
-                                            <input class="form-control" ng-model="comp.min" type="number" min="0" max="100" placeholder="Min" ng-change="calculate()" step="0.01" />
-                                            <span class="input-group-addon">&le;</span>
-                                            <input class="form-control" ng-disabled="$first" ng-model="comp.value" type="number" min="0" max="100" ng-change="calculate()" step="0.01" />
-                                            <span class="input-group-addon">&le;</span>
-                                            <input class="form-control" ng-model="comp.max" type="number" min="0" max="100" placeholder="Max" ng-change="calculate()" step="0.01" />
-                                        </div>
-                                        <span ng-if="$first" class="help-block">This is your main component. It's value will change automatically, ensuring that your feed components always sum to 100%</span>
-                                    </td>
-                                    <td style="width: 20%">
-                                        <div class="input-group">
-                                            <span class="input-group-addon">$</span>
-                                            <input class="form-control" ng-model="comp.cost" type="number" min="0" step="0.01" ng-change="calculate()" />
-                                            <span class="input-group-addon">/
-                                                <abbr>lb</abbr>
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger" ng-disabled="formResult.compData.length < 2" ng-click="removeComp($index)">
-                                            <span aria-hidden="true">&times;</span>
-                                            <span class="sr-only">Close</span>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <button type="button" class="btn btn-info" ng-disabled="compCount == formResult.compData.length || formResult.compData.length >= nutrientList.length + 1 || !formResult.hasOwnProperty('nutritionData') || formResult.nutritionData === null" ng-click="addNewComp()">Add Component</button>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger pull-right" ng-hide="formResult.compData.length < 2" ng-click="resetComps()">Reset</button>
-                                    </td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                  </td>
+                  <td style="width: 40%">
+                    <div class="input-group">
+                      <input class="form-control" ng-model="comp.min" type="number" min="0" max="100" placeholder="Min" ng-change="calculate()" step="0.01" /> <span class="input-group-addon">&le;</span>
+                      <input class="form-control" ng-disabled="$first" ng-model="comp.value" type="number" min="0" max="100" ng-change="calculate()" step="0.01" /> <span class="input-group-addon">&le;</span>
+                      <input class="form-control" ng-model="comp.max" type="number" min="0" max="100" placeholder="Max" ng-change="calculate()" step="0.01" />
+                    </div> <span ng-if="$first" class="help-block">This is your main component. It's value will change automatically, ensuring that your feed components always sum to 100%</span>
+                  </td>
+                  <td style="width: 20%">
+                    <div class="input-group"> <span class="input-group-addon">$</span>
+                      <input class="form-control" ng-model="comp.cost" type="number" min="0" step="0.01" ng-change="calculate()" /> <span class="input-group-addon">/ <abbr>lb</abbr></span>
                     </div>
-                </div>
-
-                <div class="panel panel-default" ng-if="formResult.nutritionData">
-                    <div class="panel-heading panel-link" role="tab" data-toggle="collapse" data-parent="#formAccordion" data-target="#feedWeight">
-                        {{('feed-view' | isState) ? '1' : '2'}}. Feed Weight Conversion<span class="label label-info pull-right" ng-hide="{{'feed-view' | isState}}">Optional</span>
-                    </div>
-                    <div id="feedWeight" class="panel-collapse collapse" ng-class="{ 'in': ('feed-view' | isState) }" role="tabpanel">
-                        <div class="panel-body">
-                            <div class="form-group" ng-if="formResult.compData.length > 0">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <input id="feedWeight" class="form-control" type="number" min="0" step="0.1" ng-model="formResult.weight" ng-change="calculate()" ng-init="formResult.weight=0" />
-                                        <span class="input-group-addon">lb</span>
-                                    </div>
-                                    <span class="help-block">Provide a desired feed weight to view all component quantities in pounds. Leaving this as 0 will show component quantities as a percentage of total feed weight.</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel panel-default" ng-if="formResult.nutritionData && formResult.compData.length > 1 && !('feed-view' | isState)">
-                    <div class="panel-heading panel-link" role="tab" data-toggle="collapse" data-parent="#formAccordion" data-target="#optimize">
-                        3. Minimize Feed Costs<span class="label label-info pull-right">Optional</span>
-                    </div>
-                    <div id="optimize" class="panel-collapse collapse" role="tabpanel">
-                        <div class="panel-body">
-                            The feed components you've added above provide the following nutritional content. If you provide the minimum and maximum quantities for any items below, we'll help you calculate the component quantities you can use to meet those requirements with the lowest possible cost. Otherwise, leave them blank.
-                        </div>
-                        <table class="table table-condensed table-responsive">
-                            <thead>
-                                <tr>
-                                    <th>Nutrition</th>
-                                    <th>Quantity (% DM)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="data in formResult.nutritionData | toArray: true">
-                                    <td>{{data.name | ucfirst}}</td>
-                                    <td style="width: 80%">
-                                        <div class="input-group" ng-class="{'has-error': (formResult.optData[data.$key] && isUndefined(formResult.optData[data.$key].min)) }">
-                                            <input class="form-control" ng-model="formResult.optData[data.$key].min" type="number" min="0" step="0.01" max="{{maxAchievableNutrients[data.$key]}}" placeholder="Min" />
-                                            <span class="input-group-addon">&le;</span>
-                                            <input class="form-control" disabled type="number" min="0" step="0.01" value="{{data.value | precision: 3}}" />
-                                            <span class="input-group-addon">&le;</span>
-                                            <input class="form-control" ng-model="formResult.optData[data.$key].max" type="number" min="0" placeholder="Max" step="0.01" max="100" />
-                                        </div>
-                                        <span class="help-block">The minimum quantity for this item cannot exceed {{maxAchievableNutrients[data.$key]}}</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary" ng-click="optFeed()">Calculate Feed Proportions</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel panel-default" ng-if="formResult.nutritionData">
-                <div class="panel-heading panel-link" role="tab" data-toggle="collapse" data-target="#feedMeta">
-                    {{('feed-view' | isState) ? 2 : (formResult.compData.length > 1 ? '4' : '3')}}. About This Feed<span class="pull-right"><span class="label label-warning" ng-if="!formResult.name">Incomplete</span> <span class="label label-danger" ng-if="!('feed-view' | isState)">Required</span></span>
-                </div>
-                <div id="feedMeta" class="panel-collapse collapse in" role="tabpanel">
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <label for="feedName" class="control-label" ng-class="{'text-muted': ('feed-edit' | isState) || ('feed-view' | isState)}">Feed Name</label>
-                            <input id="feedName" ng-hide="{{('feed-edit' | isState) || ('feed-view' | isState)}}" class="form-control" type="text" ng-model="formResult.name" required />
-                            <p class="form-control-static" ng-hide="{{'feed-new' | isState}}">{{formResult.name | ucfirst}}</p>
-                            <span class="help-block" ng-hide="{{('feed-edit' | isState) || ('feed-view' | isState)}}">You <b>have</b> to fill this in. This shows up in the list of feeds, so keep it short but descriptive.</span>
-                        </div>
-
-                        <div class="form-group" ng-hide="{{('feed-view' | isState) && !formResult.batchId}}">
-                            <label for="animalBatchId" class="control-label" ng-class="{'text-muted': ('feed-view' | isState)}">Animal Batch ID</label>
-                            <input id="animalBatchId" class="form-control" type="text" ng-model="formResult.batchId" ng-hide="{{'feed-view' | isState}}" />
-                            <p class="form-control-static" ng-if="('feed-view' | isState)">{{formResult.batchId}}</p>
-                            <span class="help-block" ng-if="!('feed-view' | isState)">You can leave this blank. If you're creating this feed for a certain batch of animals, use this field to keep track of their identification codes.</span>
-                        </div>
-
-                        <div class="form-group" ng-hide="{{('feed-view' | isState) && !formResult.description}}">
-                            <label for="feedDescription" class="control-label" ng-class="{'text-muted': ('feed-view' | isState)}">Description</label>
-                            <textarea id="feedDescription" class="form-control" ng-model="formResult.description" rows="5" ng-hide="{{'feed-view' | isState}}"></textarea>
-                            <p class="form-control-static" ng-if="('feed-view' | isState)">{{formResult.description}}</p>
-                            <span class="help-block" ng-if="!('feed-view' | isState)">You can leave this blank. Use this space to store any additional information or comments about this feed.</span>
-                        </div>
-
-                        <div class="form-group" ng-init="initRadio();" ng-if="!('feed-view' | isState) && isPrivilegedUser()">
-                            <label class="control-label">Can anyone else see this feed?</label>
-                            <label class="radio">
-                                <input type="radio" ng-model="formResult.isPrivate" data-toggle="radio" name="privacySelector" id="publicRadio" ng-value="false"><b>Public: </b> Everyone can see this, but only you can make changes.
-                            </label>
-                            <label class="radio">
-                                <input type="radio" ng-model="formResult.isPrivate" data-toggle="radio" name="privacySelector" id="privateRadio" ng-value="true" checked><b>Private: </b> Only you can see this, and only you can make changes.
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div ng-if="formResult.nutritionData && !('feed-view' | isState)">
-                <div ng-if="isLoggedIn()">
-                    <span class="help-block" ng-if="!formResult.name">You have to provide a feed name before saving this feed.</span>
-                    <button type="submit" class="btn btn-primary btn-large" ng-disabled="!formResult.name">
-                        <span class="fui-check"></span>&nbsp;Save Feed Mixture
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-danger" ng-disabled="formResult.compData.length < 2" ng-click="removeComp($index)"> <span aria-hidden="true">&times;</span> <span class="sr-only">Close</span>
                     </button>
-                    <button type="reset" class="btn btn-danger btn-large pull-right" ui-sref="feed-list">
-                        <span class="fui-cross"></span>&nbsp;Cancel
-                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <button type="button" class="btn btn-info" ng-disabled="compCount==formResult.compData.length || formResult.compData.length>= nutrientList.length + 1 || !formResult.hasOwnProperty('nutritionData') || formResult.nutritionData === null"
+                    ng-click="addNewComp()">Add Component</button>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-danger pull-right" ng-hide="formResult.compData.length < 2" ng-click="resetComps()">Reset</button>
+                  </td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="panel panel-default" ng-if="formResult.nutritionData">
+          <div class="panel-heading panel-link" role="tab" data-toggle="collapse" data-parent="#formAccordion" data-target="#feedWeight"> {{('feed-view' | isState) ? '1' : '2'}}. Feed Weight Conversion<span class="label label-info pull-right" ng-hide="{{'feed-view' | isState}}">Optional</span>
+          </div>
+          <div id="feedWeight" class="panel-collapse collapse" ng-class="{ 'in': ('feed-view' | isState) }" role="tabpanel">
+            <div class="panel-body">
+              <div class="form-group" ng-if="formResult.compData.length> 0">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input id="feedWeight" class="form-control" type="number" min="0" step="0.1" ng-model="formResult.weight" ng-change="calculate()" ng-init="formResult.weight=0" /> <span class="input-group-addon">lb</span>
+                  </div> <span class="help-block">Provide a desired feed weight to view all component quantities in pounds. Leaving this as 0 will show component quantities as a percentage of total feed weight.</span>
                 </div>
-                <div ng-if="!isLoggedIn()">
-                    <span class="help-block">You need to sign in to save this feed.</span>
-                </div>
+              </div>
             </div>
-
-            <div ng-if="('feed-view' | isState)">
-                <button class="btn btn-primary btn-large" ng-click="genExportData()" data-target="#shareModal" data-backdrop="static" data-toggle="modal">
-                    <span class="fui-export"></span>&nbsp;Share
-                </button>
+          </div>
+        </div>
+        <div class="panel panel-default" ng-if="formResult.nutritionData && formResult.compData.length> 1 && !('feed-view' | isState)">
+          <div class="panel-heading panel-link" role="tab" data-toggle="collapse" data-parent="#formAccordion" data-target="#optimize"> 3. Minimize Feed Costs<span class="label label-info pull-right">Optional</span>
+          </div>
+          <div id="optimize" class="panel-collapse collapse" role="tabpanel">
+            <div class="panel-body"> The feed components you've added above provide the following nutritional content. If you provide the minimum and maximum quantities for any items below, we'll help you calculate the component quantities you can use to meet those requirements
+              with the lowest possible cost. Otherwise, leave them blank.</div>
+            <table class="table table-condensed table-responsive">
+              <thead>
+                <tr>
+                  <th>Nutrition</th>
+                  <th>Quantity (% DM)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="data in formResult.nutritionData | toArray: true">
+                  <td>{{data.name | ucfirst}}</td>
+                  <td style="width: 80%">
+                    <div class="input-group" ng-class="{'has-error': (formResult.optData[data.$key] && isUndefined(formResult.optData[data.$key].min)) }">
+                      <input class="form-control" ng-model="formResult.optData[data.$key].min" type="number" min="0" step="0.01" max="{{maxAchievableNutrients[data.$key]}}" placeholder="Min" /> <span class="input-group-addon">&le;</span>
+                      <input class="form-control" disabled type="number" min="0" step="0.01" value="{{data.value | precision: 3}}" /> <span class="input-group-addon">&le;</span>
+                      <input class="form-control" ng-model="formResult.optData[data.$key].max" type="number" min="0" placeholder="Max" step="0.01" max="100" />
+                    </div> <span class="help-block">The minimum quantity for this item cannot exceed {{maxAchievableNutrients[data.$key]}}</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>
+                    <button type="button" class="btn btn-primary" ng-click="optFeed()">Calculate Feed Proportions</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default" ng-if="formResult.nutritionData">
+        <div class="panel-heading panel-link" role="tab" data-toggle="collapse" data-target="#feedMeta"> {{('feed-view' | isState) ? 2 : (formResult.compData.length > 1 ? '4' : '3')}}. About This Feed<span class="pull-right"><span class="label label-warning" ng-if="!formResult.name">Incomplete</span> <span class="label label-danger" ng-if="!('feed-view' | isState)">Required</span></span>
+        </div>
+        <div id="feedMeta" class="panel-collapse collapse in" role="tabpanel">
+          <div class="panel-body">
+            <div class="form-group">
+              <label for="feedName" class="control-label" ng-class="{'text-muted': ('feed-edit' | isState) || ('feed-view' | isState)}">Feed Name</label>
+              <input id="feedName" ng-hide="{{('feed-edit' | isState) || ('feed-view' | isState)}}" class="form-control" type="text" ng-model="formResult.name" required />
+              <p class="form-control-static" ng-hide="{{'feed-new' | isState}}">{{formResult.name | ucfirst}}</p> <span class="help-block" ng-hide="{{('feed-edit' | isState) || ('feed-view' | isState)}}">You <b>have</b> to fill this in. This shows up in the list of feeds, so keep it short but descriptive.</span>
             </div>
-        </form>
-    </section>
+            <div class="form-group" ng-hide="{{('feed-view' | isState) && !formResult.batchId}}">
+              <label for="animalBatchId" class="control-label" ng-class="{'text-muted': ('feed-view' | isState)}">Animal Batch ID</label>
+              <input id="animalBatchId" class="form-control" type="text" ng-model="formResult.batchId" ng-hide="{{'feed-view' | isState}}" />
+              <p class="form-control-static" ng-if="('feed-view' | isState)">{{formResult.batchId}}</p> <span class="help-block" ng-if="!('feed-view' | isState)">You can leave this blank. If you're creating this feed for a certain batch of animals, use this field to keep track of their identification codes.</span>
+            </div>
+            <div class="form-group" ng-hide="{{('feed-view' | isState) && !formResult.description}}">
+              <label for="feedDescription" class="control-label" ng-class="{'text-muted': ('feed-view' | isState)}">Description</label>
+              <textarea id="feedDescription" class="form-control" ng-model="formResult.description" rows="5" ng-hide="{{'feed-view' | isState}}"></textarea>
+              <p class="form-control-static" ng-if="('feed-view' | isState)">{{formResult.description}}</p> <span class="help-block" ng-if="!('feed-view' | isState)">You can leave this blank. Use this space to store any additional information or comments about this feed.</span>
+            </div>
+            <div class="form-group" ng-init="initRadio();" ng-if="!('feed-view' | isState) && isPrivilegedUser()">
+              <label class="control-label">Can anyone else see this feed?</label>
+              <label class="radio">
+                <input type="radio" ng-model="formResult.isPrivate" data-toggle="radio" name="privacySelector" id="publicRadio" ng-value="false"><b>Public:</b> Everyone can see this, but only you can make changes.</label>
+              <label class="radio">
+                <input type="radio" ng-model="formResult.isPrivate" data-toggle="radio" name="privacySelector" id="privateRadio" ng-value="true" checked><b>Private:</b> Only you can see this, and only you can make changes.</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ng-if="formResult.nutritionData && !('feed-view' | isState)">
+        <div ng-if="isLoggedIn()"> <span class="help-block" ng-if="!formResult.name">You have to provide a feed name before saving this feed.</span>
+          <button type="submit" class="btn btn-primary btn-large" ng-disabled="!formResult.name"><span class="fui-check"></span> &nbsp;Save Feed Mixture</button>
+          <button type="reset" class="btn btn-danger btn-large pull-right" ui-sref="feed-list"><span class="fui-cross"></span> &nbsp;Cancel</button>
+        </div>
+        <div ng-if="!isLoggedIn()"> <span class="help-block">You need to sign in to save this feed.</span>
+        </div>
+      </div>
+      <div ng-if="('feed-view' | isState)">
+        <button class="btn btn-primary btn-large" ng-click="genExportData()" data-target="#shareModal" data-backdrop="static" data-toggle="modal"><span class="fui-export"></span> &nbsp;Share</button>
+      </div>
+    </form>
+  </section>
 </div>
-
 <div class="modal fade" id="optResultModal" tabindex="-1" role="dialog" aria-hidden="true" ng-if="!('feed-view' | isState)">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="fui-cross"></span><span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title">Calculation Results</h4>
-            </div>
-            <div class="modal-body">
-                <div ng-if="results.feasible === false">
-                    <p>We weren't able to find a set of quantities that meets all your requirements. This normally happens when you specify minimum and maximum values that cannot be satisfied using any combination of the components you've selected.</p>
-                    <p>To fix this, you can add or remove components in Step 1 above, or change the minimum and maximum values specified in Step 3. </p>
-                </div>
-                <div ng-if="results.feasible">
-                    <p>Success! We've found a set of quantities that meets all your requirements.</p>
-                    <p>Your total feed cost per pound is: {{results.result * 0.01 | currency}}</p>
-                    <p>Your feed mixture will be automatically updated with these values once you close this window.</p>
-                </div>
-            </div>
-            <table class="table table-condensed table-hover table-responsive table-striped" ng-if="results.feasible">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Component</th>
-                        <th>Qty. (%)</th>
-                        <th>Cost (lb)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="comp in formResult.compData">
-                        <td>{{$index+1}}</td>
-                        <td style="width: 60%">{{comp.name | ucfirst}}</td>
-                        <td>{{comp.value | precision: 3}}</td>
-                        <td>{{comp.cost | currency}}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="modal-footer">
-                <button type="button" class="btn" ng-class="{'btn-primary': results.feasible, 'btn-danger': !results.feasible}" data-dismiss="modal">Close</button>
-            </div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="fui-cross"></span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">Calculation Results</h4>
+      </div>
+      <div class="modal-body">
+        <div ng-if="results.feasible === false">
+          <p>We weren't able to find a set of quantities that meets all your requirements. This normally happens when you specify minimum and maximum values that cannot be satisfied using any combination of the components you've selected.</p>
+          <p>To fix this, you can add or remove components in Step 1 above, or change the minimum and maximum values specified in Step 3.</p>
         </div>
+        <div ng-if="results.feasible">
+          <p>Success! We've found a set of quantities that meets all your requirements.</p>
+          <p>Your total feed cost per pound is: {{results.result * 0.01 | currency}}</p>
+          <p>Your feed mixture will be automatically updated with these values once you close this window.</p>
+        </div>
+      </div>
+      <table class="table table-condensed table-hover table-responsive table-striped" ng-if="results.feasible">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Component</th>
+            <th>Qty. (%)</th>
+            <th>Cost (lb)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="comp in formResult.compData">
+            <td>{{$index+1}}</td>
+            <td style="width: 60%">{{comp.name | ucfirst}}</td>
+            <td>{{comp.value | precision: 3}}</td>
+            <td>{{comp.cost | currency}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="modal-footer">
+        <button type="button" class="btn" ng-class="{'btn-primary': results.feasible, 'btn-danger': !results.feasible}" data-dismiss="modal">Close</button>
+      </div>
     </div>
+  </div>
 </div>
-
 <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-hidden="true" ng-if="('feed-view' | isState)">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="fui-cross"></span><span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title">Share Feed</h4>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="control-label">Feed Link</label>
-                    <pre>{{currentUrl}}</pre>
-                    <span class="help-block">The link above goes directly to this page. You can share it with anyone!</span>
-                </div>
-                <hr>
-                <div class="form-group">
-                    <label class="control-label" for="plainText">Email-Friendly Format</label>
-                    <pre>{{plainText}}</pre>
-                    <span class="help-block">You can copy this into an email message.</span>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn" data-dismiss="modal">Close</button>
-            </div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="fui-cross"></span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">Share Feed</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="control-label">Feed Link</label><pre>{{currentUrl}}</pre> <span class="help-block">The link above goes directly to this page. You can share it with anyone!</span>
         </div>
+        <hr>
+        <div class="form-group">
+          <label class="control-label" for="plainText">Email-Friendly Format</label><pre>{{plainText}}</pre> <span class="help-block">You can copy this into an email message.</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn" data-dismiss="modal">Close</button>
+      </div>
     </div>
+  </div>
 </div>

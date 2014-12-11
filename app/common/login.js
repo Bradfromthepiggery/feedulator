@@ -1,3 +1,10 @@
+/*
+* @Author: Lim Mingjie, Kenneth
+* @Date:   2014-12-10 22:09:13
+* @Last Modified by:   Lim Mingjie, Kenneth
+* @Last Modified time: 2014-12-11 01:23:03
+*/
+
 'use strict';
 
 angular.module('app.common-login', [
@@ -26,7 +33,7 @@ function LoginConfig($httpProvider, $stateProvider, authProvider, jwtInterceptor
         loginState: 'login'
     });
 
-    jwtInterceptorProvider.tokenGetter = function(aiStorage, $http, jwtHelper, auth) {
+    jwtInterceptorProvider.tokenGetter = ['$http', 'aiStorage', 'auth', 'jwtHelper', function($http, aiStorage, auth, jwtHelper) {
         var idToken = aiStorage.get('idToken'),
             refreshToken = aiStorage.get('refreshToken');
 
@@ -37,7 +44,7 @@ function LoginConfig($httpProvider, $stateProvider, authProvider, jwtInterceptor
                 return idToken;
             }
         }
-    }
+    }];
 
     $httpProvider.interceptors.push('jwtInterceptor');
 }

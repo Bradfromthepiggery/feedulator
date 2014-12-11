@@ -2,7 +2,7 @@
  * @Author: Lim Mingjie, Kenneth
  * @Date:   2014-12-03 01:40:40
  * @Last Modified by:   Lim Mingjie, Kenneth
- * @Last Modified time: 2014-12-03 01:47:16
+ * @Last Modified time: 2014-12-11 01:22:01
  */
 
 'use strict';
@@ -25,7 +25,7 @@ function ComponentEditConfig($stateProvider) {
         views: {
             "main": {
                 controller: 'ComponentEditCtrl',
-                templateUrl: 'app/component/component-new.tpl.html'
+                templateUrl: 'app/component/component-new.tpl.min.html'
             }
         },
         data: {

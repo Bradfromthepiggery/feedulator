@@ -1,0 +1,32 @@
+<h1><code ng:non-bindable="">AuthUtil</code>
+<div><span class="hint">service in module <code ng:non-bindable="">app.common-auth</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="app-common-auth-authutil-page"><p>Provides convenience functions for authorizing and authenticating users</p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="#/api/lodash">lodash</a></code>
+</li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_isloggedin">isLoggedIn(scope)</h3>
+<div class="isloggedin"><div class="isloggedin-page"><p>Determines if a user has successfully logged in.</p>
+</div><h5 id="methods_isloggedin_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="isloggedin-page"><p>The scope which this function will act upon.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_isprivilegeduser">isPrivilegedUser(scope)</h3>
+<div class="isprivilegeduser"><div class="isprivilegeduser-page"><p>Looks up an internal list to check if a user has privileged rights.</p>
+</div><h5 id="methods_isprivilegeduser_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="isprivilegeduser-page"><p>The scope which this function will act upon.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_itemfilter">itemFilter(scope, item)</h3>
+<div class="itemfilter"><div class="itemfilter-page"><p>Checks if a user is permitted to view the item. This is used to prune any list of items that has to be displayed to users.</p>
+</div><h5 id="methods_itemfilter_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>scope</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="itemfilter-page"><p>The scope which this function will act upon.</p>
+</div></td></tr><tr><td>item</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="itemfilter-page"><p>The item to be filtered. The function expects this input to have the field <code>isPrivate</code>.</p>
+</div></td></tr></tbody></table></div>
+</li>
+</ul>
+</div>
+</div>

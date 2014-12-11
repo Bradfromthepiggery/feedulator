@@ -1,82 +1,65 @@
 <div class="row">
-    <aside class="col-lg-3">
-        <form role="form">
-            <div class="form-group" ng-if="compCount >= 2">
-                <div class="input-group">
-                    <input type="search" class="form-control" ng-model="$parent.search" placeholder="Search {{compCount}} Components by Name" ng-change="masonryUpdate('#componentList')" />
-                    <span class="input-group-btn">
-                        <button type="submit" class="btn">
-                            <span class="fui-search"></span>
-                    </button>
-                    </span>
-                </div>
-                <hr>
-            </div>
-            <p class="lead">Hide/Show Details</p>
-            <label class="checkbox" for="nutrientsCheckbox">
-                <input type="checkbox" id="nutrientsCheckbox" data-toggle="checkbox" ng-model="nutrientsChecked" ng-init="nutrientsChecked=true" ng-disabled="compCount === 0">Nutrients
-            </label>
-            <label class="checkbox" for="gmoCheckbox">
-                <input type="checkbox" id="gmoCheckbox" data-toggle="checkbox" ng-model="gmoChecked" ng-init="gmoChecked=true" ng-disabled="compCount === 0">GMO Status
-            </label>
-            <label class="checkbox" for="descCheckbox">
-                <input type="checkbox" id="descCheckbox" data-toggle="checkbox" ng-model="descriptionChecked" ng-init="descriptionChecked=false" ng-disabled="compCount === 0">Description
-            </label>
-            <label class="checkbox" for="supplierCheckbox">
-                <input type="checkbox" id="supplierCheckbox" data-toggle="checkbox" ng-model="supplierChecked" ng-init="supplierChecked=false" ng-disabled="compCount === 0">Supplier
-            </label>
-            <hr>
-            <button class="btn btn-primary btn-block" ui-sref="component-new">
-                <span class="fui-plus"></span>&nbsp;Create New Feed Component</button>
-        </form>
-    </aside>
-    <div class="col-lg-9">
-        <div class="row" id="componentList">
-            <div ng-if="compCount === 0" class="text-center">
-                <img src="app/assets/pig.svg" class="empty-state-img">
-                <p class="lead">You currently have no feed components in the system.
-                    <br/>Components you create will show up here. Get copyin'!</p>
-            </div>
-
-            <section class="col-lg-4 componentItem" dir-paginate="comp in compData | filter: {$: search} | orderBy: 'name' | itemsPerPage: 9" ng-init="masonryInit('#componentList')">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h2 class="panel-title component-panel-title">
-                            {{::comp.name | ucfirst}}
-                            <span class="pull-right label label-success" ng-if="gmoChecked">{{::comp.gmoFree ? "GMO Free" : ""}}</span>
-                        </h2>
-                    </div>
-                    <div class="panel-body" ng-if="comp.supplier || comp.description">
-                        <p ng-if="supplierChecked && comp.supplier">Supplier: {{::comp.supplier}}</p>
-                        <p ng-if="descriptionChecked">{{::comp.description}}</p>
-                    </div>
-                    <table class="table table-condensed table-striped table-hover table-responsive" ng-if="nutrientsChecked">
-                        <thead>
-                            <tr>
-                                <th>Nutrient</th>
-                                <th>Qty. (%&nbsp;DM)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-class="{ success: data.name.toLowerCase().contains(search.toLowerCase()) && search !== '' }" ng-repeat="data in ::comp.nutrients track by data.name | toArray | orderBy: '-value'">
-                                <td>{{::data.name | ucfirst}}</td>
-                                <td>{{::data.value}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="panel-footer" ng-if="isPrivilegedUser() || (isLoggedIn() && profile.user_id === comp.owner)">
-                        <button class="btn btn-warning btn-sm" ui-sref="component-edit({compId: comp._id})">
-                            <span class="fui-new"></span>&nbsp;Edit
-                        </button>
-                        <button class="btn btn-danger btn-sm pull-right" ng-click="deleteComp(comp._id)">
-                            <span class="fui-trash"></span>&nbsp;Delete
-                        </button>
-                    </div>
-                </div>
-            </section>
+  <aside class="col-lg-3">
+    <form role="form">
+      <div class="form-group" ng-if="compCount>= 2">
+        <div class="input-group">
+          <input type="search" class="form-control" ng-model="$parent.search" placeholder="Search {{compCount}} Components by Name" ng-change="masonryUpdate('#componentList')" /> <span class="input-group-btn"><button type="submit" class="btn"><span class="fui-search"></span>
+          </button>
+          </span>
         </div>
-        <div class="text-center" ng-if="compCount >= 2">
-            <dir-pagination-controls boundary-links="false" on-page-change="masonryUpdate('#componentList')" template-url="app/common/pagination.tpl.html"></dir-pagination-controls>
+        <hr>
+      </div>
+      <p class="lead">Hide/Show Details</p>
+      <label class="checkbox" for="nutrientsCheckbox">
+        <input type="checkbox" id="nutrientsCheckbox" data-toggle="checkbox" ng-model="nutrientsChecked" ng-init="nutrientsChecked=true" ng-disabled="compCount === 0">Nutrients</label>
+      <label class="checkbox" for="gmoCheckbox">
+        <input type="checkbox" id="gmoCheckbox" data-toggle="checkbox" ng-model="gmoChecked" ng-init="gmoChecked=true" ng-disabled="compCount === 0">GMO Status</label>
+      <label class="checkbox" for="descCheckbox">
+        <input type="checkbox" id="descCheckbox" data-toggle="checkbox" ng-model="descriptionChecked" ng-init="descriptionChecked=false" ng-disabled="compCount === 0">Description</label>
+      <label class="checkbox" for="supplierCheckbox">
+        <input type="checkbox" id="supplierCheckbox" data-toggle="checkbox" ng-model="supplierChecked" ng-init="supplierChecked=false" ng-disabled="compCount === 0">Supplier</label>
+      <hr>
+      <button class="btn btn-primary btn-block" ui-sref="component-new"><span class="fui-plus"></span> &nbsp;Create New Feed Component</button>
+    </form>
+  </aside>
+  <div class="col-lg-9">
+    <div class="row" id="componentList">
+      <div ng-if="compCount === 0" class="text-center"> <img src="app/assets/pig.svg" class="empty-state-img">
+        <p class="lead">You currently have no feed components in the system.
+          <br/>Components you create will show up here. Get copyin'!</p>
+      </div>
+      <section class="col-lg-4 componentItem" dir-paginate="comp in compData | filter: {$: search} | orderBy: 'name' | itemsPerPage: 9" ng-init="masonryInit('#componentList')">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h2 class="panel-title component-panel-title"> {{::comp.name | ucfirst}} <span class="pull-right label label-success" ng-if="gmoChecked">{{::comp.gmoFree ? "GMO Free" : ""}}</span></h2>
+          </div>
+          <div class="panel-body" ng-if="comp.supplier || comp.description">
+            <p ng-if="supplierChecked && comp.supplier">Supplier: {{::comp.supplier}}</p>
+            <p ng-if="descriptionChecked">{{::comp.description}}</p>
+          </div>
+          <table class="table table-condensed table-striped table-hover table-responsive" ng-if="nutrientsChecked">
+            <thead>
+              <tr>
+                <th>Nutrient</th>
+                <th>Qty. (%&nbsp;DM)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-class="{ success: data.name.toLowerCase().contains(search.toLowerCase()) && search !== '' }" ng-repeat="data in ::comp.nutrients track by data.name | toArray | orderBy: '-value'">
+                <td>{{::data.name | ucfirst}}</td>
+                <td>{{::data.value}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="panel-footer" ng-if="isPrivilegedUser() || (isLoggedIn() && profile.user_id === comp.owner)">
+            <button class="btn btn-warning btn-sm" ui-sref="component-edit({compId: comp._id})"><span class="fui-new"></span> &nbsp;Edit</button>
+            <button class="btn btn-danger btn-sm pull-right" ng-click="deleteComp(comp._id)"><span class="fui-trash"></span> &nbsp;Delete</button>
+          </div>
         </div>
+      </section>
     </div>
+    <div class="text-center" ng-if="compCount>= 2">
+      <dir-pagination-controls boundary-links="false" on-page-change="masonryUpdate('#componentList')" template-url="app/common/pagination.tpl.html"></dir-pagination-controls>
+    </div>
+  </div>
 </div>

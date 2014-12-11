@@ -1,3 +1,10 @@
+/*
+* @Author: Lim Mingjie, Kenneth
+* @Date:   2014-12-10 22:09:16
+* @Last Modified by:   Lim Mingjie, Kenneth
+* @Last Modified time: 2014-12-11 01:22:15
+*/
+
 'use strict';
 
 angular.module('app.component-list', [
@@ -23,7 +30,7 @@ function CompListConfig($stateProvider) {
         views: {
             "main": {
                 controller: 'CompListCtrl',
-                templateUrl: 'app/component/component-list.tpl.html'
+                templateUrl: 'app/component/component-list.tpl.min.html'
             }
         },
         data: {
