@@ -26,7 +26,7 @@ For more information on SemVer, visit http://semver.org/.
 
 Have a bug or a feature request? [Please open a new issue](https://github.com/kenlimmj/feedulator/issues).
 
-Before opening any issue, please search for existing issues and read the [Issue Guidelines](https://github.com/necolas/issue-guidelines), written by [Nicolas Gallagher](https://github.com/necolas/).
+Before opening any issue, please search for existing issues and read the [Issue Guidelines](CONTRIBUTING.md).
 
 ## Contributing
 
