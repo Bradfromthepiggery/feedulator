@@ -2,7 +2,7 @@
  * @Author: Lim Mingjie, Kenneth
  * @Date:   2014-12-03 01:16:25
  * @Last Modified by:   Lim Mingjie, Kenneth
- * @Last Modified time: 2014-12-03 01:50:00
+ * @Last Modified time: 2014-12-05 08:50:14
  */
 
 'use strict';
@@ -58,6 +58,7 @@ function FeedEditController($scope, $state, $stateParams, $timeout, APIUtil, Aut
 
     $scope.initRadio = UIUtil.initRadio;
     $scope.makeSticky = UIUtil.makeSticky;
+    $scope.isUndefined = angular.isUndefined;
 
     // Extract the feed data from the database and bind to the scope
     APIUtil.getFeed($scope, $stateParams.feedId);

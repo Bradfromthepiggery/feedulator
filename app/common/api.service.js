@@ -3,10 +3,11 @@
 var DEBUG = false;
 
 angular.module('app.common-api', [
+        'app.common-auth',
         'ngLodash',
         'restangular'
     ])
-    .service('APIUtil', function(Restangular, lodash) {
+    .service('APIUtil', function(AuthUtil, Restangular, lodash) {
         // API Endpoints
         var animalEndpoint = Restangular.all('animal'),
             componentEndpoint = Restangular.all('component'),
@@ -18,7 +19,12 @@ angular.module('app.common-api', [
 
         var getAllAnimals = function(scope) {
             return animalEndpoint.get('all').then(function(data) {
-                scope.animalData = lodash.toArray(Restangular.stripRestangular(data));
+                var data = lodash.toArray(Restangular.stripRestangular(data));
+
+                scope.animalData = data.filter(function(item) {
+                    return AuthUtil.itemFilter(scope, item);
+                });
+
                 scope.animalCount = scope.animalData.length;
             }, function(response) {
                 scope.animalData = [];
@@ -61,7 +67,12 @@ angular.module('app.common-api', [
 
         var getAllComponents = function(scope) {
             return componentEndpoint.get('all').then(function(data) {
-                scope.compData = lodash.toArray(Restangular.stripRestangular(data));
+                var data = lodash.toArray(Restangular.stripRestangular(data));
+
+                scope.compData = data.filter(function(item) {
+                    return AuthUtil.itemFilter(scope, item);
+                });
+
                 scope.compCount = scope.compData.length;
             }, function(response) {
                 scope.compData = [];
@@ -104,7 +115,12 @@ angular.module('app.common-api', [
 
         var getAllFeeds = function(scope) {
             return feedEndpoint.get('all').then(function(data) {
-                scope.feedData = lodash.toArray(Restangular.stripRestangular(data));
+                var data = lodash.toArray(Restangular.stripRestangular(data));
+
+                scope.feedData = data.filter(function(item) {
+                    return AuthUtil.itemFilter(scope, item);
+                });
+
                 scope.feedCount = scope.feedData.length;
             }, function(response) {
                 scope.feedData = [];

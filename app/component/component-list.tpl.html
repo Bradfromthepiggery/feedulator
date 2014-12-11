@@ -3,7 +3,7 @@
         <form role="form">
             <div class="form-group" ng-if="compCount >= 2">
                 <div class="input-group">
-                    <input type="search" class="form-control" ng-model="$parent.search" placeholder="Search {{compCount}} Feed Components" />
+                    <input type="search" class="form-control" ng-model="$parent.search" placeholder="Search {{compCount}} Components by Name" ng-change="masonryUpdate('#componentList')" />
                     <span class="input-group-btn">
                         <button type="submit" class="btn">
                             <span class="fui-search"></span>
@@ -38,7 +38,7 @@
                     <br/>Components you create will show up here. Get copyin'!</p>
             </div>
 
-            <section class="col-lg-4 componentItem" dir-paginate="comp in compData | filter: userFilter | filter: {$: search} | orderBy: 'name' | itemsPerPage: 9" ng-init="masonryInit('#componentList')">
+            <section class="col-lg-4 componentItem" dir-paginate="comp in compData | filter: {$: search} | orderBy: 'name' | itemsPerPage: 9" ng-init="masonryInit('#componentList')">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h2 class="panel-title component-panel-title">
@@ -76,7 +76,7 @@
             </section>
         </div>
         <div class="text-center" ng-if="compCount >= 2">
-            <dir-pagination-controls boundary-links="false" on-page-change="masonryUpdate('#componentList')" template-url="./app/common/pagination.tpl.html"></dir-pagination-controls>
+            <dir-pagination-controls boundary-links="false" on-page-change="masonryUpdate('#componentList')" template-url="app/common/pagination.tpl.html"></dir-pagination-controls>
         </div>
     </div>
 </div>

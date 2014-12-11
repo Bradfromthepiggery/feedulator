@@ -2,7 +2,7 @@
  * @Author: Lim Mingjie, Kenneth
  * @Date:   2014-12-03 01:01:28
  * @Last Modified by:   Lim Mingjie, Kenneth
- * @Last Modified time: 2014-12-03 01:35:51
+ * @Last Modified time: 2014-12-05 13:49:53
  */
 
 'use strict';
@@ -85,26 +85,39 @@ function FeedNewController($scope, $state, $timeout, APIUtil, AuthUtil, FeedUtil
 
     $scope.initRadio = UIUtil.initRadio;
     $scope.makeSticky = UIUtil.makeSticky;
+    $scope.isUndefined = angular.isUndefined;
 
     APIUtil.getAllComponents($scope).then(function() {
         $scope.compData = lodash.sortBy($scope.compData, function(item) {
             return item.name;
         });
+
+        if (localStorage.getItem('formResult')) {
+            $scope.formResult = JSON.parse(localStorage.getItem('formResult'));
+
+            $timeout(function() {
+                $scope.formResult.compData.forEach(function(item, index) {
+                    $('#select' + index).select2('val', item._id);
+                });
+
+                $scope.calculate();
+            });
+        } else {
+            // Initialize an object to collect all the input data
+            $scope.formResult = {
+                creationDate: new Date(),
+                compData: [{
+                    _id: null,
+                    name: null,
+                    value: 100,
+                    cost: 0
+                }],
+                isPrivate: true
+            };
+        }
     });
 
     APIUtil.getAllAnimals($scope);
-
-    // Initialize an object to collect all the input data
-    $scope.formResult = {
-        creationDate: new Date(),
-        compData: [{
-            _id: null,
-            name: null,
-            value: 100,
-            cost: 0
-        }],
-        isPrivate: true
-    };
 
     $scope.submit = function() {
         // Create an ID using the provided name
@@ -123,11 +136,19 @@ function FeedNewController($scope, $state, $timeout, APIUtil, AuthUtil, FeedUtil
         result[$scope.formResult._id] = $scope.formResult;
 
         APIUtil.addFeed(result).then(function() {
+            localStorage.removeItem('formResult');
+
             Messenger().post("Saved feed '" + $scope.formResult.name + "'");
 
             $state.go('feed-list');
         });
     }
+
+    $scope.$watch('formResult', function(newVal) {
+        if (newVal) {
+            localStorage.setItem('formResult', JSON.stringify(newVal));
+        }
+    }, true);
 
     $timeout(function() {
         $('#select0').select2('focus');

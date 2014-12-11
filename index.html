@@ -7,34 +7,35 @@
     <title ng-bind="pageTitle">The Piggery's Feedulator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="57x57" href="./apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="./apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="./apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="./apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="./apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="./apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="./apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon-180x180.png">
+
+    <link rel="icon" type="image/png" href="./favicon-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="./favicon-160x160.png" sizes="160x160">
+    <link rel="icon" type="image/png" href="./favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32">
+
+    <meta name="apple-mobile-web-app-title" content="The Feedulator">
+    <meta name="msapplication-TileColor" content="#b91d47">
+    <meta name="msapplication-TileImage" content="./mstile-144x144.png">
+    <meta name="application-name" content="The Feedulator">
+
     <!-- Styles -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="bower_components/messenger/build/css/messenger-theme-air.css">
     <link rel="stylesheet" href="bower_components/messenger/build/css/messenger.css">
     <link rel="stylesheet" href="theme/app.css">
     <link rel="stylesheet" href="theme/flat-ui/dist/css/flat-ui-pro.min.css">
-
-    <style>
-    .logo {
-        display: inline-block;
-        margin-right: 0.5vw;
-        width: 1.5vw;
-        height: 100%;
-        vertical-align: baseline;
-    }
-    .modal-backdrop {
-        position: fixed;
-        height: 100vh;
-        width: 100vw;
-    }
-    .avatar {
-        display: inline-block;
-        margin-right: 1vw;
-        width: 1.75vw;
-        height: 100%;
-        vertical-align: middle;
-    }
-    </style>
+    <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.min.css">
 </head>
 
 <body style="margin-bottom: 20px">
@@ -71,6 +72,8 @@
 </body>
 
 <!-- Core -->
+<script async src="//cdn.polyfill.io/v1/polyfill.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/jsLPSolver/src/solver.js"></script>
@@ -78,11 +81,8 @@
 <script src="bower_components/moment/min/moment.min.js"></script>
 <script src="bower_components/sticky/jquery.sticky.js"></script>
 <script src="theme/flat-ui/dist/js/flat-ui-pro.min.js"></script>
-<script async src="//cdn.polyfill.io/v1/polyfill.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
 
 <!-- Modules -->
-<script src="bower_components/masonry/dist/masonry.pkgd.min.js"></script>
 <script src="bower_components/angular-aria/angular-aria.min.js"></script>
 <script src="bower_components/angular-filter/dist/angular-filter.min.js"></script>
 <script src="bower_components/angular-jwt/dist/angular-jwt.min.js"></script>
@@ -92,23 +92,26 @@
 <script src="bower_components/angular-touch/angular-touch.min.js"></script>
 <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
 <script src="bower_components/angular-utils-pagination/dirPagination.js"></script>
-<script src="bower_components/angularjs-indexedDB/src/indexeddb.js"></script>
 <script src="bower_components/auth0-angular/build/auth0-angular.min.js"></script>
 <script src="bower_components/auth0-lock/build/auth0-lock.min.js"></script>
+<script src="bower_components/masonry/dist/masonry.pkgd.min.js"></script>
 <script src="bower_components/ng-lodash/build/ng-lodash.min.js"></script>
 <script src="bower_components/restangular/dist/restangular.min.js"></script>
+<script src="bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
 
 <!-- Application Config -->
 <script src="app/app.js"></script>
-<script src="data/components.json"></script>
-<script src="data/animals.json"></script>
 <script src="data/nutrientMasterList.json"></script>
+<script src="data/authorizedUsers.json"></script>
 
 <!-- Common -->
-<script src="app/common/home.js"></script>
 <script src="app/common/404.js"></script>
+<script src="app/common/api.service.js"></script>
+<script src="app/common/authentication.service.js"></script>
+<script src="app/common/home.js"></script>
 <script src="app/common/login.js"></script>
-<script src="app/common/authentication.js"></script>
+<script src="app/common/ui.service.js"></script>
+<script src="app/common/filters.js"></script>
 
 <!-- Animal -->
 <script src="app/animal/animal-edit.js"></script>

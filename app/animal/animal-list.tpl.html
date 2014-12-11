@@ -3,7 +3,7 @@
         <form role="form">
             <div class="form-group" ng-if="animalCount >= 2">
                 <div class="input-group">
-                    <input type="search" class="form-control" ng-model="search" placeholder="Search {{animalCount}} Animals" />
+                    <input type="search" class="form-control" ng-model="$parent.search" placeholder="Search {{animalCount}} Animals by Name" ng-change="masonryUpdate('#animalList')"/>
                     <span class="input-group-btn">
                         <button type="submit" class="btn">
                             <span class="fui-search"></span>
@@ -32,7 +32,7 @@
                     <br/>Animals you create will show up here. Get growin'!</p>
             </div>
 
-            <section class="col-lg-4 animalItem" dir-paginate="animal in animalData | filter: userFilter | filter: { $: search } | orderBy: 'name' | itemsPerPage: 12" ng-init="masonryInit('#animalList')">
+            <section class="col-lg-4 animalItem" dir-paginate="animal in animalData | filter: { $: search } | orderBy: 'name' | itemsPerPage: 9" ng-init="masonryInit('#animalList')">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h2 class="panel-title component-panel-title">
@@ -46,7 +46,7 @@
                         <thead>
                             <tr>
                                 <th>Nutrient</th>
-                                <th>Qty (%&nbsp;DM)</th>
+                                <th>Qty. (%&nbsp;DM)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -56,7 +56,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div class="panel-footer" ng-if="isPrivilegedUser() || (isLoggedIn() && profile.user_id === comp.owner)">
+                    <div class="panel-footer" ng-if="isPrivilegedUser() || (isLoggedIn() && profile.user_id === animal.owner)">
                         <button class="btn btn-warning btn-sm" ui-sref="animal-edit({ animalId: animal._id})">
                             <span class="fui-new"></span>&nbsp;Edit
                         </button>
@@ -70,7 +70,7 @@
             </section>
         </div>
         <div class="text-center" ng-if="animalCount >= 2">
-            <dir-pagination-controls boundary-links="false" on-page-change="masonryUpdate('#animalList')" template-url="./app/common/pagination.tpl.html"></dir-pagination-controls>
+            <dir-pagination-controls boundary-links="false" on-page-change="masonryUpdate('#animalList')" template-url="app/common/pagination.tpl.html"></dir-pagination-controls>
         </div>
     </div>
 </div>

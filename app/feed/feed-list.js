@@ -51,10 +51,10 @@ function FeedListController($rootScope, $scope, $state, $timeout, APIUtil, AuthU
     $scope.isLoggedIn = lodash.partial(AuthUtil.isLoggedIn, $scope);
     $scope.isPrivilegedUser = lodash.partial(AuthUtil.isPrivilegedUser, $scope);
 
-    $scope.userFilter = lodash.partial(AuthUtil.itemFilter, $scope);
-
     $scope.masonryInit = UIUtil.masonryInit;
     $scope.masonryUpdate = UIUtil.masonryUpdate;
+
+    $scope.search = "";
 
     APIUtil.getAllFeeds($scope);
 
@@ -65,6 +65,8 @@ function FeedListController($rootScope, $scope, $state, $timeout, APIUtil, AuthU
 
         APIUtil.deleteFeed(feedId).then(function() {
             Messenger().post("Successfully deleted feed.");
+
+            $scope.masonryUpdate('#feedList');
         });
     }
 

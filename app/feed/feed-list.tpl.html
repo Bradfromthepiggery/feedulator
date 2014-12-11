@@ -1,9 +1,9 @@
 <div class="row">
     <aside class="col-lg-3">
         <form role="form">
-            <div class="form-group" ng-show="feedCount >= 2">
+            <div class="form-group" ng-if="feedCount >= 2">
                 <div class="input-group">
-                    <input type="search" class="form-control" ng-model="search" placeholder="Search {{feedCount}} Feeds" />
+                    <input type="search" class="form-control" ng-model="$parent.search" placeholder="Search {{feedCount}} Feeds by Name" ng-change="masonryUpdate('#feedList')" />
                     <span class="input-group-btn">
                         <button type="submit" class="btn">
                             <span class="fui-search"></span>
@@ -32,7 +32,7 @@
                     <br/>Feeds you create will show up here. Get mixin'!</p>
             </div>
 
-            <section class="col-lg-4 feedItem" dir-paginate="feed in feedData | filter: userFilter | filter: {$: search} | orderBy: 'name' | itemsPerPage: 12" ng-init="masonryInit('#feedList')">
+            <section class="col-lg-4 feedItem" dir-paginate="feed in feedData | filter: {$: search} | orderBy: 'name' | itemsPerPage: 9" ng-init="masonryInit('#feedList')">
                 <div class="panel panel-default">
                     <div class="panel-heading panel-link" ui-sref="feed-view({ feedId: feed._id})">
                         <h2 class="panel-title component-panel-title">
@@ -51,13 +51,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-class="{ success: component.name.toLowerCase().contains(search.toLowerCase()) && search !== '' }" ng-repeat="component in ::feed.compData track by component.name | orderBy: '-value'">
+                            <tr ng-class="{ success: component.name.toLowerCase().contains(search.toLowerCase()) && search !== '' }" ng-repeat="component in ::feed.compData | orderBy: '-value' track by component._id">
                                 <td>{{::component.name | ucfirst}}</td>
                                 <td>{{::component.value}}</td>
                             </tr>
                         </tbody>
                     </table>
-                    <div class="panel-footer" ng-if="isPrivilegedUser() || (isLoggedIn() && profile.user_id === comp.owner)">
+                    <div class="panel-footer" ng-if="isPrivilegedUser() || (isLoggedIn() && profile.user_id === feed.owner)">
                         <button class="btn btn-warning btn-sm" ui-sref="feed-edit({ feedId: feed._id })">
                             <span class="fui-new"></span>&nbsp;Edit
                         </button>

@@ -52,10 +52,10 @@ function CompListController($rootScope, $scope, $state, $timeout, APIUtil, AuthU
     $scope.isLoggedIn = lodash.partial(AuthUtil.isLoggedIn, $scope);
     $scope.isPrivilegedUser = lodash.partial(AuthUtil.isPrivilegedUser, $scope);
 
-    $scope.userFilter = lodash.partial(AuthUtil.itemFilter, $scope);
-
     $scope.masonryInit = UIUtil.masonryInit;
     $scope.masonryUpdate = UIUtil.masonryUpdate;
+
+    $scope.search = "";
 
     APIUtil.getAllComponents($scope);
 
@@ -66,6 +66,8 @@ function CompListController($rootScope, $scope, $state, $timeout, APIUtil, AuthU
 
         APIUtil.deleteComponent(feedId).then(function() {
             Messenger().post("Successfully deleted component.");
+
+            $scope.masonryUpdate('#componentList');
         });
     }
 

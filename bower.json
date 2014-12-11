@@ -4,8 +4,18 @@
   "authors": [
     "Lim Mingjie Kenneth <kl545@cornell.edu>"
   ],
+  "description": "A Feed Calculator for Small Farms, jointly produced by The Piggery Inc. and Cornell University",
   "main": "index.html",
+  "keywords": [
+    "farm",
+    "farming",
+    "nutrition",
+    "feed",
+    "calculator",
+    "cornell"
+  ],
   "license": "GNU GPL v2.0",
+  "homepage": "thepiggery.net/feedulator",
   "private": true,
   "ignore": [
     "**/.*",
@@ -15,29 +25,28 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.3.2",
-    "angular-filter": "~0.4.9",
-    "angular-loader": "1.2.x",
-    "angular-moment": "~0.8.2",
-    "angular-route": "1.2.x",
+    "angular": "~1.3.6",
+    "angular-aria": "~1.3.6",
+    "angular-filter": "~0.5.1",
+    "angular-jwt": "~0.0.5",
+    "angular-moment": "~0.8.3",
     "angular-slugify": "~1.0.0",
-    "angular-ui-router": "~0.2.11",
-    "angular-utils-pagination": "~0.3.1",
-    "angularjs-indexedDB": "*",
-    "bootstrap": "~3.3.0",
-    "ng-lodash": "~0.0.2",
-    "jsLPSolver": "*",
+    "angular-storage": "~0.5.0",
+    "angular-touch": "~1.3.6",
+    "angular-ui-router": "~0.2.13",
+    "angular-utils-pagination": "~0.4.0",
+    "angular-loading-bar": "~0.6.0",
+    "restangular": "~1.4.0",
+    "ng-lodash": "~0.1.0",
     "messenger": "~1.4.1",
     "sticky": "~1.0.1",
-    "angular-aria": "~1.3.4",
-    "angular-touch": "~1.3.4",
-    "auth0-angular": "~3.0.5",
-    "angular-storage": "~0.5.0",
-    "angular-jwt": "~0.0.5",
-    "restangular": "~1.4.0"
+    "jsLPSolver": "*",
+    "auth0-angular": "~3.0.6",
+    "jquery": "~2.1.1",
+    "moment": "~2.8.4",
+    "masonry": "~3.2.1"
   },
   "resolutions": {
-    "angular": "~1.3.2"
-  },
-  "homepage": "https://github.com/kenlimmj/feedulator"
+    "angular": ">=1.2"
+  }
 }

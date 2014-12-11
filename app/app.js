@@ -1,14 +1,15 @@
 /*
-* @Author: Lim Mingjie, Kenneth
-* @Date:   2014-12-03 01:15:05
-* @Last Modified by:   Lim Mingjie, Kenneth
-* @Last Modified time: 2014-12-03 01:33:27
-*/
+ * @Author: Lim Mingjie, Kenneth
+ * @Date:   2014-12-03 01:15:05
+ * @Last Modified by:   Lim Mingjie, Kenneth
+ * @Last Modified time: 2014-12-05 14:39:00
+ */
 
 'use strict';
 
 var appDependencies = [
     'angular-jwt',
+    'angular-loading-bar',
     'angular-storage',
     'angular.filter',
     'angularMoment',
@@ -54,10 +55,11 @@ AppConfig.$inject = [
     '$httpProvider',
     '$locationProvider',
     '$urlRouterProvider',
-    'RestangularProvider'
+    'cfpLoadingBarProvider',
+    'RestangularProvider',
 ]
 
-function AppConfig($httpProvider, $locationProvider, $urlRouterProvider, RestangularProvider) {
+function AppConfig($httpProvider, $locationProvider, $urlRouterProvider, cfpLoadingBarProvider, RestangularProvider) {
     RestangularProvider.setBaseUrl('http://thepiggery.net:8011/feedulator');
 
     // Catch bad paths and route them to the error page
@@ -68,6 +70,8 @@ function AppConfig($httpProvider, $locationProvider, $urlRouterProvider, Restang
         extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-right',
         theme: 'block'
     }
+
+    cfpLoadingBarProvider.includeSpinner = false;
 }
 
 
